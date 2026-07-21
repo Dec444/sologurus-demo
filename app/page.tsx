@@ -1,7 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import resourceData from "../data/demo-resources.json";
+import languages from "../data/languages.json";
+import { makeCalendarIcs } from "../lib/calendar.mjs";
 
 const resourceTabs = [
   ["tests", "Tests & centres"],
@@ -22,6 +24,7 @@ type Profile = {
   goal: string;
   date: string;
   hours: number;
+  timezone: string;
 };
 
 type Plan = {
@@ -42,6 +45,7 @@ const demoProfile: Profile = {
   goal: "IELTS 7.0 for Canadian PR",
   date: "2026-12-05",
   hours: 8,
+  timezone: "Asia/Ho_Chi_Minh",
 };
 
 const toolSteps = [
@@ -100,49 +104,31 @@ const resources = [
   ["Writing", "IELTS Liz", "Free · B1–C2"],
 ];
 
-function makeIcs(profile: Profile, plan: Plan) {
-  const start = new Date();
-  start.setDate(start.getDate() + 1);
-  const ymd = (date: Date) => date.toISOString().slice(0, 10).replaceAll("-", "");
-  const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-  const events = plan.sample.map((task, index) => {
-    const day = new Date(start);
-    day.setDate(day.getDate() + index * 2);
-    return [
-      "BEGIN:VEVENT",
-      `UID:sologurus-session-${index}@demo`,
-      `DTSTAMP:${stamp}`,
-      `DTSTART:${ymd(day)}T183000`,
-      `DTEND:${ymd(day)}T193000`,
-      `SUMMARY:Sologurus · ${task.split(" · ")[1]}`,
-      `DESCRIPTION:${task} | Goal: ${profile.goal}`,
-      "END:VEVENT",
-    ].join("\r\n");
-  });
-  const reminders = [
-    ["073000", "Morning start · See today’s study plan"],
-    ["123000", "Noon check-in · Choose the full or shortened plan"],
-    ["210000", "Night reflection · Mark done + write one line"],
-  ].map(([time, label], index) => [
-    "BEGIN:VEVENT",
-    `UID:sologurus-reminder-${index}@demo`,
-    `DTSTAMP:${stamp}`,
-    `DTSTART:${ymd(start)}T${time}`,
-    `DTEND:${ymd(start)}T${time.slice(0, 2)}${String(Number(time.slice(2, 4)) + 10).padStart(2, "0")}00`,
-    `RRULE:FREQ=DAILY;UNTIL:${profile.date.replaceAll("-", "")}T235959`,
-    `SUMMARY:${label}`,
-    "END:VEVENT",
-  ].join("\r\n"));
-  return ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Sologurus//Study Plan//EN", ...events, ...reminders, "END:VCALENDAR"].join("\r\n");
-}
-
 export default function Home() {
   const [profile, setProfile] = useState<Profile>(demoProfile);
   const [stage, setStage] = useState<"profile" | "running" | "plans" | "exported">("profile");
   const [activeTool, setActiveTool] = useState(0);
   const [selected, setSelected] = useState("balanced");
   const [resourceTab, setResourceTab] = useState<ResourceTab>("tests");
+  const [notionStatus, setNotionStatus] = useState<"idle" | "connecting" | "success" | "error">("idle");
+  const [notionMessage, setNotionMessage] = useState("");
+  const [notionUrl, setNotionUrl] = useState("");
+  const [notionApiConfigured, setNotionApiConfigured] = useState(false);
+  const [notionDatabaseUrl, setNotionDatabaseUrl] = useState("");
+  const [calendarReady, setCalendarReady] = useState(false);
+  const [googleCalendarUrl, setGoogleCalendarUrl] = useState("");
   const selectedPlan = useMemo(() => plans.find((plan) => plan.id === selected) ?? plans[2], [selected]);
+
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/notion").then((response) => response.json()),
+      fetch("/api/calendar").then((response) => response.json()),
+    ]).then(([notion, calendar]: [{ configured?: boolean; databaseUrl?: string | null }, { eventUrl?: string | null }]) => {
+      setNotionApiConfigured(Boolean(notion.configured));
+      setNotionDatabaseUrl(notion.databaseUrl ?? "");
+      setGoogleCalendarUrl(calendar.eventUrl ?? "");
+    }).catch(() => undefined);
+  }, []);
 
   const update = (key: keyof Profile, value: string | number) => setProfile((current) => ({ ...current, [key]: value }));
 
@@ -157,21 +143,52 @@ export default function Home() {
   };
 
   const downloadIcs = () => {
-    const blob = new Blob([makeIcs(profile, selectedPlan)], { type: "text/calendar;charset=utf-8" });
+    const blob = new Blob([makeCalendarIcs(profile, selectedPlan)], { type: "text/calendar;charset=utf-8" });
     const href = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = href;
     anchor.download = `sologurus-${selectedPlan.id}.ics`;
     anchor.click();
     URL.revokeObjectURL(href);
+    setCalendarReady(true);
     setStage("exported");
+  };
+
+  const connectNotion = async () => {
+    if (!notionApiConfigured && notionDatabaseUrl) {
+      window.open(notionDatabaseUrl, "_blank", "noopener,noreferrer");
+      setNotionUrl(notionDatabaseUrl);
+      setNotionMessage("Opened the verified Sologurus database with real study tasks.");
+      setNotionStatus("success");
+      setStage("exported");
+      return;
+    }
+    setNotionStatus("connecting");
+    setNotionMessage("");
+    setNotionUrl("");
+    try {
+      const response = await fetch("/api/notion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profile, plan: selectedPlan }),
+      });
+      const result = await response.json() as { ok?: boolean; url?: string; message?: string };
+      if (!response.ok || !result.ok || !result.url) throw new Error(result.message || "Notion page creation failed.");
+      setNotionUrl(result.url);
+      setNotionMessage("A new page was written by the Sologurus server integration.");
+      setNotionStatus("success");
+      setStage("exported");
+    } catch (error) {
+      setNotionStatus("error");
+      setNotionMessage(error instanceof Error ? error.message : "Notion page creation failed.");
+    }
   };
 
   return (
     <main>
       <header className="topbar">
         <a className="brand" href="#top" aria-label="Sologurus home"><span className="brand-mark">S</span><span>Sologurus</span></a>
-        <div className="status"><span className="status-dot" /> Seeded demo · No keys required</div>
+        <div className="status"><span className="status-dot" /> Core demo · Calendar needs no keys</div>
       </header>
 
       <section className="hero" id="top">
@@ -185,7 +202,7 @@ export default function Home() {
           <div className="step done"><span>01</span><div><b>Learning goal</b><small>Your context + constraints</small></div></div>
           <div className={`step ${stage !== "profile" ? "done" : ""}`}><span>02</span><div><b>Agent research</b><small>Tests, guidance, resources</small></div></div>
           <div className={`step ${stage === "plans" || stage === "exported" ? "done" : ""}`}><span>03</span><div><b>Choose a strategy</b><small>Three paths, same time budget</small></div></div>
-          <div className={`step ${stage === "exported" ? "done" : ""}`}><span>04</span><div><b>Start studying</b><small>Calendar + Notion-ready</small></div></div>
+          <div className={`step ${stage === "exported" ? "done" : ""}`}><span>04</span><div><b>Start studying</b><small>Calendar + live Notion write</small></div></div>
           <div className="promise"><span>8h</span><p>Your declared weekly limit. Every plan stays inside it.</p></div>
         </aside>
 
@@ -194,7 +211,7 @@ export default function Home() {
             <div className="profile-view">
               <div className="panel-heading"><div><span className="kicker">STEP 01</span><h2>Tell me where you’re headed.</h2></div><button className="text-button" onClick={() => setProfile(demoProfile)}>Use demo profile ↗</button></div>
               <div className="form-grid">
-                <label>Target language<select value={profile.language} onChange={(e) => update("language", e.target.value)}><option>English</option><option>French</option><option>Spanish</option></select></label>
+                <label>Target language<select value={profile.language} onChange={(e) => update("language", e.target.value)}>{languages.map((language) => <option key={language.name} value={language.name}>{language.name} · {language.nativeName}</option>)}</select></label>
                 <label>Current level<select value={profile.level} onChange={(e) => update("level", e.target.value)}><option>B1 · Intermediate</option><option>A2 · Elementary</option><option>B2 · Upper-intermediate</option></select></label>
                 <label>City<input value={profile.city} onChange={(e) => update("city", e.target.value)} /></label>
                 <label>Country<input value={profile.country} onChange={(e) => update("country", e.target.value)} /></label>
@@ -290,11 +307,14 @@ export default function Home() {
               </section>
 
               <div className="export-row">
-                <div><b>Ready for your real week.</b><span>3 study sessions + morning, noon, and night reminders.</span></div>
-                <button className="secondary" onClick={() => setStage("exported")}>Preview Notion page</button>
-                <button className="primary compact" data-testid="download-ics" onClick={downloadIcs}>Download calendar .ICS ↓</button>
+                <div><b>Send the plan somewhere real.</b><span>Live Notion and Google Calendar connections, plus a universal 15-event calendar file.</span></div>
+                <button className="secondary" data-testid="connect-notion" disabled={notionStatus === "connecting"} onClick={connectNotion}>{notionStatus === "connecting" ? "Creating page…" : !notionApiConfigured && notionDatabaseUrl ? "Open connected Notion plan ↗" : "Create Notion page ↗"}</button>
+                {googleCalendarUrl && <a className="secondary action-link" href={googleCalendarUrl} target="_blank" rel="noreferrer">Open Google Calendar ↗</a>}
+                <button className="primary compact" data-testid="download-ics" onClick={downloadIcs}>Download universal .ICS ↓</button>
               </div>
-              {stage === "exported" && <div className="success" role="status"><span>✓</span><div><b>Your plan is ready.</b><p>Calendar file generated. The same structured tasks are ready for a Notion database write.</p></div></div>}
+              {notionStatus === "error" && <div className="integration-error" role="alert"><span>!</span><div><b>Notion is not connected yet.</b><p>{notionMessage}</p></div></div>}
+              {notionStatus === "success" && <div className="success" role="status"><span>✓</span><div><b>Notion is connected.</b><p>{notionMessage} <a href={notionUrl} target="_blank" rel="noreferrer">Open it in Notion ↗</a></p></div></div>}
+              {calendarReady && <div className="success" role="status"><span>✓</span><div><b>Calendar file generated with 15 events.</b><p>Import it into Google, Apple, or Outlook Calendar. Events use {profile.timezone} and reminders repeat through {profile.date}.</p></div></div>}
             </div>
           )}
         </div>

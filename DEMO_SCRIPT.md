@@ -8,9 +8,9 @@ Recording notes: use a 1440p browser, keep the cursor slow, and start on the top
 
 ## 0:18–0:37 — One-click onboarding
 
-[Point to the seeded-demo badge. Click **Use demo profile**. Briefly show goal, date, and 8-hour slider.]
+[Open the target-language menu to show the 16 choices. Select English, click **Use demo profile**, and briefly show goal, date, and 8-hour slider.]
 
-“Sologurus starts with the constraints that matter: current level, location, test goal, deadline, and real weekly availability. The judge path is completely seeded, so this whole flow works without keys or setup.”
+“Sologurus supports 16 target languages and starts with the constraints that matter: current level, location, test goal, deadline, and real weekly availability. The judge path is seeded, so the core planning flow works without keys or setup.”
 
 [Click **Build my study system**.]
 
@@ -28,9 +28,9 @@ Recording notes: use a 1440p browser, keep the cursor slow, and start on the top
 
 ## 1:47–2:12 — The payoff
 
-[Scroll to the first-week block and resources. Click **Download calendar .ICS**. Show the success message; optionally open the downloaded file in Calendar after recording a clean browser take.]
+[Scroll to the first-week block and resources. Click **Open connected Notion plan** and briefly show the database with real task rows. Return, click **Open Google Calendar** to show the recurring series, then return and click **Download universal .ICS**.]
 
-“The selected plan becomes specific sessions plus three daily behavior loops: a morning start, a noon check-in, and a one-line night reflection. The ICS export works in Apple, Google, or Outlook Calendar with zero configuration. The same task objects are ready for a scoped Notion database write.”
+“The selected plan goes somewhere real. This Notion database contains dated study tasks with skill, duration, resource link, status, and reflection fields. Google Calendar already has three weekly study series and three daily behavior loops: a morning start, noon check-in, and night reflection. The universal ICS adds 12 study sessions and those three recurring reminders to Google, Apple, or Outlook with zero setup.”
 
 ## 2:12–2:47 — How we built it (graded)
 
@@ -38,7 +38,7 @@ Recording notes: use a 1440p browser, keep the cursor slow, and start on the top
 
 “Codex accelerated the end-to-end build: it turned the product requirements into the orchestration states, responsive interface, ICS emitter, seeded fixtures, tests, documentation, and deployment workflow in one focused session. GPT-5.6 does the runtime product work: tool selection, learner-specific ranking, strategy synthesis, and constraint checking.
 
-The human decisions were equally important: structured tools over free text, strategies over intensity tiers, ICS before OAuth, and one language deeply rather than ten languages poorly. Those choices make Sologurus reliable enough to use, and simple enough for any self-directed learner to start.”
+The human decisions were equally important: structured tools over free text, strategies over intensity tiers, ICS before OAuth, and broad language choice with one demo path researched deeply. Those choices make Sologurus reliable enough to use, and simple enough for any self-directed learner to start.”
 
 ## 2:47–2:55 — Close
 
@@ -55,4 +55,4 @@ The human decisions were equally important: structured tools over free text, str
 
 **Title:** Sologurus — the self-directed language learning agent
 
-**Description:** Sologurus turns a language-test goal into verified exam options, free-first learning resources, and three strategically distinct study plans that respect a learner’s weekly availability. GPT-5.6 orchestrates structured tools and constraint-checks the curriculum; a zero-key seeded demo lets judges run the full flow and export a real calendar in under three minutes.
+**Description:** Sologurus turns a language-test goal into verified exam options, free-first learning resources, and three strategically distinct study plans that respect a learner’s weekly availability. Learners can choose from 16 target languages, send the result to connected Notion and Google Calendar experiences, or export a universal calendar file. GPT-5.6 orchestrates structured tools and constraint-checks the curriculum.
