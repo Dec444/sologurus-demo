@@ -1,0 +1,18 @@
+[
+  { "name": "English", "nativeName": "English" },
+  { "name": "Spanish", "nativeName": "Español" },
+  { "name": "French", "nativeName": "Français" },
+  { "name": "German", "nativeName": "Deutsch" },
+  { "name": "Italian", "nativeName": "Italiano" },
+  { "name": "Portuguese", "nativeName": "Português" },
+  { "name": "Mandarin Chinese", "nativeName": "普通话" },
+  { "name": "Japanese", "nativeName": "日本語" },
+  { "name": "Korean", "nativeName": "한국어" },
+  { "name": "Arabic", "nativeName": "العربية" },
+  { "name": "Vietnamese", "nativeName": "Tiếng Việt" },
+  { "name": "Dutch", "nativeName": "Nederlands" },
+  { "name": "Swedish", "nativeName": "Svenska" },
+  { "name": "Turkish", "nativeName": "Türkçe" },
+  { "name": "Hindi", "nativeName": "हिन्दी" },
+  { "name": "Indonesian", "nativeName": "Bahasa Indonesia" }
+]
