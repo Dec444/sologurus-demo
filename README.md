@@ -1,6 +1,6 @@
 # Sologurus
 
-Sologurus is an educational planning agent for self-directed language learners. It turns “I need IELTS 7.0 by December” into a verified test recommendation, free-first resources, and three strategically different plans that stay inside the learner’s available time. The included seeded demo requires no API keys and produces a real `.ics` calendar file.
+Sologurus is an educational planning agent for self-directed language learners. It turns “I need IELTS 7.0 by December” into a verified test recommendation, local test-centre options, ten ranked YouTube teachers, a complete four-skill resource library, and three strategically different plans that stay inside the learner’s available time. The included seeded demo requires no API keys and produces a real `.ics` calendar file.
 
 Built for the **Education** category of OpenAI Build Week with Codex and GPT-5.6.
 
@@ -19,7 +19,7 @@ npm install
 npm run demo
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Click **Use demo profile**, run the agent, select a plan, and download the calendar file. No API keys are needed.
+Open [http://localhost:3000](http://localhost:3000). Click **Use demo profile**, run the agent, select a plan, browse the complete research results, and download the calendar file. No API keys are needed.
 
 ```bash
 npm run build

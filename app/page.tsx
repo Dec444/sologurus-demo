@@ -1,6 +1,18 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import resourceData from "../data/demo-resources.json";
+
+const resourceTabs = [
+  ["tests", "Tests & centres"],
+  ["youtube", "YouTube · 10"],
+  ["listening", "Listening · 5"],
+  ["speaking", "Speaking · 5"],
+  ["reading", "Reading · 5"],
+  ["writing", "Writing · 5"],
+] as const;
+
+type ResourceTab = (typeof resourceTabs)[number][0];
 
 type Profile = {
   language: string;
@@ -33,7 +45,7 @@ const demoProfile: Profile = {
 };
 
 const toolSteps = [
-  ["search_tests", "6 exams · 2 local centres", "Verified official sources"],
+  ["search_tests", "6 exams · 3 local centres", "Verified official sources"],
   ["rank_guidance", "10 channels · 5 communities", "Scored for B1 + IELTS fit"],
   ["curate_resources", "30 free-first resources", "Four skills + TV immersion"],
   ["generate_plans", "3 strategies · 8 h/week", "Constraint check passed"],
@@ -129,6 +141,7 @@ export default function Home() {
   const [stage, setStage] = useState<"profile" | "running" | "plans" | "exported">("profile");
   const [activeTool, setActiveTool] = useState(0);
   const [selected, setSelected] = useState("balanced");
+  const [resourceTab, setResourceTab] = useState<ResourceTab>("tests");
   const selectedPlan = useMemo(() => plans.find((plan) => plan.id === selected) ?? plans[2], [selected]);
 
   const update = (key: keyof Profile, value: string | number) => setProfile((current) => ({ ...current, [key]: value }));
@@ -226,6 +239,56 @@ export default function Home() {
                 <div><span className="kicker">YOUR FIRST STUDY BLOCK</span><h3>{selectedPlan.name} · Week one</h3>{selectedPlan.sample.map((item) => <p key={item}><span>✓</span>{item}</p>)}</div>
                 <div className="resource-stack"><span className="kicker">RESOURCES IN THIS PLAN</span>{resources.map(([skill, name, meta]) => <div key={skill}><b>{skill}</b><span>{name}</span><small>{meta}</small></div>)}</div>
               </div>
+
+              <section className="resource-explorer" aria-labelledby="all-resources-title">
+                <div className="resource-heading">
+                  <div><span className="kicker">AGENT RESEARCH · FULL RESULTS</span><h3 id="all-resources-title">See every recommendation.</h3></div>
+                  <p>Official test locations, ranked teachers, and five materials for every skill. Sources last checked {resourceData.lastVerified}.</p>
+                </div>
+                <div className="resource-tabs" role="tablist" aria-label="Research result categories">
+                  {resourceTabs.map(([id, label]) => (
+                    <button key={id} role="tab" aria-selected={resourceTab === id} className={resourceTab === id ? "active" : ""} onClick={() => setResourceTab(id)}>{label}</button>
+                  ))}
+                </div>
+
+                <div className="resource-results" role="tabpanel">
+                  {resourceTab === "tests" && (
+                    <>
+                      <div className="result-subhead"><b>Test centres near {profile.city}</b><span>{resourceData.testCenters.length} verified locations</span></div>
+                      <div className="center-grid">
+                        {resourceData.testCenters.map((center) => (
+                          <a className="center-card" href={center.registrationUrl} target="_blank" rel="noreferrer" key={center.name}>
+                            <span className="pin">⌖</span><div><b>{center.name}</b><small>{center.provider}</small><address>{center.address}</address><p>{center.availability}</p></div><span className="open-link">Official booking ↗</span>
+                          </a>
+                        ))}
+                      </div>
+                      <div className="result-subhead secondary-head"><b>Recognized English tests</b><span>{resourceData.tests.length} options compared</span></div>
+                      <div className="resource-list tests-list">
+                        {resourceData.tests.map((test) => (
+                          <a href={test.sourceUrl} target="_blank" rel="noreferrer" key={test.name}><span className="rank">TEST</span><div><b>{test.name}</b><p>{test.fit}</p><small>{test.format}</small></div><span className="open-link">Source ↗</span></a>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  {resourceTab === "youtube" && (
+                    <div className="resource-list">
+                      {resourceData.youtube.map((channel, index) => (
+                        <a href={channel.url} target="_blank" rel="noreferrer" key={channel.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{channel.name}</b><p>{channel.bestFor}</p><small>{channel.level} · learner-fit score {channel.score}/100</small></div><span className="open-link">Watch ↗</span></a>
+                      ))}
+                    </div>
+                  )}
+
+                  {resourceTab !== "tests" && resourceTab !== "youtube" && (
+                    <div className="material-grid">
+                      {resourceData.materials[resourceTab].map((material, index) => (
+                        <a href={material.url} target="_blank" rel="noreferrer" key={material.name}><span className="material-number">0{index + 1}</span><div><b>{material.name}</b><p>{material.use}</p><small>{material.cost} · {material.level}</small></div><span className="open-link">Open ↗</span></a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </section>
+
               <div className="export-row">
                 <div><b>Ready for your real week.</b><span>3 study sessions + morning, noon, and night reminders.</span></div>
                 <button className="secondary" onClick={() => setStage("exported")}>Preview Notion page</button>

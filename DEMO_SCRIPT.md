@@ -20,19 +20,19 @@ Recording notes: use a 1440p browser, keep the cursor slow, and start on the top
 
 “This is not a chatbot free-writing a curriculum. GPT-5.6 is a planner over structured tools. It finds relevant tests, ranks current guidance, curates free-first resources, then composes plans from those validated objects. Every step has a predictable schema, and every plan is checked against Linh’s eight-hour limit.”
 
-## 1:03–1:42 — The centerpiece: strategic plans
+## 1:03–1:47 — Evidence and strategic plans
 
-[Point to the IELTS General recommendation. Click each plan card once; settle on **Balanced Four-Skill**.]
+[Point to the IELTS General recommendation. Scroll to **See every recommendation**. Open **Tests & centres**, **YouTube**, and **Listening** briefly. Then click each plan card once; settle on **Balanced Four-Skill**.]
 
-“For Canadian PR, the agent recommends IELTS General and explains the fit. Then it offers three real strategies — not light, medium, and heavy versions of the same idea. Test-First prioritizes exam mechanics. Immersion-Led builds fluency through input. Balanced Four-Skill avoids a hidden weak band. Each choice shows an honest expected outcome, the exact skill split, and concrete tasks such as twenty-five minutes of IELTS writing outline work.”
+“For Canadian PR, the agent recommends IELTS General and explains the fit. Linh can inspect every result: official test-centre addresses and booking links, ten ranked YouTube teachers with learner-fit rationale, and five listening, speaking, reading, and writing materials. Then she chooses among three real strategies — not light, medium, and heavy versions of the same idea. Test-First prioritizes exam mechanics; Immersion-Led builds fluency; and Balanced Four-Skill avoids a hidden weak band.”
 
-## 1:42–2:10 — The payoff
+## 1:47–2:12 — The payoff
 
 [Scroll to the first-week block and resources. Click **Download calendar .ICS**. Show the success message; optionally open the downloaded file in Calendar after recording a clean browser take.]
 
 “The selected plan becomes specific sessions plus three daily behavior loops: a morning start, a noon check-in, and a one-line night reflection. The ICS export works in Apple, Google, or Outlook Calendar with zero configuration. The same task objects are ready for a scoped Notion database write.”
 
-## 2:10–2:47 — How we built it (graded)
+## 2:12–2:47 — How we built it (graded)
 
 [Scroll to ‘Why this is an agent, not a prompt.’ Keep the schema card visible.]
 
