@@ -42,7 +42,7 @@ type ResourceData = {
   tests: TestOption[];
   testCenters: TestCenter[];
   youtube: Channel[];
-  forums: Forum[];
+  forums?: Forum[];
   materials: Record<"listening" | "speaking" | "reading" | "writing", Material[]>;
 };
 
@@ -142,7 +142,7 @@ export default function Home() {
   const resourceTabs: [ResourceTab, string][] = useMemo(() => [
     ["tests", `Tests & centres · ${resourceData ? resourceData.tests.length + resourceData.testCenters.length : 0}`],
     ["youtube", `YouTube · ${resourceData?.youtube.length ?? 0}`],
-    ["forums", `Forums · ${resourceData?.forums.length ?? 0}`],
+    ["forums", `Forums · ${resourceData?.forums?.length ?? 0}`],
     ["listening", `Listening · ${resourceData?.materials.listening.length ?? 0}`],
     ["speaking", `Speaking · ${resourceData?.materials.speaking.length ?? 0}`],
     ["reading", `Reading · ${resourceData?.materials.reading.length ?? 0}`],
@@ -157,7 +157,7 @@ export default function Home() {
   }, [resourceData]);
   const toolSteps = useMemo(() => [
     ["search_tests", resourceData ? `${resourceData.tests.length} exams · ${resourceData.testCenters.length} location sources` : "Loading verified sources", `${profile.language} · ${profile.city}, ${profile.country}`],
-    ["rank_guidance", resourceData ? `${resourceData.youtube.length} educators · ${resourceData.forums.length} forums` : "Loading educators and forums", `Selected for ${profile.language} learner fit`],
+    ["rank_guidance", resourceData ? `${resourceData.youtube.length} educators · ${resourceData.forums?.length ?? 0} forums` : "Loading educators and forums", `Selected for ${profile.language} learner fit`],
     ["curate_resources", resourceData ? `${Object.values(resourceData.materials).flat().length} skill resources` : "Loading four-skill materials", "Listening · speaking · reading · writing"],
     ["generate_plans", `3 strategies · ${profile.hours} h/week`, "Constraint check passed"],
   ], [profile.city, profile.country, profile.hours, profile.language, resourceData]);
@@ -174,7 +174,7 @@ export default function Home() {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch(`/api/resources?${resourceQueryKey}`, { signal: controller.signal })
+    fetch(`/api/resources?${resourceQueryKey}`, { signal: controller.signal, cache: "no-store" })
       .then(async (response) => {
         if (!response.ok) throw new Error("The verified resource catalog is temporarily unavailable.");
         return response.json() as Promise<ResourceData>;
@@ -371,7 +371,7 @@ export default function Home() {
 
                   {resourceTab === "forums" && (
                     <div className="resource-list forum-list">
-                      {resourceData.forums.map((forum, index) => (
+                      {(resourceData.forums ?? []).map((forum, index) => (
                         <a href={forum.url} target="_blank" rel="noreferrer" key={forum.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{forum.name}</b><p>{forum.bestFor}</p><small>Active study community · verify community rules before posting</small></div><span className="open-link">Join ↗</span></a>
                       ))}
                     </div>

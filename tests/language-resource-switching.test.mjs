@@ -63,10 +63,13 @@ test("Notion receives the selected research instead of opening a static fallback
 
 test("the client reloads research when language or location changes", async () => {
   const page = await readFile(pageUrl, "utf8");
+  const resourceRoute = await readFile(new URL("../app/api/resources/route.ts", import.meta.url), "utf8");
 
   assert.doesNotMatch(page, /demo-resources\.json/, "must not pin every learner to English resources");
   assert.match(page, /fetch\(`\/api\/resources\?/, "must request the selected catalog from the server");
   assert.match(page, /profile\.language/, "language must be part of the request");
   assert.match(page, /profile\.city/, "city must be part of the request");
   assert.match(page, /profile\.country/, "country must be part of the request");
+  assert.match(page, /cache: "no-store"/, "client must not reuse a prior resource schema");
+  assert.match(resourceRoute, /Cache-Control": "no-store/, "server must not cache stale language schemas");
 });

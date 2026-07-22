@@ -38,6 +38,6 @@ export async function GET(request: NextRequest) {
       centerMode: exactLocations.length > 0 ? "verified-local-and-directory" : "official-directory",
       sourceMode: "curated-official",
     },
-    { headers: { "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400" } },
+    { headers: { "Cache-Control": "no-store, max-age=0" } },
   );
 }
