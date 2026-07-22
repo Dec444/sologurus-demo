@@ -18,6 +18,6 @@ test("server-renders the Sologurus demo shell", async () => {
   assert.match(html, /<title>Sologurus — Your self-directed study agent<\/title>/i);
   assert.match(html, /One goal\. A plan you can/);
   assert.match(html, /Build my study system/);
-  assert.match(html, /Core demo · Calendar needs no keys/);
+  assert.match(html, /16 language catalogs · sources dated/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/);
 });

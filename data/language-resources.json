@@ -1,0 +1,535 @@
+{
+  "English": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "IELTS", "reason": "Widely accepted for study, work and migration; choose Academic or General Training for the goal.", "sourceUrl": "https://ielts.org/take-a-test/test-types" },
+    "centerFinder": { "name": "IELTS official test-centre search", "provider": "IELTS", "url": "https://ielts.org/test-centres", "note": "Search current dates and authorized venues for the selected location." },
+    "locations": [
+      { "city": "Ho Chi Minh City", "country": "Vietnam", "name": "IDP IELTS · Hai Ba Trung", "provider": "IDP IELTS Vietnam", "address": "161 Hai Ba Trung, Xuan Hoa Ward, Ho Chi Minh City", "availability": "Computer-delivered sessions; confirm the current date and fee before booking.", "registrationUrl": "https://ielts.idp.com/vietnam/test-centre/hai-ba-trung-hcm" },
+      { "city": "Ho Chi Minh City", "country": "Vietnam", "name": "British Council Exams Services", "provider": "British Council Vietnam", "address": "Viettel Complex, 285 Cach Mang Thang Tam, Ho Chi Minh City", "availability": "Venue details and current sessions are confirmed during registration.", "registrationUrl": "https://www.britishcouncil.vn/en/exam/ielts/dates-fees-locations" }
+    ],
+    "tests": [
+      { "name": "IELTS Academic / General Training", "fit": "Academic is designed for higher education; General Training is used for practical and migration goals.", "format": "Listening, Reading, Writing and Speaking", "sourceUrl": "https://ielts.org/take-a-test/test-types" },
+      { "name": "TOEFL iBT", "fit": "A common university-admissions alternative.", "format": "Reading, Listening, Speaking and Writing", "sourceUrl": "https://www.ets.org/toefl/test-takers/ibt/schedule.html" }
+    ],
+    "youtube": [
+      { "name": "BBC Learning English", "url": "https://www.youtube.com/@bbclearningenglish", "bestFor": "Daily listening, vocabulary and pronunciation", "level": "A2–C1", "score": 94 },
+      { "name": "English with Lucy", "url": "https://www.youtube.com/@EnglishwithLucy", "bestFor": "Clear pronunciation and vocabulary lessons", "level": "A2–C1", "score": 91 },
+      { "name": "E2 IELTS", "url": "https://www.youtube.com/@E2IELTS", "bestFor": "IELTS strategy and worked answers", "level": "B1–C2", "score": 90 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "BBC 6 Minute English", "url": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english", "cost": "Free", "level": "B1–C1", "use": "Short audio, transcript and vocabulary" },
+        { "name": "British Council Listening", "url": "https://learnenglish.britishcouncil.org/skills/listening", "cost": "Free", "level": "A1–C1", "use": "Levelled listening lessons and checks" }
+      ],
+      "speaking": [
+        { "name": "British Council Speaking", "url": "https://learnenglish.britishcouncil.org/skills/speaking", "cost": "Free", "level": "A1–B2", "use": "Model conversations and useful phrases" },
+        { "name": "YouGlish English", "url": "https://youglish.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Hear words in authentic video clips" }
+      ],
+      "reading": [
+        { "name": "British Council Reading", "url": "https://learnenglish.britishcouncil.org/skills/reading", "cost": "Free", "level": "A1–C1", "use": "Levelled texts with comprehension work" },
+        { "name": "News in Levels", "url": "https://www.newsinlevels.com/", "cost": "Free", "level": "A1–B2", "use": "Current stories rewritten at three levels" }
+      ],
+      "writing": [
+        { "name": "Cambridge Write & Improve", "url": "https://writeandimprove.com/", "cost": "Free", "level": "A2–C1", "use": "Prompts with automated feedback" },
+        { "name": "British Council Writing", "url": "https://learnenglish.britishcouncil.org/skills/writing", "cost": "Free", "level": "A1–C1", "use": "Levelled models and writing tasks" }
+      ]
+    }
+  },
+  "Spanish": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "DELE", "reason": "Instituto Cervantes diplomas are official Spanish qualifications with levels A1–C2.", "sourceUrl": "https://cervantes.org/es/examenes/dele" },
+    "centerFinder": { "name": "DELE examination-centre finder", "provider": "Instituto Cervantes", "url": "https://controlcalidad.examenes.cervantes.es/es/dele/donde", "note": "Use the official country and city search for current centres and sessions." },
+    "locations": [],
+    "tests": [
+      { "name": "DELE", "fit": "Official, level-specific diploma for long-term proof of Spanish ability.", "format": "Reading, Listening, Writing and Speaking", "sourceUrl": "https://cervantes.org/es/examenes/dele" },
+      { "name": "SIELE", "fit": "Digital proficiency report useful when a faster, scored result is preferred.", "format": "Modular digital exam covering four skills", "sourceUrl": "https://siele.org/" }
+    ],
+    "youtube": [
+      { "name": "Dreaming Spanish", "url": "https://www.youtube.com/@DreamingSpanish", "bestFor": "Comprehensible input from beginner to advanced", "level": "A1–C1", "score": 95 },
+      { "name": "Butterfly Spanish", "url": "https://www.youtube.com/@ButterflySpanish", "bestFor": "Friendly grammar, vocabulary and culture lessons", "level": "A1–B2", "score": 92 },
+      { "name": "Easy Spanish", "url": "https://www.youtube.com/@EasySpanish", "bestFor": "Street interviews with bilingual subtitles", "level": "A2–C1", "score": 90 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "AVE Global Spanish activities", "url": "https://cvc.cervantes.es/ensenanza/actividades_ave/", "cost": "Free", "level": "A1–C1", "use": "Instituto Cervantes multimedia practice" },
+        { "name": "Easy Spanish Podcast", "url": "https://www.easyspanish.fm/", "cost": "Free / paid", "level": "A2–C1", "use": "Natural conversations with learning support" }
+      ],
+      "speaking": [
+        { "name": "Forvo Spanish", "url": "https://forvo.com/languages/es/", "cost": "Free", "level": "A1–C2", "use": "Native-speaker pronunciation examples" },
+        { "name": "SpanishDict pronunciation", "url": "https://www.spanishdict.com/pronunciation", "cost": "Free", "level": "A1–C1", "use": "Pronunciation clips and phrase practice" }
+      ],
+      "reading": [
+        { "name": "CVC Lecturas paso a paso", "url": "https://cvc.cervantes.es/aula/lecturas/", "cost": "Free", "level": "A1–B2", "use": "Graded readings from Instituto Cervantes" },
+        { "name": "News in Slow Spanish", "url": "https://www.newsinslowspanish.com/", "cost": "Free / paid", "level": "A2–C1", "use": "News stories with learner support" }
+      ],
+      "writing": [
+        { "name": "DELE sample exams", "url": "https://examenes.cervantes.es/es/dele/preparar-prueba", "cost": "Free", "level": "A1–C2", "use": "Official writing tasks and exam models" },
+        { "name": "LangCorrect Spanish", "url": "https://langcorrect.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Write journal entries for community correction" }
+      ]
+    }
+  },
+  "French": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "DELF / DALF", "reason": "Official diplomas cover CEFR levels A1 through C2 and remain valid for life.", "sourceUrl": "https://www.france-education-international.fr/diplome/delf-dalf" },
+    "centerFinder": { "name": "DELF-DALF examination-centre map", "provider": "France Éducation international", "url": "https://www.france-education-international.fr/en/centres-d-examen/carte", "note": "Use the official map to confirm the closest authorized centre and dates." },
+    "locations": [],
+    "tests": [
+      { "name": "DELF / DALF", "fit": "Permanent official diploma for study, work and personal goals.", "format": "Listening, Reading, Writing and Speaking", "sourceUrl": "https://www.france-education-international.fr/diplome/delf-dalf" },
+      { "name": "TCF", "fit": "A scored proficiency test used for several study and immigration pathways.", "format": "Core and optional skill modules", "sourceUrl": "https://www.france-education-international.fr/test/tcf-tout-public" }
+    ],
+    "youtube": [
+      { "name": "innerFrench", "url": "https://www.youtube.com/@innerFrench", "bestFor": "Intermediate listening through thoughtful topics", "level": "B1–C1", "score": 95 },
+      { "name": "Easy French", "url": "https://www.youtube.com/@EasyFrench", "bestFor": "Authentic street interviews with subtitles", "level": "A2–C1", "score": 92 },
+      { "name": "Piece of French", "url": "https://www.youtube.com/@pieceoffrench", "bestFor": "Everyday French and comprehensible vlogs", "level": "A2–B2", "score": 89 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "TV5MONDE Apprendre", "url": "https://apprendre.tv5monde.com/", "cost": "Free", "level": "A1–B2", "use": "Video-based exercises built for French learners" },
+        { "name": "RFI Français facile", "url": "https://francaisfacile.rfi.fr/", "cost": "Free", "level": "A2–C1", "use": "News audio, transcripts and exercises" }
+      ],
+      "speaking": [
+        { "name": "Forvo French", "url": "https://forvo.com/languages/fr/", "cost": "Free", "level": "A1–C2", "use": "Native pronunciation recordings" },
+        { "name": "TV5MONDE pronunciation", "url": "https://apprendre.tv5monde.com/fr/aides/prononciation", "cost": "Free", "level": "A1–B2", "use": "Guided sound and rhythm practice" }
+      ],
+      "reading": [
+        { "name": "RFI Français facile", "url": "https://francaisfacile.rfi.fr/fr/", "cost": "Free", "level": "A2–C1", "use": "Current articles paired with learning activities" },
+        { "name": "TV5MONDE reading exercises", "url": "https://apprendre.tv5monde.com/fr/exercices", "cost": "Free", "level": "A1–B2", "use": "Filterable comprehension exercises" }
+      ],
+      "writing": [
+        { "name": "DELF-DALF sample papers", "url": "https://www.france-education-international.fr/diplome/delf-tout-public/niveau-b2/exemples-sujets", "cost": "Free", "level": "A1–C2", "use": "Official production-écrite practice" },
+        { "name": "LangCorrect French", "url": "https://langcorrect.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Community corrections for short writing" }
+      ]
+    }
+  },
+  "German": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "Goethe-Zertifikat", "reason": "Goethe-Institut exams provide recognized certificates from A1 to C2.", "sourceUrl": "https://www.goethe.de/en/spr/prf.html" },
+    "centerFinder": { "name": "Goethe exam locations", "provider": "Goethe-Institut", "url": "https://www.goethe.de/en/spr/prf/ort.html", "note": "Select country and level on the official exam-location page." },
+    "locations": [],
+    "tests": [
+      { "name": "Goethe-Zertifikat", "fit": "Level-specific proof for personal, academic and professional goals.", "format": "Reading, Listening, Writing and Speaking", "sourceUrl": "https://www.goethe.de/en/spr/prf.html" },
+      { "name": "TestDaF", "fit": "Designed for international applicants to German universities.", "format": "Reading, Listening, Writing and Speaking", "sourceUrl": "https://www.testdaf.de/en/" }
+    ],
+    "youtube": [
+      { "name": "Easy German", "url": "https://www.youtube.com/@EasyGerman", "bestFor": "Authentic conversations with subtitles", "level": "A2–C1", "score": 96 },
+      { "name": "Learn German with Anja", "url": "https://www.youtube.com/@LearnGermanwithAnja", "bestFor": "Energetic beginner grammar and vocabulary", "level": "A1–B2", "score": 91 },
+      { "name": "Deutsch mit Marija", "url": "https://www.youtube.com/@DeutschmitMarija", "bestFor": "Exam-oriented intermediate and advanced German", "level": "B1–C1", "score": 89 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "DW Learn German", "url": "https://learngerman.dw.com/", "cost": "Free", "level": "A1–C1", "use": "Courses, news and videos by Deutsche Welle" },
+        { "name": "Goethe listening practice", "url": "https://www.goethe.de/en/spr/ueb.html", "cost": "Free", "level": "A1–C2", "use": "Official exercises and exam preparation" }
+      ],
+      "speaking": [
+        { "name": "Goethe exam training", "url": "https://www.goethe.de/en/spr/prf/ueb.html", "cost": "Free", "level": "A1–C2", "use": "Official speaking formats and sample tasks" },
+        { "name": "Forvo German", "url": "https://forvo.com/languages/de/", "cost": "Free", "level": "A1–C2", "use": "Native-speaker pronunciation clips" }
+      ],
+      "reading": [
+        { "name": "DW Langsam gesprochene Nachrichten", "url": "https://learngerman.dw.com/de/langsam-gesprochene-nachrichten/s-60040332", "cost": "Free", "level": "B1–C1", "use": "Slower current news with transcripts" },
+        { "name": "Goethe reading practice", "url": "https://www.goethe.de/en/spr/ueb.html", "cost": "Free", "level": "A1–C2", "use": "Official levelled exercises" }
+      ],
+      "writing": [
+        { "name": "Goethe exam practice", "url": "https://www.goethe.de/en/spr/prf/ueb.html", "cost": "Free", "level": "A1–C2", "use": "Official writing prompts and models" },
+        { "name": "LangCorrect German", "url": "https://langcorrect.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Writing exchange and community feedback" }
+      ]
+    }
+  },
+  "Italian": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "CILS", "reason": "The University for Foreigners of Siena certifies Italian across CEFR levels.", "sourceUrl": "https://cils.unistrasi.it/" },
+    "centerFinder": { "name": "CILS examination locations", "provider": "Università per Stranieri di Siena", "url": "https://cils.unistrasi.it/1/83/88/Sedi_di_esami.htm", "note": "Confirm a centre and session in the official CILS directory." },
+    "locations": [],
+    "tests": [
+      { "name": "CILS", "fit": "Level-specific certification for study, work and citizenship pathways.", "format": "Listening, Reading, Writing, Speaking and language structures", "sourceUrl": "https://cils.unistrasi.it/" },
+      { "name": "CELI", "fit": "General Italian certification from the University for Foreigners of Perugia.", "format": "Reading, Writing, Listening and Speaking", "sourceUrl": "https://www.cvcl.it/categorie/categoria-42" }
+    ],
+    "youtube": [
+      { "name": "Learn Italian with Lucrezia", "url": "https://www.youtube.com/@lucreziaoddone", "bestFor": "Natural Italian, grammar and culture", "level": "A1–C1", "score": 95 },
+      { "name": "Easy Italian", "url": "https://www.youtube.com/@EasyItalian", "bestFor": "Real conversations with subtitles", "level": "A2–C1", "score": 92 },
+      { "name": "Podcast Italiano", "url": "https://www.youtube.com/@PodcastItaliano", "bestFor": "Comprehensible stories and explanations", "level": "A2–C1", "score": 90 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "Rai Scuola Italiano per stranieri", "url": "https://www.raiscuola.rai.it/italianoperstranieri", "cost": "Free", "level": "A1–B2", "use": "Public-broadcaster video lessons" },
+        { "name": "Podcast Italiano", "url": "https://podcastitaliano.com/", "cost": "Free / paid", "level": "A2–C1", "use": "Transcribed audio and natural Italian" }
+      ],
+      "speaking": [
+        { "name": "Forvo Italian", "url": "https://forvo.com/languages/it/", "cost": "Free", "level": "A1–C2", "use": "Native pronunciation recordings" },
+        { "name": "CILS sample exams", "url": "https://cils.unistrasi.it/89/188/Prove_Liv._CILS.htm", "cost": "Free", "level": "A1–C2", "use": "Official oral-production task formats" }
+      ],
+      "reading": [
+        { "name": "Rai Scuola Italian", "url": "https://www.raiscuola.rai.it/italianoperstranieri", "cost": "Free", "level": "A1–B2", "use": "Lesson texts and supporting explanations" },
+        { "name": "EasyItalianNews", "url": "https://easyitaliannews.com/", "cost": "Free", "level": "A2–B2", "use": "Simplified current stories" }
+      ],
+      "writing": [
+        { "name": "CILS sample exams", "url": "https://cils.unistrasi.it/89/188/Prove_Liv._CILS.htm", "cost": "Free", "level": "A1–C2", "use": "Official written-production tasks" },
+        { "name": "LangCorrect Italian", "url": "https://langcorrect.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Community feedback on learner writing" }
+      ]
+    }
+  },
+  "Portuguese": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "CAPLE", "reason": "CAPLE exams certify European Portuguese from A2 through C2.", "sourceUrl": "https://caple.letras.ulisboa.pt/" },
+    "centerFinder": { "name": "CAPLE examination centres", "provider": "Universidade de Lisboa", "url": "https://caple.letras.ulisboa.pt/centros", "note": "Search the official international centre directory and verify the variety required." },
+    "locations": [],
+    "tests": [
+      { "name": "CAPLE", "fit": "Official CEFR-aligned certification for European Portuguese.", "format": "Reading, Writing, Listening and Speaking", "sourceUrl": "https://caple.letras.ulisboa.pt/" },
+      { "name": "Celpe-Bras", "fit": "Brazil's official certificate of proficiency in Portuguese for foreigners.", "format": "Written and oral components", "sourceUrl": "https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/celpe-bras" }
+    ],
+    "youtube": [
+      { "name": "Speaking Brazilian", "url": "https://www.youtube.com/@SpeakingBrazilian", "bestFor": "Brazilian pronunciation and everyday usage", "level": "A1–C1", "score": 94 },
+      { "name": "Portuguese With Leo", "url": "https://www.youtube.com/@PortugueseWithLeo", "bestFor": "European Portuguese and culture", "level": "A2–C1", "score": 92 },
+      { "name": "Easy Portuguese", "url": "https://www.youtube.com/@EasyPortugueseVideos", "bestFor": "Authentic interviews and subtitles", "level": "A2–C1", "score": 89 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "Camões learning area", "url": "https://cvc.instituto-camoes.pt/area-aprender", "cost": "Free", "level": "A1–C1", "use": "Official Portuguese learning activities" },
+        { "name": "Practice Portuguese", "url": "https://www.practiceportuguese.com/", "cost": "Free / paid", "level": "A1–C1", "use": "European Portuguese dialogues and audio" }
+      ],
+      "speaking": [
+        { "name": "Forvo Portuguese", "url": "https://forvo.com/languages/pt/", "cost": "Free", "level": "A1–C2", "use": "Pronunciation from multiple Portuguese varieties" },
+        { "name": "CAPLE sample exams", "url": "https://caple.letras.ulisboa.pt/exames", "cost": "Free", "level": "A2–C2", "use": "Official spoken-interaction formats" }
+      ],
+      "reading": [
+        { "name": "Camões learning area", "url": "https://cvc.instituto-camoes.pt/area-aprender", "cost": "Free", "level": "A1–C1", "use": "Texts and language activities" },
+        { "name": "RTP Notícias", "url": "https://www.rtp.pt/noticias/", "cost": "Free", "level": "B1–C2", "use": "Authentic European Portuguese news" }
+      ],
+      "writing": [
+        { "name": "CAPLE exam information", "url": "https://caple.letras.ulisboa.pt/exames", "cost": "Free", "level": "A2–C2", "use": "Use official descriptors to structure practice" },
+        { "name": "LangCorrect Portuguese", "url": "https://langcorrect.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Community feedback on short texts" }
+      ]
+    }
+  },
+  "Mandarin Chinese": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "HSK", "reason": "HSK is the standardized Chinese-language proficiency test for non-native speakers.", "sourceUrl": "https://www.chinesetest.cn/HSK" },
+    "centerFinder": { "name": "HSK test-centre search", "provider": "Chinese Testing International", "url": "https://www.chinesetest.cn/test-centers", "note": "Search the official directory for current paper-based and internet-based sessions." },
+    "locations": [],
+    "tests": [
+      { "name": "HSK", "fit": "General Mandarin certification for academic and professional goals.", "format": "Listening, Reading and Writing; speaking is offered through HSKK", "sourceUrl": "https://www.chinesetest.cn/HSK" },
+      { "name": "TOCFL", "fit": "Mandarin proficiency certification administered by Taiwan's SC-TOP.", "format": "Listening, Reading, Speaking and Writing options", "sourceUrl": "https://tocfl.edu.tw/index.php/home/index/2" }
+    ],
+    "youtube": [
+      { "name": "Yoyo Chinese", "url": "https://www.youtube.com/@YoyoChinese", "bestFor": "Structured pronunciation and grammar", "level": "A1–B2", "score": 95 },
+      { "name": "Mandarin Corner", "url": "https://www.youtube.com/@MandarinCorner2", "bestFor": "Long-form comprehensible conversations", "level": "A2–C1", "score": 93 },
+      { "name": "Everyday Chinese", "url": "https://www.youtube.com/@EverydayChinese", "bestFor": "Practical phrases and listening", "level": "A1–B2", "score": 89 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "Mandarin Bean", "url": "https://mandarinbean.com/", "cost": "Free / paid", "level": "A1–C1", "use": "Graded lessons with audio and transcripts" },
+        { "name": "ChinesePod", "url": "https://www.chinesepod.com/", "cost": "Free / paid", "level": "A1–C1", "use": "Large library of levelled audio lessons" }
+      ],
+      "speaking": [
+        { "name": "Forvo Mandarin", "url": "https://forvo.com/languages/zh/", "cost": "Free", "level": "A1–C2", "use": "Native pronunciation examples" },
+        { "name": "HSKK information", "url": "https://www.chinesetest.cn/HSKK", "cost": "Free", "level": "A1–C1", "use": "Official speaking-test format and targets" }
+      ],
+      "reading": [
+        { "name": "Du Chinese", "url": "https://duchinese.net/", "cost": "Free / paid", "level": "A1–C1", "use": "Graded stories with dictionary support" },
+        { "name": "The Chairman's Bao", "url": "https://www.thechairmansbao.com/", "cost": "Free / paid", "level": "A1–C1", "use": "HSK-graded news reading" }
+      ],
+      "writing": [
+        { "name": "HSK sample papers", "url": "https://www.chinesetest.cn/HSK", "cost": "Free", "level": "A1–C1", "use": "Official exam information and sample access" },
+        { "name": "Purple Culture stroke order", "url": "https://www.purpleculture.net/chinese-english-dictionary/", "cost": "Free", "level": "A1–C1", "use": "Character lookup and stroke-order practice" }
+      ]
+    }
+  },
+  "Japanese": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "JLPT", "reason": "The Japanese-Language Proficiency Test is the major level-based qualification from N5 to N1.", "sourceUrl": "https://www.jlpt.jp/e/about/index.html" },
+    "centerFinder": { "name": "JLPT overseas test-site list", "provider": "Japan Foundation / JEES", "url": "https://www.jlpt.jp/e/application/overseas_list.html", "note": "Check the official country list; test months differ by city." },
+    "locations": [],
+    "tests": [
+      { "name": "JLPT", "fit": "Widely recognized level qualification for study and employment contexts.", "format": "Language Knowledge, Reading and Listening", "sourceUrl": "https://www.jlpt.jp/e/about/index.html" },
+      { "name": "JFT-Basic", "fit": "Measures everyday Japanese needed for life and work in Japan.", "format": "Computer-based language knowledge and comprehension", "sourceUrl": "https://www.jpf.go.jp/jft-basic/e/" }
+    ],
+    "youtube": [
+      { "name": "Japanese Ammo with Misa", "url": "https://www.youtube.com/@JapaneseAmmowithMisa", "bestFor": "Detailed grammar and natural examples", "level": "A1–C1", "score": 95 },
+      { "name": "ToKini Andy", "url": "https://www.youtube.com/@ToKiniAndy", "bestFor": "Structured textbook and grammar support", "level": "A1–B2", "score": 91 },
+      { "name": "Comprehensible Japanese", "url": "https://www.youtube.com/@cijapanese", "bestFor": "Visual, levelled listening input", "level": "A1–B2", "score": 90 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "Erin's Challenge", "url": "https://www.erin.jpf.go.jp/en/", "cost": "Free", "level": "A1–B1", "use": "Japan Foundation video lessons and scenes" },
+        { "name": "NHK Easy Japanese", "url": "https://www.nhk.or.jp/lesson/en/", "cost": "Free", "level": "A1–A2", "use": "Public-broadcaster audio lessons" }
+      ],
+      "speaking": [
+        { "name": "Marugoto e-learning", "url": "https://marugoto.jpf.go.jp/en/e-learning/index.html", "cost": "Free", "level": "A1–B1", "use": "Can-do speaking activities and courses" },
+        { "name": "Forvo Japanese", "url": "https://forvo.com/languages/ja/", "cost": "Free", "level": "A1–C2", "use": "Native pronunciation recordings" }
+      ],
+      "reading": [
+        { "name": "NHK News Web Easy", "url": "https://www3.nhk.or.jp/news/easy/", "cost": "Free", "level": "A2–B1", "use": "Simplified news with reading aids" },
+        { "name": "Tadoku free books", "url": "https://tadoku.org/japanese/en/free-books-en/", "cost": "Free", "level": "A1–B2", "use": "Graded readers for extensive reading" }
+      ],
+      "writing": [
+        { "name": "JLPT sample questions", "url": "https://www.jlpt.jp/e/samples/forlearners.html", "cost": "Free", "level": "N5–N1", "use": "Official language-knowledge models" },
+        { "name": "LangCorrect Japanese", "url": "https://langcorrect.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Community correction for journal writing" }
+      ]
+    }
+  },
+  "Korean": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "TOPIK", "reason": "TOPIK is Korea's official proficiency test for non-native speakers.", "sourceUrl": "https://www.topik.go.kr/TWSTDY/TWSTDY0111.do" },
+    "centerFinder": { "name": "TOPIK registration and test notices", "provider": "National Institute for International Education", "url": "https://www.topik.go.kr/", "note": "International registration is handled by local institutions listed in official notices." },
+    "locations": [],
+    "tests": [
+      { "name": "TOPIK I / II", "fit": "Official level result for education, work and residency uses.", "format": "Listening and Reading; TOPIK II also includes Writing", "sourceUrl": "https://www.topik.go.kr/TWSTDY/TWSTDY0111.do" },
+      { "name": "EPS-TOPIK", "fit": "Employment-focused Korean assessment used in the Employment Permit System.", "format": "Listening and Reading", "sourceUrl": "https://epstopik.hrdkorea.or.kr/epstopik/home/main/mainPage.do" }
+    ],
+    "youtube": [
+      { "name": "Talk To Me In Korean", "url": "https://www.youtube.com/@talktomeinkorean", "bestFor": "Practical explanations and natural Korean", "level": "A1–C1", "score": 95 },
+      { "name": "Korean Unnie", "url": "https://www.youtube.com/@KoreanUnnie", "bestFor": "Beginner vocabulary and culture", "level": "A1–B1", "score": 90 },
+      { "name": "Learn Korean with GO! Billy", "url": "https://www.youtube.com/@GoBillyKorean", "bestFor": "Thorough grammar and Hangul lessons", "level": "A1–B2", "score": 89 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "Online King Sejong Institute", "url": "https://www.iksi.or.kr/lms/main/main.do?lang=EN", "cost": "Free", "level": "A1–B2", "use": "Official online courses and listening work" },
+        { "name": "KBS World Korean", "url": "https://world.kbs.co.kr/learn_korean/", "cost": "Free", "level": "A1–B1", "use": "Public-broadcaster phrase and audio lessons" }
+      ],
+      "speaking": [
+        { "name": "King Sejong conversation courses", "url": "https://www.iksi.or.kr/lms/main/main.do?lang=EN", "cost": "Free", "level": "A1–B2", "use": "Guided dialogues and speaking tasks" },
+        { "name": "Forvo Korean", "url": "https://forvo.com/languages/ko/", "cost": "Free", "level": "A1–C2", "use": "Native pronunciation examples" }
+      ],
+      "reading": [
+        { "name": "King Sejong Institute materials", "url": "https://www.iksi.or.kr/lms/main/main.do?lang=EN", "cost": "Free", "level": "A1–B2", "use": "Structured vocabulary and reading lessons" },
+        { "name": "TOPIK practice", "url": "https://www.topik.go.kr/", "cost": "Free", "level": "A1–C1", "use": "Official notices and test preparation access" }
+      ],
+      "writing": [
+        { "name": "TOPIK II writing practice", "url": "https://www.topik.go.kr/", "cost": "Free", "level": "B1–C1", "use": "Practice against the official test format" },
+        { "name": "LangCorrect Korean", "url": "https://langcorrect.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Learner writing with community corrections" }
+      ]
+    }
+  },
+  "Arabic": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "ACTFL Arabic assessments", "reason": "ACTFL provides independently rated proficiency assessments for Arabic speaking and writing.", "sourceUrl": "https://www.actfl.org/assessments" },
+    "centerFinder": { "name": "ACTFL assessment scheduling", "provider": "ACTFL / Language Testing International", "url": "https://www.languagetesting.com/sign-in/test-candidates", "note": "Delivery is remotely scheduled rather than tied to a walk-in local centre." },
+    "locations": [],
+    "tests": [
+      { "name": "ACTFL OPI / WPT Arabic", "fit": "Skill-specific proficiency ratings for academic and professional evidence.", "format": "Rated Speaking and Writing assessments", "sourceUrl": "https://www.actfl.org/assessments" },
+      { "name": "ALPT", "fit": "General Arabic proficiency assessment; verify acceptance with the receiving institution.", "format": "Listening, Reading, Structure, Writing and Speaking", "sourceUrl": "https://www.arabacademy.com/alpt/" }
+    ],
+    "youtube": [
+      { "name": "Learn Arabic with Maha", "url": "https://www.youtube.com/@LearnArabicwithMaha", "bestFor": "Accessible Modern Standard Arabic and culture", "level": "A1–B2", "score": 93 },
+      { "name": "ArabicPod101", "url": "https://www.youtube.com/@ArabicPod101", "bestFor": "Short vocabulary and listening lessons", "level": "A1–B2", "score": 89 },
+      { "name": "Easy Arabic", "url": "https://www.youtube.com/@EasyArabicVideos", "bestFor": "Street interviews and dialect exposure", "level": "A2–C1", "score": 88 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "Al Jazeera Learning Arabic", "url": "https://learning.aljazeera.net/en", "cost": "Free", "level": "A1–C1", "use": "Levelled media-based Arabic lessons" },
+        { "name": "Playaling", "url": "https://playaling.com/", "cost": "Free / paid", "level": "A1–C1", "use": "Captioned Arabic video across dialects" }
+      ],
+      "speaking": [
+        { "name": "Forvo Arabic", "url": "https://forvo.com/languages/ar/", "cost": "Free", "level": "A1–C2", "use": "Native pronunciation across varieties" },
+        { "name": "ACTFL Arabic OPI", "url": "https://www.languagetesting.com/oral-proficiency-interview-opi", "cost": "Paid", "level": "A1–C2", "use": "Official speaking-assessment descriptors" }
+      ],
+      "reading": [
+        { "name": "Al Jazeera Learning Arabic", "url": "https://learning.aljazeera.net/en", "cost": "Free", "level": "A1–C1", "use": "Graded texts with vocabulary support" },
+        { "name": "BBC Arabic", "url": "https://www.bbc.com/arabic", "cost": "Free", "level": "B1–C2", "use": "Authentic current-affairs reading" }
+      ],
+      "writing": [
+        { "name": "ACTFL Arabic WPT", "url": "https://www.languagetesting.com/writing-proficiency-test", "cost": "Paid", "level": "A1–C2", "use": "Use official proficiency criteria for practice" },
+        { "name": "LangCorrect Arabic", "url": "https://langcorrect.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Community correction for learner writing" }
+      ]
+    }
+  },
+  "Vietnamese": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "Vietnamese proficiency certificate", "reason": "Vietnamese universities administer six-level proficiency exams for foreign learners.", "sourceUrl": "https://vietnamesestudies.tdtu.edu.vn/en/vietnamese-language-certificate/test-schedule" },
+    "centerFinder": { "name": "Vietnamese certificate test schedule", "provider": "Ton Duc Thang University", "url": "https://vietnamesestudies.tdtu.edu.vn/en/vietnamese-language-certificate/test-schedule", "note": "Check the university's current schedule and application deadline." },
+    "locations": [
+      { "city": "Ho Chi Minh City", "country": "Vietnam", "name": "Ton Duc Thang University", "provider": "Faculty of Vietnamese Studies", "address": "19 Nguyen Huu Tho Street, Tan Hung Ward, Ho Chi Minh City", "availability": "The university publishes dated exam sessions and registration deadlines.", "registrationUrl": "https://vietnamesestudies.tdtu.edu.vn/en/vietnamese-language-certificate/test-schedule" }
+    ],
+    "tests": [
+      { "name": "Vietnamese Language Proficiency Certificate", "fit": "Six-level evidence administered by authorized Vietnamese universities.", "format": "Listening, Speaking, Reading and Writing", "sourceUrl": "https://vietnamesestudies.tdtu.edu.vn/en/vietnamese-language-certificate/test-schedule" },
+      { "name": "VNU Vietnamese proficiency exam", "fit": "University-administered certificate for foreign learners.", "format": "Four-skill proficiency assessment", "sourceUrl": "https://ussh.vnu.edu.vn/eng/dao-tao/thi-chung-chi-tieng-viet/" }
+    ],
+    "youtube": [
+      { "name": "Tiếng Việt Ơi", "url": "https://www.youtube.com/results?search_query=Ti%E1%BA%BFng+Vi%E1%BB%87t+%C6%A0i", "bestFor": "Practical Vietnamese lessons and culture", "level": "A1–B2", "score": 94 },
+      { "name": "Learn Vietnamese With Annie", "url": "https://www.youtube.com/results?search_query=Learn+Vietnamese+With+Annie", "bestFor": "Southern Vietnamese pronunciation and conversation", "level": "A1–B2", "score": 91 },
+      { "name": "SVFF Vietnamese", "url": "https://www.youtube.com/results?search_query=SVFF+Vietnamese", "bestFor": "Southern-dialect dialogues and listening", "level": "A1–B2", "score": 89 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "VOV5 Vietnamese lessons", "url": "https://vovworld.vn/en-US/learn-vietnamese-c75.aspx", "cost": "Free", "level": "A1–B2", "use": "Public-radio language lessons with audio" },
+        { "name": "Tiếng Việt Ơi", "url": "https://tiengvietoi.com/", "cost": "Free / paid", "level": "A1–B2", "use": "Everyday dialogues and guided lessons" }
+      ],
+      "speaking": [
+        { "name": "Forvo Vietnamese", "url": "https://forvo.com/languages/vi/", "cost": "Free", "level": "A1–C2", "use": "Native-speaker pronunciation recordings" },
+        { "name": "VOV5 Learn Vietnamese", "url": "https://vovworld.vn/en-US/learn-vietnamese-c75.aspx", "cost": "Free", "level": "A1–B2", "use": "Repeatable model dialogues" }
+      ],
+      "reading": [
+        { "name": "VOV5 Vietnamese lessons", "url": "https://vovworld.vn/en-US/learn-vietnamese-c75.aspx", "cost": "Free", "level": "A1–B2", "use": "Bilingual lesson transcripts" },
+        { "name": "VnExpress", "url": "https://vnexpress.net/", "cost": "Free", "level": "B1–C2", "use": "Authentic Vietnamese news reading" }
+      ],
+      "writing": [
+        { "name": "TDTU exam schedule and format", "url": "https://vietnamesestudies.tdtu.edu.vn/en/vietnamese-language-certificate/test-schedule", "cost": "Free", "level": "A1–C1", "use": "Anchor practice to the official certificate" },
+        { "name": "LangCorrect Vietnamese", "url": "https://langcorrect.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Community feedback on Vietnamese writing" }
+      ]
+    }
+  },
+  "Dutch": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "Staatsexamen NT2", "reason": "The Dutch state exam certifies Dutch as a second language at B1 or B2.", "sourceUrl": "https://www.staatsexamensnt2.nl/" },
+    "centerFinder": { "name": "Staatsexamen NT2 registration", "provider": "College voor Toetsen en Examens", "url": "https://www.staatsexamensnt2.nl/aanmelden", "note": "Official registration shows current exam cities and available dates in the Netherlands." },
+    "locations": [],
+    "tests": [
+      { "name": "Staatsexamen NT2", "fit": "Official B1 and B2 programmes for education and work in the Netherlands.", "format": "Reading, Listening, Speaking and Writing", "sourceUrl": "https://www.staatsexamensnt2.nl/" },
+      { "name": "CNaVT", "fit": "International Dutch certification with purpose-specific profiles.", "format": "Listening, Reading, Writing and Speaking", "sourceUrl": "https://cnavt.org/" }
+    ],
+    "youtube": [
+      { "name": "Dutchies to be", "url": "https://www.youtube.com/results?search_query=Dutchies+to+be", "bestFor": "Structured Dutch grammar and pronunciation", "level": "A1–B2", "score": 93 },
+      { "name": "Easy Dutch", "url": "https://www.youtube.com/results?search_query=Easy+Dutch", "bestFor": "Real conversations with subtitles", "level": "A2–C1", "score": 91 },
+      { "name": "Learn Dutch with Bart de Pau", "url": "https://www.youtube.com/results?search_query=Learn+Dutch+with+Bart+de+Pau", "bestFor": "Clear beginner courses", "level": "A1–B1", "score": 89 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "NOS Jeugdjournaal", "url": "https://jeugdjournaal.nl/", "cost": "Free", "level": "A2–B2", "use": "Accessible public-broadcast news video" },
+        { "name": "NPO Luister", "url": "https://npo.nl/luister", "cost": "Free", "level": "B1–C2", "use": "Authentic Dutch public-radio audio" }
+      ],
+      "speaking": [
+        { "name": "Forvo Dutch", "url": "https://forvo.com/languages/nl/", "cost": "Free", "level": "A1–C2", "use": "Native Dutch pronunciation" },
+        { "name": "NT2 speaking exam", "url": "https://www.staatsexamensnt2.nl/onderwerpen/het-examen/examenonderdelen", "cost": "Free", "level": "B1–B2", "use": "Official component information for practice" }
+      ],
+      "reading": [
+        { "name": "NOS Jeugdjournaal", "url": "https://jeugdjournaal.nl/", "cost": "Free", "level": "A2–B2", "use": "Short, accessible current stories" },
+        { "name": "Oefenen.nl", "url": "https://oefenen.nl/", "cost": "Free / account", "level": "A1–B1", "use": "Dutch reading and civic-language practice" }
+      ],
+      "writing": [
+        { "name": "NT2 practice exams", "url": "https://www.staatsexamensnt2.nl/onderwerpen/voorbereiden-op-het-examen/oefenomgeving", "cost": "Free", "level": "B1–B2", "use": "Official practice environment" },
+        { "name": "LangCorrect Dutch", "url": "https://langcorrect.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Community corrections for learner texts" }
+      ]
+    }
+  },
+  "Swedish": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "Swedex", "reason": "Swedex is an internationally available Swedish exam at CEFR levels A2, B1 and B2.", "sourceUrl": "https://www.folkuniversitetet.se/mer-om-sprak/sprakexamina-och-sprakprov/swedex-swedish-examinations/" },
+    "centerFinder": { "name": "Swedex test-centre list", "provider": "Folkuniversitetet", "url": "https://www.folkuniversitetet.se/mer-om-sprak/sprakexamina-och-sprakprov/swedex-swedish-examinations/testcenter/", "note": "Contact an authorized centre directly for current dates and registration." },
+    "locations": [],
+    "tests": [
+      { "name": "Swedex", "fit": "General Swedish certificate for levels A2, B1 and B2.", "format": "Reading, Listening, Writing and Speaking", "sourceUrl": "https://www.folkuniversitetet.se/mer-om-sprak/sprakexamina-och-sprakprov/swedex-swedish-examinations/" },
+      { "name": "TISUS", "fit": "Qualifying Swedish test for university studies in Sweden.", "format": "Reading, Writing and Speaking", "sourceUrl": "https://www.su.se/tisus/english/" }
+    ],
+    "youtube": [
+      { "name": "Say It In Swedish", "url": "https://www.youtube.com/results?search_query=Say+It+In+Swedish", "bestFor": "Natural pronunciation and practical Swedish", "level": "A1–B2", "score": 93 },
+      { "name": "Fun Swedish", "url": "https://www.youtube.com/results?search_query=Fun+Swedish", "bestFor": "Beginner grammar and conversation", "level": "A1–B1", "score": 90 },
+      { "name": "Peter SFI", "url": "https://www.youtube.com/results?search_query=Peter+SFI+Swedish", "bestFor": "SFI-aligned explanations", "level": "A1–B2", "score": 87 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "Radio Sweden på lätt svenska", "url": "https://sverigesradio.se/radioswedenpalattsvenska", "cost": "Free", "level": "A2–B1", "use": "Public-radio news in easier Swedish" },
+        { "name": "8 Sidor listen-and-read", "url": "https://8sidor.se/", "cost": "Free", "level": "A2–B1", "use": "Easy-language news with audio options" }
+      ],
+      "speaking": [
+        { "name": "Forvo Swedish", "url": "https://forvo.com/languages/sv/", "cost": "Free", "level": "A1–C2", "use": "Native Swedish pronunciation examples" },
+        { "name": "Swedex exam information", "url": "https://www.folkuniversitetet.se/mer-om-sprak/sprakexamina-och-sprakprov/swedex-swedish-examinations/", "cost": "Free", "level": "A2–B2", "use": "Official skill expectations and format" }
+      ],
+      "reading": [
+        { "name": "8 Sidor", "url": "https://8sidor.se/", "cost": "Free", "level": "A2–B1", "use": "Independent easy-language Swedish news" },
+        { "name": "Klartext", "url": "https://sverigesradio.se/klartext", "cost": "Free", "level": "A2–B2", "use": "Accessible news from Swedish Radio" }
+      ],
+      "writing": [
+        { "name": "TISUS sample tests", "url": "https://www.su.se/tisus/english/about-tisus/sample-tests", "cost": "Free", "level": "B2–C1", "use": "Official university-level writing models" },
+        { "name": "LangCorrect Swedish", "url": "https://langcorrect.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Community feedback on learner writing" }
+      ]
+    }
+  },
+  "Turkish": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "TYS", "reason": "Yunus Emre Institute's Turkish Proficiency Exam evaluates the four core language skills.", "sourceUrl": "https://yee.org.tr/me/turkce-ogretimi/sinavlar?tab=turkce-yeterlik-sinavi" },
+    "centerFinder": { "name": "Yunus Emre Institute centres", "provider": "Yunus Emre Institute", "url": "https://www.yee.org.tr/en/node/80", "note": "Find the nearest institute and confirm whether it is offering the next TYS session." },
+    "locations": [],
+    "tests": [
+      { "name": "TYS", "fit": "General Turkish proficiency certification from Yunus Emre Institute.", "format": "Reading, Listening, Writing and Speaking", "sourceUrl": "https://yee.org.tr/me/turkce-ogretimi/sinavlar?tab=turkce-yeterlik-sinavi" },
+      { "name": "TÖMER certificate exams", "fit": "University language-centre certificates; acceptance depends on the receiving institution.", "format": "Four-skill, level-based assessment", "sourceUrl": "https://tomer.ankara.edu.tr/" }
+    ],
+    "youtube": [
+      { "name": "Turkishle", "url": "https://www.youtube.com/results?search_query=Turkishle", "bestFor": "Structured everyday Turkish", "level": "A1–B2", "score": 93 },
+      { "name": "Learn Turkish with TurkishClass101", "url": "https://www.youtube.com/results?search_query=TurkishClass101", "bestFor": "Short vocabulary and listening lessons", "level": "A1–B2", "score": 89 },
+      { "name": "Easy Turkish", "url": "https://www.youtube.com/results?search_query=Easy+Turkish", "bestFor": "Authentic street interviews", "level": "A2–C1", "score": 88 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "Learn Turkish by Yunus Emre", "url": "https://turkce.yee.org.tr/en/", "cost": "Free", "level": "A1–C1", "use": "Official online Turkish learning portal" },
+        { "name": "TRT Dinle", "url": "https://www.trtdinle.com/", "cost": "Free", "level": "B1–C2", "use": "Authentic public-broadcaster audio" }
+      ],
+      "speaking": [
+        { "name": "Forvo Turkish", "url": "https://forvo.com/languages/tr/", "cost": "Free", "level": "A1–C2", "use": "Native pronunciation recordings" },
+        { "name": "Yunus Emre online Turkish", "url": "https://turkce.yee.org.tr/en/", "cost": "Free", "level": "A1–C1", "use": "Dialogue and speaking-focused activities" }
+      ],
+      "reading": [
+        { "name": "Yunus Emre online Turkish", "url": "https://turkce.yee.org.tr/en/", "cost": "Free", "level": "A1–C1", "use": "Levelled official learning texts" },
+        { "name": "TRT Haber", "url": "https://www.trthaber.com/", "cost": "Free", "level": "B1–C2", "use": "Authentic Turkish current-affairs reading" }
+      ],
+      "writing": [
+        { "name": "TYS exam information", "url": "https://yee.org.tr/me/turkce-ogretimi/sinavlar?tab=turkce-yeterlik-sinavi", "cost": "Free", "level": "B2–C1", "use": "Practice against official skill descriptions" },
+        { "name": "LangCorrect Turkish", "url": "https://langcorrect.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Community correction for writing" }
+      ]
+    }
+  },
+  "Hindi": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "ACTFL Hindi assessments", "reason": "ACTFL proficiency assessments offer independently rated speaking and writing evidence in Hindi.", "sourceUrl": "https://www.actfl.org/assessments" },
+    "centerFinder": { "name": "ACTFL assessment scheduling", "provider": "ACTFL / Language Testing International", "url": "https://www.languagetesting.com/sign-in/test-candidates", "note": "Tests are scheduled through LTI and may be remotely proctored rather than locally seated." },
+    "locations": [],
+    "tests": [
+      { "name": "ACTFL OPI / WPT Hindi", "fit": "Skill-specific proficiency ratings for academic and professional evidence.", "format": "Rated Speaking and Writing assessments", "sourceUrl": "https://www.actfl.org/assessments" },
+      { "name": "Kendriya Hindi Sansthan examinations", "fit": "Hindi study and certification options administered by India's Central Institute of Hindi.", "format": "Programme-specific Hindi assessment", "sourceUrl": "https://khsindia.org/" }
+    ],
+    "youtube": [
+      { "name": "HindiPod101", "url": "https://www.youtube.com/results?search_query=HindiPod101", "bestFor": "Short vocabulary and listening lessons", "level": "A1–B2", "score": 91 },
+      { "name": "Anil Mahato Hindi", "url": "https://www.youtube.com/results?search_query=Anil+Mahato+Hindi", "bestFor": "Systematic Hindi grammar lessons", "level": "A1–B2", "score": 89 },
+      { "name": "Hindi TV", "url": "https://www.youtube.com/results?search_query=Hindi+TV+learn+Hindi", "bestFor": "Visual beginner vocabulary and stories", "level": "A1–A2", "score": 86 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "All India Radio News Hindi", "url": "https://newsonair.gov.in/", "cost": "Free", "level": "B1–C2", "use": "Authentic public-radio Hindi" },
+        { "name": "A Door Into Hindi", "url": "https://taj.oasis.unc.edu/", "cost": "Free", "level": "A1–B1", "use": "University-built video and audio lessons" }
+      ],
+      "speaking": [
+        { "name": "Forvo Hindi", "url": "https://forvo.com/languages/hi/", "cost": "Free", "level": "A1–C2", "use": "Native Hindi pronunciation" },
+        { "name": "ACTFL Hindi OPI", "url": "https://www.languagetesting.com/oral-proficiency-interview-opi", "cost": "Paid", "level": "A1–C2", "use": "Official speaking-proficiency framework" }
+      ],
+      "reading": [
+        { "name": "BBC Hindi", "url": "https://www.bbc.com/hindi", "cost": "Free", "level": "B1–C2", "use": "Authentic current-affairs reading" },
+        { "name": "A Door Into Hindi", "url": "https://taj.oasis.unc.edu/", "cost": "Free", "level": "A1–B1", "use": "Guided Devanagari and lesson texts" }
+      ],
+      "writing": [
+        { "name": "ACTFL Hindi WPT", "url": "https://www.languagetesting.com/writing-proficiency-test", "cost": "Paid", "level": "A1–C2", "use": "Official proficiency targets for writing" },
+        { "name": "LangCorrect Hindi", "url": "https://langcorrect.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Community correction for Hindi texts" }
+      ]
+    }
+  },
+  "Indonesian": {
+    "lastVerified": "2026-07-21",
+    "recommendation": { "name": "UKBI Adaptif Merdeka", "reason": "UKBI is Indonesia's official proficiency test for the Indonesian language.", "sourceUrl": "https://ukbi.kemendikdasmen.go.id/" },
+    "centerFinder": { "name": "UKBI registration portal", "provider": "Badan Pengembangan dan Pembinaan Bahasa", "url": "https://ukbi.kemendikdasmen.go.id/", "note": "Register through the official adaptive test portal and review current delivery details." },
+    "locations": [],
+    "tests": [
+      { "name": "UKBI Adaptif Merdeka", "fit": "Official Indonesian-language proficiency measurement.", "format": "Adaptive listening, language response and reading sections with optional writing/speaking", "sourceUrl": "https://ukbi.kemendikdasmen.go.id/" },
+      { "name": "TIBA", "fit": "University of Indonesia proficiency test designed for foreign learners.", "format": "Listening, Grammar, Reading and Writing", "sourceUrl": "https://lbifib.ui.ac.id/index.php/en/bipa-program/indonesian-proficiency-tests" }
+    ],
+    "youtube": [
+      { "name": "IndonesianPod101", "url": "https://www.youtube.com/results?search_query=IndonesianPod101", "bestFor": "Short vocabulary and listening lessons", "level": "A1–B2", "score": 91 },
+      { "name": "Bahasa Indonesia with Sarah", "url": "https://www.youtube.com/results?search_query=Bahasa+Indonesia+with+Sarah", "bestFor": "Beginner grammar and everyday phrases", "level": "A1–B1", "score": 88 },
+      { "name": "Easy Indonesian", "url": "https://www.youtube.com/results?search_query=Easy+Indonesian", "bestFor": "Natural conversations and subtitles", "level": "A2–C1", "score": 87 }
+    ],
+    "materials": {
+      "listening": [
+        { "name": "BIPA Daring", "url": "https://bipa.kemdikbud.go.id/", "cost": "Free", "level": "A1–C1", "use": "Government Indonesian-for-foreigners portal" },
+        { "name": "VOA Indonesia", "url": "https://www.voaindonesia.com/", "cost": "Free", "level": "B1–C2", "use": "Authentic news audio and video" }
+      ],
+      "speaking": [
+        { "name": "Forvo Indonesian", "url": "https://forvo.com/languages/id/", "cost": "Free", "level": "A1–C2", "use": "Native Indonesian pronunciation" },
+        { "name": "BIPA Daring", "url": "https://bipa.kemdikbud.go.id/", "cost": "Free", "level": "A1–C1", "use": "Guided dialogue and speaking materials" }
+      ],
+      "reading": [
+        { "name": "BIPA Daring", "url": "https://bipa.kemdikbud.go.id/", "cost": "Free", "level": "A1–C1", "use": "Levelled official learning texts" },
+        { "name": "Kompas", "url": "https://www.kompas.com/", "cost": "Free / paid", "level": "B1–C2", "use": "Authentic Indonesian current-affairs reading" }
+      ],
+      "writing": [
+        { "name": "UKBI official portal", "url": "https://ukbi.kemendikdasmen.go.id/", "cost": "Free / paid test", "level": "A2–C2", "use": "Use official test structure for writing practice" },
+        { "name": "LangCorrect Indonesian", "url": "https://langcorrect.com/", "cost": "Free / paid", "level": "A2–C2", "use": "Community feedback on Indonesian writing" }
+      ]
+    }
+  }
+}

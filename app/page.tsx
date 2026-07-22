@@ -1,20 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import resourceData from "../data/demo-resources.json";
 import languages from "../data/languages.json";
 import { makeCalendarIcs } from "../lib/calendar.mjs";
 
-const resourceTabs = [
-  ["tests", "Tests & centres"],
-  ["youtube", "YouTube · 10"],
-  ["listening", "Listening · 5"],
-  ["speaking", "Speaking · 5"],
-  ["reading", "Reading · 5"],
-  ["writing", "Writing · 5"],
-] as const;
-
-type ResourceTab = (typeof resourceTabs)[number][0];
+type ResourceTab = "tests" | "youtube" | "listening" | "speaking" | "reading" | "writing";
 
 type Profile = {
   language: string;
@@ -37,6 +27,22 @@ type Plan = {
   sample: string[];
 };
 
+type TestOption = { name: string; fit: string; format: string; sourceUrl: string };
+type TestCenter = { name: string; provider: string; address: string; availability: string; registrationUrl: string };
+type Channel = { name: string; url: string; bestFor: string; level: string; score: number };
+type Material = { name: string; url: string; cost: string; level: string; use: string };
+type ResourceData = {
+  language: string;
+  lastVerified: string;
+  sourceMode: "curated-official";
+  centerMode: "verified-local-and-directory" | "official-directory";
+  recommendation: { name: string; reason: string; sourceUrl: string };
+  tests: TestOption[];
+  testCenters: TestCenter[];
+  youtube: Channel[];
+  materials: Record<"listening" | "speaking" | "reading" | "writing", Material[]>;
+};
+
 const demoProfile: Profile = {
   language: "English",
   level: "B1 · Intermediate",
@@ -48,14 +54,14 @@ const demoProfile: Profile = {
   timezone: "Asia/Ho_Chi_Minh",
 };
 
-const toolSteps = [
-  ["search_tests", "6 exams · 3 local centres", "Verified official sources"],
-  ["rank_guidance", "10 channels · 5 communities", "Scored for B1 + IELTS fit"],
-  ["curate_resources", "30 free-first resources", "Four skills + TV immersion"],
-  ["generate_plans", "3 strategies · 8 h/week", "Constraint check passed"],
-];
+function buildPlans(data: ResourceData | null, language: string): Plan[] {
+  const exam = data?.recommendation.name ?? `${language} proficiency test`;
+  const listening = data?.materials.listening[0]?.name ?? `${language} listening practice`;
+  const speaking = data?.youtube[0]?.name ?? `${language} speaking lesson`;
+  const writing = data?.materials.writing[0]?.name ?? `${language} writing practice`;
+  const reading = data?.materials.reading[0]?.name ?? `${language} reading practice`;
 
-const plans: Plan[] = [
+  return [
   {
     id: "test-first",
     name: "Test-First",
@@ -64,9 +70,9 @@ const plans: Plan[] = [
     split: "40% drills · 25% feedback · 20% vocabulary · 15% input",
     outcome: "Best for a near-term score target. Expected: 6.5–7.0 with consistent review.",
     sample: [
-      "25 min · Cambridge IELTS Reading passage, timed",
+      `25 min · ${exam} reading task, timed`,
       "20 min · Error log: label 3 mistake patterns",
-      "15 min · E2 IELTS speaking answer, record + compare",
+      `15 min · ${speaking} speaking prompt, record + compare`,
     ],
   },
   {
@@ -77,9 +83,9 @@ const plans: Plan[] = [
     split: "45% listening · 25% speaking · 20% reading · 10% test format",
     outcome: "Best for durable fluency. Score gains may be slower in the first month.",
     sample: [
-      "25 min · BBC 6 Minute English ×2, shadow the second",
-      "20 min · Modern Family scene with English subtitles",
-      "15 min · Voice note: retell the scene without notes",
+      `25 min · ${listening} ×2, shadow the second`,
+      `20 min · ${language} video with target-language subtitles`,
+      `15 min · Voice note: retell it in ${language} without notes`,
     ],
   },
   {
@@ -90,19 +96,13 @@ const plans: Plan[] = [
     split: "25% each · listening · speaking · reading · writing",
     outcome: "Best default for a six-month runway. Expected: stable progress across all bands.",
     sample: [
-      "25 min · IELTS Liz Task 2: outline + thesis only",
-      "20 min · British Council listening set, review transcript",
-      "15 min · iTalki notebook: correct yesterday’s paragraph",
+      `25 min · ${writing}: outline + first paragraph`,
+      `20 min · ${listening}, then review the transcript`,
+      `15 min · ${reading}: annotate five useful phrases`,
     ],
   },
-];
-
-const resources = [
-  ["Listening", "BBC Learning English", "Free · B1–C1"],
-  ["Speaking", "E2 IELTS", "Free · B1–C2"],
-  ["Reading", "News in Levels", "Free · A2–B2"],
-  ["Writing", "IELTS Liz", "Free · B1–C2"],
-];
+  ];
+}
 
 export default function Home() {
   const [profile, setProfile] = useState<Profile>(demoProfile);
@@ -117,7 +117,38 @@ export default function Home() {
   const [notionDatabaseUrl, setNotionDatabaseUrl] = useState("");
   const [calendarReady, setCalendarReady] = useState(false);
   const [googleCalendarUrl, setGoogleCalendarUrl] = useState("");
-  const selectedPlan = useMemo(() => plans.find((plan) => plan.id === selected) ?? plans[2], [selected]);
+  const [resourceData, setResourceData] = useState<ResourceData | null>(null);
+  const [loadedResourceKey, setLoadedResourceKey] = useState("");
+  const [resourceError, setResourceError] = useState("");
+  const resourceQueryKey = useMemo(() => new URLSearchParams({
+    language: profile.language,
+    city: profile.city,
+    country: profile.country,
+  }).toString(), [profile.city, profile.country, profile.language]);
+  const resourceLoading = loadedResourceKey !== resourceQueryKey;
+  const plans = useMemo(() => buildPlans(resourceData, profile.language), [resourceData, profile.language]);
+  const selectedPlan = useMemo(() => plans.find((plan) => plan.id === selected) ?? plans[2], [plans, selected]);
+  const resourceTabs: [ResourceTab, string][] = useMemo(() => [
+    ["tests", `Tests & centres · ${resourceData ? resourceData.tests.length + resourceData.testCenters.length : 0}`],
+    ["youtube", `YouTube · ${resourceData?.youtube.length ?? 0}`],
+    ["listening", `Listening · ${resourceData?.materials.listening.length ?? 0}`],
+    ["speaking", `Speaking · ${resourceData?.materials.speaking.length ?? 0}`],
+    ["reading", `Reading · ${resourceData?.materials.reading.length ?? 0}`],
+    ["writing", `Writing · ${resourceData?.materials.writing.length ?? 0}`],
+  ], [resourceData]);
+  const featuredResources = useMemo(() => {
+    if (!resourceData) return [];
+    return (["listening", "speaking", "reading", "writing"] as const).map((skill) => {
+      const material = resourceData.materials[skill][0];
+      return [skill[0].toUpperCase() + skill.slice(1), material.name, `${material.cost} · ${material.level}`];
+    });
+  }, [resourceData]);
+  const toolSteps = useMemo(() => [
+    ["search_tests", resourceData ? `${resourceData.tests.length} exams · ${resourceData.testCenters.length} location sources` : "Loading verified sources", `${profile.language} · ${profile.city}, ${profile.country}`],
+    ["rank_guidance", resourceData ? `${resourceData.youtube.length} recommended educators` : "Loading educators", `Selected for ${profile.language} learner fit`],
+    ["curate_resources", resourceData ? `${Object.values(resourceData.materials).flat().length} skill resources` : "Loading four-skill materials", "Listening · speaking · reading · writing"],
+    ["generate_plans", `3 strategies · ${profile.hours} h/week`, "Constraint check passed"],
+  ], [profile.city, profile.country, profile.hours, profile.language, resourceData]);
 
   useEffect(() => {
     Promise.all([
@@ -130,9 +161,40 @@ export default function Home() {
     }).catch(() => undefined);
   }, []);
 
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch(`/api/resources?${resourceQueryKey}`, { signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("The verified resource catalog is temporarily unavailable.");
+        return response.json() as Promise<ResourceData>;
+      })
+      .then((data) => {
+        setResourceData(data);
+        setResourceError("");
+        setLoadedResourceKey(resourceQueryKey);
+      })
+      .catch((error) => {
+        if (error instanceof Error && error.name !== "AbortError") {
+          setResourceData(null);
+          setResourceError(error.message);
+          setLoadedResourceKey(resourceQueryKey);
+        }
+      });
+    return () => controller.abort();
+  }, [resourceQueryKey]);
+
   const update = (key: keyof Profile, value: string | number) => setProfile((current) => ({ ...current, [key]: value }));
 
+  const updateLanguage = (language: string) => setProfile((current) => ({
+    ...current,
+    language,
+    goal: current.language === language || !/IELTS|English/i.test(current.goal)
+      ? current.goal
+      : `Reach B2 ${language} for study and work`,
+  }));
+
   const runAgent = async () => {
+    if (resourceLoading || !resourceData) return;
     setStage("running");
     setActiveTool(0);
     for (let index = 0; index < toolSteps.length; index += 1) {
@@ -188,7 +250,7 @@ export default function Home() {
     <main>
       <header className="topbar">
         <a className="brand" href="#top" aria-label="Sologurus home"><span className="brand-mark">S</span><span>Sologurus</span></a>
-        <div className="status"><span className="status-dot" /> Core demo · Calendar needs no keys</div>
+        <div className="status"><span className="status-dot" /> 16 language catalogs · sources dated</div>
       </header>
 
       <section className="hero" id="top">
@@ -211,7 +273,7 @@ export default function Home() {
             <div className="profile-view">
               <div className="panel-heading"><div><span className="kicker">STEP 01</span><h2>Tell me where you’re headed.</h2></div><button className="text-button" onClick={() => setProfile(demoProfile)}>Use demo profile ↗</button></div>
               <div className="form-grid">
-                <label>Target language<select value={profile.language} onChange={(e) => update("language", e.target.value)}>{languages.map((language) => <option key={language.name} value={language.name}>{language.name} · {language.nativeName}</option>)}</select></label>
+                <label>Target language<select value={profile.language} onChange={(e) => updateLanguage(e.target.value)}>{languages.map((language) => <option key={language.name} value={language.name}>{language.name} · {language.nativeName}</option>)}</select></label>
                 <label>Current level<select value={profile.level} onChange={(e) => update("level", e.target.value)}><option>B1 · Intermediate</option><option>A2 · Elementary</option><option>B2 · Upper-intermediate</option></select></label>
                 <label>City<input value={profile.city} onChange={(e) => update("city", e.target.value)} /></label>
                 <label>Country<input value={profile.country} onChange={(e) => update("country", e.target.value)} /></label>
@@ -219,7 +281,8 @@ export default function Home() {
                 <label>Target date<input type="date" value={profile.date} onChange={(e) => update("date", e.target.value)} /></label>
                 <label>Hours each week<div className="range-row"><input aria-label="Hours each week" type="range" min="3" max="20" value={profile.hours} onChange={(e) => update("hours", Number(e.target.value))} /><output>{profile.hours}h</output></div></label>
               </div>
-              <button className="primary" data-testid="run-agent" onClick={runAgent}>Build my study system <span>→</span></button>
+              {resourceError && <div className="integration-error" role="alert"><span>!</span><div><b>Research could not load.</b><p>{resourceError}</p></div></div>}
+              <button className="primary" aria-label="Build my study system" data-testid="run-agent" disabled={resourceLoading || !resourceData} onClick={runAgent}>{resourceLoading ? `Loading ${profile.language} sources…` : "Build my study system"} <span>→</span></button>
             </div>
           )}
 
@@ -240,10 +303,10 @@ export default function Home() {
             </div>
           )}
 
-          {(stage === "plans" || stage === "exported") && (
+          {(stage === "plans" || stage === "exported") && resourceData && (
             <div className="plans-view">
               <div className="panel-heading"><div><span className="kicker">STEP 03 · CONSTRAINT CHECK PASSED</span><h2>Three strategies. One honest time budget.</h2></div><button className="text-button" onClick={() => setStage("profile")}>Edit profile</button></div>
-              <div className="insight-strip"><b>Recommended test: IELTS General Training</b><span>Best fit for Canadian PR pathways · official dates and fees should be rechecked before booking.</span></div>
+              <div className="insight-strip"><b>Recommended test: {resourceData.recommendation.name}</b><span>{resourceData.recommendation.reason} Dates, local availability and acceptance should be rechecked before booking.</span><a href={resourceData.recommendation.sourceUrl} target="_blank" rel="noreferrer">Official source ↗</a></div>
               <div className="plan-grid">
                 {plans.map((plan) => (
                   <button aria-pressed={selected === plan.id} className={`plan-card ${selected === plan.id ? "selected" : ""}`} key={plan.id} onClick={() => setSelected(plan.id)}>
@@ -254,13 +317,13 @@ export default function Home() {
               </div>
               <div className="schedule">
                 <div><span className="kicker">YOUR FIRST STUDY BLOCK</span><h3>{selectedPlan.name} · Week one</h3>{selectedPlan.sample.map((item) => <p key={item}><span>✓</span>{item}</p>)}</div>
-                <div className="resource-stack"><span className="kicker">RESOURCES IN THIS PLAN</span>{resources.map(([skill, name, meta]) => <div key={skill}><b>{skill}</b><span>{name}</span><small>{meta}</small></div>)}</div>
+                <div className="resource-stack"><span className="kicker">RESOURCES IN THIS PLAN</span>{featuredResources.map(([skill, name, meta]) => <div key={skill}><b>{skill}</b><span>{name}</span><small>{meta}</small></div>)}</div>
               </div>
 
               <section className="resource-explorer" aria-labelledby="all-resources-title">
                 <div className="resource-heading">
                   <div><span className="kicker">AGENT RESEARCH · FULL RESULTS</span><h3 id="all-resources-title">See every recommendation.</h3></div>
-                  <p>Official test locations, ranked teachers, and five materials for every skill. Sources last checked {resourceData.lastVerified}.</p>
+                  <p>{profile.language} test options, official centre directories, educators, and four-skill materials. Catalog checked {resourceData.lastVerified}; availability is always rechecked at the source.</p>
                 </div>
                 <div className="resource-tabs" role="tablist" aria-label="Research result categories">
                   {resourceTabs.map(([id, label]) => (
@@ -271,15 +334,15 @@ export default function Home() {
                 <div className="resource-results" role="tabpanel">
                   {resourceTab === "tests" && (
                     <>
-                      <div className="result-subhead"><b>Test centres near {profile.city}</b><span>{resourceData.testCenters.length} verified locations</span></div>
+                      <div className="result-subhead"><b>Test centres near {profile.city}</b><span>{resourceData.centerMode === "official-directory" ? "official finder — no address invented" : `${resourceData.testCenters.length - 1} local record(s) + official finder`}</span></div>
                       <div className="center-grid">
                         {resourceData.testCenters.map((center) => (
                           <a className="center-card" href={center.registrationUrl} target="_blank" rel="noreferrer" key={center.name}>
-                            <span className="pin">⌖</span><div><b>{center.name}</b><small>{center.provider}</small><address>{center.address}</address><p>{center.availability}</p></div><span className="open-link">Official booking ↗</span>
+                            <span className="pin">⌖</span><div><b>{center.name}</b><small>{center.provider}</small><address>{center.address}</address><p>{center.availability}</p></div><span className="open-link">Official source ↗</span>
                           </a>
                         ))}
                       </div>
-                      <div className="result-subhead secondary-head"><b>Recognized English tests</b><span>{resourceData.tests.length} options compared</span></div>
+                      <div className="result-subhead secondary-head"><b>Recognized {profile.language} tests</b><span>{resourceData.tests.length} options compared</span></div>
                       <div className="resource-list tests-list">
                         {resourceData.tests.map((test) => (
                           <a href={test.sourceUrl} target="_blank" rel="noreferrer" key={test.name}><span className="rank">TEST</span><div><b>{test.name}</b><p>{test.fit}</p><small>{test.format}</small></div><span className="open-link">Source ↗</span></a>

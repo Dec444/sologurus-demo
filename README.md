@@ -20,7 +20,7 @@ Language learners rarely lack motivation; they lack a system. Choosing an exam, 
 
 Sologurus turns a learner's language, level, location, goal, deadline, and weekly availability into a transparent study system. It shows the evidence behind its recommendations, offers three genuinely different strategies, checks the learner's time budget, and sends the chosen plan to tools they already use.
 
-> **Hackathon scope:** the public judge path is a deterministic English/IELTS scenario, so the complete experience works without API keys or flaky live search. The product keeps explicit integration boundaries for live retrieval and learner-specific writes.
+> **Hackathon scope:** the public demo ships a dated, source-linked catalog for every selectable language. The browser reloads that catalog through `/api/resources` whenever language or location changes; official exam directories remain the source of truth for current dates and availability.
 
 ## Try the demo
 
@@ -40,9 +40,9 @@ The seeded learner is an intermediate English speaker in Ho Chi Minh City pursui
 | Capability | Demo result |
 |---|---|
 | Learner profile | 16 target languages, level, location, goal, deadline, and weekly hours |
-| Test explorer | 6 recognized tests, an explained recommendation, and 3 local test centers |
-| Guidance | 10 ranked YouTube educators with learner-fit rationale |
-| Resource library | 5 listening, speaking, reading, and writing materials per skill |
+| Test explorer | Language-specific recognized tests, an explained recommendation, verified local records where available, and an official center finder everywhere |
+| Guidance | Language-specific YouTube educators with learner-fit rationale |
+| Resource library | Listening, speaking, reading, and writing materials that reload with the target language |
 | Strategy builder | Test-First, Immersion-Led, and Balanced Four-Skill plans |
 | Constraint check | Every plan stays inside the learner's declared weekly limit |
 | Notion | Connected study database plus an optional server-side page-creation route |
@@ -66,15 +66,15 @@ Planner / orchestrator
                          Notion · Google Calendar · ICS
 ```
 
-Each stage returns predictable records. The planning layer composes those records into concrete, time-boxed sessions such as “25 min · IELTS Liz Task 2: outline + thesis only” and verifies that the total does not exceed the learner's availability.
+Each stage returns predictable records. The planning layer composes the selected language's exam and resources into concrete, time-boxed sessions and verifies that the total does not exceed the learner's availability.
 
 ### Demo mode and live integrations
 
-- **Deterministic research:** the judge path uses curated fixtures with outbound sources. This makes the demonstration fast, repeatable, and credential-free.
+- **Reactive verified research:** `GET /api/resources` returns a dated catalog for the selected language and location. Exact local addresses are shown only when verified; otherwise Sologurus links to the official center directory and clearly says so.
 - **Universal calendar:** the dependency-free iCalendar generator produces timezone-aware events that import into Google, Apple, and Outlook Calendar.
 - **Connected examples:** the deployed experience links to verified Notion and Google Calendar records created for the demonstration.
 - **Live Notion boundary:** when `NOTION_TOKEN` and `NOTION_PARENT_PAGE_ID` are configured on the server, `POST /api/notion` creates a learner-specific page through the Notion API.
-- **Planned live mode:** GPT-5.6 is intended to orchestrate source-cited retrieval, ranking, strategy synthesis, and constraint checking behind the same structured boundaries.
+- **Honest source model:** exam dates and venue availability can change, so the product never invents a nearby address; it routes learners to the owning exam body's current directory.
 
 ## Run locally
 

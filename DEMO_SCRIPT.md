@@ -22,7 +22,7 @@ Before recording:
 
 [Open the target-language menu to show the 16 choices. Select English, click **Use demo profile**, and briefly show goal, date, and 8-hour slider.]
 
-“Sologurus supports 16 target languages and starts with the constraints that matter: current level, location, test goal, deadline, and real weekly availability. The judge path is seeded, so the core planning flow works without keys or setup.”
+“Sologurus supports 16 target languages and starts with the constraints that matter: current level, location, test goal, deadline, and real weekly availability. Changing the language reloads the entire evidence set—not just the label—through a source-linked catalog.”
 
 [Click **Build my study system**.]
 
@@ -36,7 +36,7 @@ Before recording:
 
 [Point to the IELTS General recommendation. Scroll to **See every recommendation**. Open **Tests & centres**, **YouTube**, and **Listening** briefly. Then click each plan card once; settle on **Balanced Four-Skill**.]
 
-“For Canadian PR, the agent recommends IELTS General and explains the fit. Linh can inspect every result: official test-centre addresses and booking links, ten ranked YouTube teachers with learner-fit rationale, and five listening, speaking, reading, and writing materials. Then she chooses among three real strategies — not light, medium, and heavy versions of the same idea. Test-First prioritizes exam mechanics; Immersion-Led builds fluency; and Balanced Four-Skill avoids a hidden weak band.”
+“For Canadian PR, the agent recommends IELTS and explains the fit. Linh can inspect every result: verified local records plus the official test-centre finder, ranked YouTube teachers with learner-fit rationale, and dedicated listening, speaking, reading, and writing materials. If a city has no verified address, Sologurus says that plainly and opens the exam owner’s live directory. Then she chooses among three real strategies—not light, medium, and heavy versions of the same idea.”
 
 ## 1:47–2:12 — The payoff
 
@@ -50,7 +50,7 @@ Before recording:
 
 “Codex accelerated the end-to-end build: it turned the product requirements into the orchestration states, responsive interface, ICS emitter, seeded fixtures, tests, documentation, and deployment workflow in one focused session. GPT-5.6 does the runtime product work: tool selection, learner-specific ranking, strategy synthesis, and constraint checking.
 
-The human decisions were equally important: structured tools over free text, strategies over intensity tiers, ICS before OAuth, and broad language choice with one demo path researched deeply. Those choices make Sologurus reliable enough to use, and simple enough for any self-directed learner to start.”
+The human decisions were equally important: structured tools over free text, strategies over intensity tiers, ICS before OAuth, and an explicit official-directory fallback instead of invented local test centres. Those choices make Sologurus reliable enough to use, and simple enough for any self-directed learner to start.”
 
 ## 2:47–2:55 — Close
 
@@ -61,7 +61,7 @@ The human decisions were equally important: structured tools over free text, str
 ## Backup lines if the recording runs short
 
 - “Free-first curation keeps the plan accessible, not just academically sound.”
-- “The public demo is deterministic; live mode can refresh sources when credentials are configured.”
+- “The resource endpoint reloads immediately when language or location changes, while official directories supply changing dates and availability.”
 
 ## Submission copy
 
