@@ -1,6 +1,18 @@
 # Sologurus demo script — 2:50 target
 
-Recording notes: use a 1440p browser, keep the cursor slow, and start on the top of the product. Speak at a relaxed 135–145 words per minute. The bracketed text is action, not narration.
+**Live product:** [sologurus-study-agent.lu-liu398220.chatgpt.site](https://sologurus-study-agent.lu-liu398220.chatgpt.site)
+
+**Repository:** [github.com/Dec444/sologurus-demo](https://github.com/Dec444/sologurus-demo)
+
+Recording notes: use a 1440p browser, keep the cursor slow, and start at the top of the product. Speak at a relaxed 135–145 words per minute. The bracketed text is direction, not narration.
+
+Before recording:
+
+- Sign in to the Notion and Google accounts used for the connected examples.
+- Open the product once so fonts and application assets are cached.
+- Reset the product to the profile step.
+- Close personal tabs and disable notifications.
+- Record one clean take before adding optional Calendar cutaways.
 
 ## 0:00–0:18 — The problem
 
@@ -56,3 +68,7 @@ The human decisions were equally important: structured tools over free text, str
 **Title:** Sologurus — the self-directed language learning agent
 
 **Description:** Sologurus turns a language-test goal into verified exam options, free-first learning resources, and three strategically distinct study plans that respect a learner’s weekly availability. Learners can choose from 16 target languages, send the result to connected Notion and Google Calendar experiences, or export a universal calendar file. GPT-5.6 orchestrates structured tools and constraint-checks the curriculum.
+
+**Live demo:** [https://sologurus-study-agent.lu-liu398220.chatgpt.site](https://sologurus-study-agent.lu-liu398220.chatgpt.site)
+
+**Source:** [https://github.com/Dec444/sologurus-demo](https://github.com/Dec444/sologurus-demo)

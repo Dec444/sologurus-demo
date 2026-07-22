@@ -1,94 +1,162 @@
+<div align="center">
+
+![Sologurus — one goal, a plan you can actually follow](public/og.png)
+
 # Sologurus
 
-Sologurus is an educational planning agent for self-directed language learners. It turns “I need IELTS 7.0 by December” into a verified test recommendation, local test-centre options, ten ranked YouTube teachers, a complete four-skill resource library, and three strategically different plans that stay inside the learner’s available time. Learners can choose from 16 target languages, open a connected Notion study database, open the connected Google Calendar schedule, or download a real `.ics` calendar file.
+**A self-directed language-learning agent that turns a goal into evidence, strategy, and scheduled action.**
 
-Built for the **Education** category of OpenAI Build Week with Codex and GPT-5.6.
+[Live demo](https://sologurus-study-agent.lu-liu398220.chatgpt.site) · [Demo script](DEMO_SCRIPT.md) · [Devpost submission](DEVPOST_SUBMISSION.md) · [Product spec](sologurus-hackathon-prd.md)
 
-## Demo video
+[![CI](https://github.com/Dec444/sologurus-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/Dec444/sologurus-demo/actions/workflows/ci.yml)
+[![Node.js 22+](https://img.shields.io/badge/Node.js-22%2B-5FA04E?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-8A7CFB.svg)](LICENSE)
 
-Add the public YouTube URL here before submission. The complete recording script is in [`DEMO_SCRIPT.md`](./DEMO_SCRIPT.md).
+</div>
 
-## Quickstart
+## Why Sologurus
 
-Requirements: Node.js 22.13 or newer.
+Language learners rarely lack motivation; they lack a system. Choosing an exam, checking test centers, evaluating teachers, finding materials for every skill, and fitting it all into a real week can become a second job.
+
+Sologurus turns a learner's language, level, location, goal, deadline, and weekly availability into a transparent study system. It shows the evidence behind its recommendations, offers three genuinely different strategies, checks the learner's time budget, and sends the chosen plan to tools they already use.
+
+> **Hackathon scope:** the public judge path is a deterministic English/IELTS scenario, so the complete experience works without API keys or flaky live search. The product keeps explicit integration boundaries for live retrieval and learner-specific writes.
+
+## Try the demo
+
+Open the [live Sologurus demo](https://sologurus-study-agent.lu-liu398220.chatgpt.site), then:
+
+1. Open the target-language menu to see all 16 choices.
+2. Select **Use demo profile**.
+3. Run **Build my study system** and watch the structured research steps.
+4. Compare the three study strategies.
+5. Browse every test center, YouTube recommendation, and four-skill resource.
+6. Open the connected Notion and Google Calendar examples or download the universal `.ics` calendar.
+
+The seeded learner is an intermediate English speaker in Ho Chi Minh City pursuing IELTS 7.0 for Canadian permanent residence with eight hours available each week.
+
+## What it does
+
+| Capability | Demo result |
+|---|---|
+| Learner profile | 16 target languages, level, location, goal, deadline, and weekly hours |
+| Test explorer | 6 recognized tests, an explained recommendation, and 3 local test centers |
+| Guidance | 10 ranked YouTube educators with learner-fit rationale |
+| Resource library | 5 listening, speaking, reading, and writing materials per skill |
+| Strategy builder | Test-First, Immersion-Led, and Balanced Four-Skill plans |
+| Constraint check | Every plan stays inside the learner's declared weekly limit |
+| Notion | Connected study database plus an optional server-side page-creation route |
+| Calendar | 12 study sessions, 3 recurring reminders, and a universal `.ics` export |
+
+## How it works
+
+Sologurus is designed as a planner over structured operations, not a chatbot that free-writes a curriculum.
+
+```text
+Learner profile
+      │
+      ▼
+Planner / orchestrator
+      ├── search_tests()      → test choices, sources, and local centers
+      ├── rank_guidance()     → ranked educators with rationale
+      ├── curate_resources()  → free-first materials grouped by skill
+      └── generate_plans()    → 3 strategies + weekly constraint check
+                                      │
+                                      ▼
+                         Notion · Google Calendar · ICS
+```
+
+Each stage returns predictable records. The planning layer composes those records into concrete, time-boxed sessions such as “25 min · IELTS Liz Task 2: outline + thesis only” and verifies that the total does not exceed the learner's availability.
+
+### Demo mode and live integrations
+
+- **Deterministic research:** the judge path uses curated fixtures with outbound sources. This makes the demonstration fast, repeatable, and credential-free.
+- **Universal calendar:** the dependency-free iCalendar generator produces timezone-aware events that import into Google, Apple, and Outlook Calendar.
+- **Connected examples:** the deployed experience links to verified Notion and Google Calendar records created for the demonstration.
+- **Live Notion boundary:** when `NOTION_TOKEN` and `NOTION_PARENT_PAGE_ID` are configured on the server, `POST /api/notion` creates a learner-specific page through the Notion API.
+- **Planned live mode:** GPT-5.6 is intended to orchestrate source-cited retrieval, ranking, strategy synthesis, and constraint checking behind the same structured boundaries.
+
+## Run locally
+
+### Requirements
+
+- Node.js 22.13 or newer
+- npm
 
 ```bash
-git clone <your-repository-url>
-cd Sologurus
+git clone https://github.com/Dec444/sologurus-demo.git
+cd sologurus-demo
 npm install
 npm run demo
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Click **Use demo profile**, run the agent, select a plan, browse the complete research results, and download the calendar file. No API keys are needed for the core demo or standards-based calendar export.
+Open [http://localhost:3000](http://localhost:3000). No environment variables are required for the core demo or `.ics` download.
 
-```bash
-npm run build
-npm test
-```
+### Optional environment variables
 
-## Sample data
+Copy `.env.example` to `.env.local` only if you want to exercise integration paths.
 
-- Language: English
-- Level: B1 / intermediate
-- Location: Ho Chi Minh City, Vietnam
-- Goal: IELTS 7.0 for Canadian permanent residence
-- Target: December 5, 2026
-- Availability: 8 hours per week
+| Variable | Purpose |
+|---|---|
+| `NOTION_TOKEN` | Server-side Notion integration token |
+| `NOTION_PARENT_PAGE_ID` | Parent page for learner-specific Notion pages |
+| `NOTION_DATABASE_URL` | URL exposed by the connected-demo button |
+| `GOOGLE_CALENDAR_EVENT_URL` | URL exposed by the connected-calendar button |
 
-## How it works
+Never commit real tokens. Deployment secrets belong in the hosting environment, not in browser code or tracked files.
+
+## Development
+
+| Command | Purpose |
+|---|---|
+| `npm run demo` | Start the local judge experience |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create the production build |
+| `npm test` | Build and run the complete regression suite |
+| `npm run lint` | Run ESLint |
+
+The tests cover server rendering, language breadth, resource completeness, Notion and Calendar integration boundaries, calendar structure, and minimum readable typography.
+
+### Project map
 
 ```text
-Learner profile
-     ↓
-GPT-5.6 planner / orchestrator
-     ├── search_tests()       → test choices and official-source records
-     ├── rank_guidance()      → channels and communities with rationale
-     ├── curate_resources()   → free-first four-skill resources
-     └── generate_plans()     → three strategies + constraint check
-                                  ↓
-                         Notion tasks + Google Calendar + ICS
+app/
+  api/notion/       Live Notion page-creation boundary
+  api/calendar/     Connected-calendar status boundary
+  page.tsx          Interactive learner journey
+data/               Curated demo resources and language catalog
+lib/calendar.mjs    Timezone-aware iCalendar generator
+tests/              Node regression tests
+public/             Brand and social-preview assets
+DEMO_SCRIPT.md       Under-three-minute recording script
+DEVPOST_SUBMISSION.md  Hackathon submission narrative
 ```
 
-The core architectural decision is **structured tools over free-text planning**. Each step produces predictable records; the planner composes those objects into schedules and checks that total minutes do not exceed the learner’s declared availability.
+## Product decisions
 
-## How Codex accelerated the build
+- Structured records instead of one long study-plan prompt
+- Strategies that differ by learning philosophy, not “light / medium / heavy” intensity
+- Complete resource visibility so learners can inspect the agent's evidence
+- ICS first so calendar export works without OAuth
+- Broad language choice with one deeply researched judge path
+- A readable, responsive interface that keeps dense results scannable
 
-Codex translated the PRD into the working responsive experience, scaffolded the orchestration states, implemented the dependency-free ICS emitter, wrote the seeded judge path, and generated the deployment/readme/demo assets in one build session. The most valuable acceleration was turning several hours of UI, export, and validation boilerplate into a focused implementation pass while keeping human product decisions explicit.
+## Built for OpenAI Build Week
 
-## How GPT-5.6 is used
+Sologurus was built for the **Education** category with Codex and GPT-5.6. Codex accelerated the implementation of the responsive product, structured orchestration states, calendar emitter, integration routes, fixtures, tests, documentation, demo script, and deployment workflow. Human decisions determined the scope, learning strategies, evidence requirements, and reliability tradeoffs.
 
-In live mode, GPT-5.6 is the planner over the structured tools: it decides which lookup to call, ranks resources for the learner’s level and goal, synthesizes three plans by strategy rather than intensity, and checks the result against the weekly time constraint. The public demo uses deterministic fixtures so judges can test the entire product without credentials or flaky live search.
+For the complete story, see the [Devpost submission copy](DEVPOST_SUBMISSION.md). For the intended demonstration sequence, use the [recording script](DEMO_SCRIPT.md).
 
-## Human decisions
+## Roadmap
 
-- Structured tool results instead of a free-text study-plan prompt
-- Three plan strategies, not “light / medium / heavy” intensity tiers
-- ICS first, so calendar export works without OAuth setup
-- Sixteen target-language choices, with the English/IELTS demo researched in depth
-
-## Demo vs. live integration
-
-This repository ships the complete seeded experience, a connected Notion study database, six recurring Google Calendar series, and a working standards-based calendar export. The deployed demo links to the verified connected records. If `NOTION_TOKEN` and `NOTION_PARENT_PAGE_ID` are configured server-side, `POST /api/notion` also creates a new learner-specific page through the live Notion API. See [`.env.example`](./.env.example).
-
-The calendar generator creates 12 dated study sessions plus three daily recurring reminder events in the learner's timezone. Its `.ics` output imports into Google, Apple, and Outlook Calendar without OAuth. `GOOGLE_CALENDAR_EVENT_URL` and `NOTION_DATABASE_URL` expose the verified demo connections without placing credentials in the browser.
-
-Out of scope for this hackathon build: authentication, multi-user accounts, two-way Notion sync, adaptive re-planning, placement testing, native mobile apps, payments, analytics, and monitoring.
-
-## Submission checklist
-
-- [x] Working seeded project
-- [x] Education category and project description
-- [x] Zero-key judge path
-- [x] 16-language target selector
-- [x] Live Notion database connection
-- [x] Live recurring Google Calendar schedule
-- [x] Universal calendar export
-- [x] Setup and architecture documentation
-- [x] MIT license
-- [x] Under-three-minute demo script
-- [ ] Add the public YouTube demo URL
-- [ ] Add the Codex `/feedback` session ID to Devpost
+- Source-cited live retrieval with freshness checks
+- Deep resource catalogs for every supported language
+- Placement diagnostics and skill-gap detection
+- Adaptive replanning from completed tasks and reflections
+- Two-way Notion and Google Calendar synchronization
+- Speaking and writing feedback loops
+- Secure accounts and OAuth-based integrations
 
 ## License
 
-MIT — see [`LICENSE`](./LICENSE).
+Released under the [MIT License](LICENSE).

@@ -1,7 +1,24 @@
 {
   "name": "sologurus",
   "version": "0.1.0",
+  "description": "A self-directed language-learning agent that turns goals into evidence, strategy, and scheduled action.",
   "private": true,
+  "homepage": "https://sologurus-study-agent.lu-liu398220.chatgpt.site",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dec444/sologurus-demo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Dec444/sologurus-demo/issues"
+  },
+  "keywords": [
+    "education",
+    "language-learning",
+    "study-planner",
+    "notion",
+    "calendar",
+    "openai-build-week"
+  ],
   "engines": {
     "node": ">=22.13.0"
   },
@@ -11,7 +28,7 @@
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext dev",
     "build": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
-    "test": "npm run build && node --test tests/rendered-html.test.mjs",
+    "test": "npm run build && node --test tests/*.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate"
   },

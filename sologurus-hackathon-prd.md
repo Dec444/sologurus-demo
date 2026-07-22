@@ -1,5 +1,7 @@
 # Sologurus — Hackathon PRD & Build Spec
 
+> **Implementation status:** the hackathon build is live at [sologurus-study-agent.lu-liu398220.chatgpt.site](https://sologurus-study-agent.lu-liu398220.chatgpt.site). See [`README.md`](README.md) for setup and architecture, [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) for the recording flow, and [`DEVPOST_SUBMISSION.md`](DEVPOST_SUBMISSION.md) for submission copy. This document preserves the original product and scoping decisions; the shipped implementation is the source of truth for final behavior.
+
 **Event:** OpenAI Build Week (Codex + GPT-5.6)
 **Scope:** Ship-today. Demo-complete, not production-complete.
 **Category:** Education
