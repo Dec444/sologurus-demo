@@ -30,8 +30,8 @@ Open the [live Sologurus demo](https://sologurus-study-agent.lu-liu398220.chatgp
 2. Select **Use demo profile**.
 3. Run **Build my study system** and watch the structured research steps.
 4. Compare the three study strategies.
-5. Browse every test center, YouTube recommendation, and four-skill resource.
-6. Open the connected Notion and Google Calendar examples or download the universal `.ics` calendar.
+5. Browse every test center, all 10 YouTube recommendations, 3 study forums, and four-skill resources.
+6. With Notion write credentials configured, update the selected Notion page; otherwise use Google Calendar or download the universal `.ics` calendar.
 
 The seeded learner is an intermediate English speaker in Ho Chi Minh City pursuing IELTS 7.0 for Canadian permanent residence with eight hours available each week.
 
@@ -39,13 +39,13 @@ The seeded learner is an intermediate English speaker in Ho Chi Minh City pursui
 
 | Capability | Demo result |
 |---|---|
-| Learner profile | 16 target languages, level, location, goal, deadline, and weekly hours |
+| Learner profile | 16 target languages, dependent country/city menus, level, goal, deadline, and weekly hours |
 | Test explorer | Language-specific recognized tests, an explained recommendation, verified local records where available, and an official center finder everywhere |
-| Guidance | Language-specific YouTube educators with learner-fit rationale |
+| Guidance | Exactly 10 language-specific YouTube educators and 3 study forums |
 | Resource library | Listening, speaking, reading, and writing materials that reload with the target language |
 | Strategy builder | Test-First, Immersion-Led, and Balanced Four-Skill plans |
 | Constraint check | Every plan stays inside the learner's declared weekly limit |
-| Notion | Connected study database plus an optional server-side page-creation route |
+| Notion | Real server-side page replacement or child-page creation using the current profile, strategy, and full research set |
 | Calendar | 12 study sessions, 3 recurring reminders, and a universal `.ics` export |
 
 ## How it works
@@ -72,8 +72,7 @@ Each stage returns predictable records. The planning layer composes the selected
 
 - **Reactive verified research:** `GET /api/resources` returns a dated catalog for the selected language and location. Exact local addresses are shown only when verified; otherwise Sologurus links to the official center directory and clearly says so.
 - **Universal calendar:** the dependency-free iCalendar generator produces timezone-aware events that import into Google, Apple, and Outlook Calendar.
-- **Connected examples:** the deployed experience links to verified Notion and Google Calendar records created for the demonstration.
-- **Live Notion boundary:** when `NOTION_TOKEN` and `NOTION_PARENT_PAGE_ID` are configured on the server, `POST /api/notion` creates a learner-specific page through the Notion API.
+- **Live Notion write:** with `NOTION_TOKEN` plus `NOTION_TARGET_PAGE_ID`, `POST /api/notion` replaces one selected page with the current plan. With `NOTION_PARENT_PAGE_ID` instead, it creates a new learner-specific child page. It never reports a static link as a successful update.
 - **Honest source model:** exam dates and venue availability can change, so the product never invents a nearby address; it routes learners to the owning exam body's current directory.
 
 ## Run locally
@@ -99,8 +98,8 @@ Copy `.env.example` to `.env.local` only if you want to exercise integration pat
 | Variable | Purpose |
 |---|---|
 | `NOTION_TOKEN` | Server-side Notion integration token |
+| `NOTION_TARGET_PAGE_ID` | Existing page to replace with the current selected plan |
 | `NOTION_PARENT_PAGE_ID` | Parent page for learner-specific Notion pages |
-| `NOTION_DATABASE_URL` | URL exposed by the connected-demo button |
 | `GOOGLE_CALENDAR_EVENT_URL` | URL exposed by the connected-calendar button |
 
 Never commit real tokens. Deployment secrets belong in the hosting environment, not in browser code or tracked files.
@@ -121,10 +120,10 @@ The tests cover server rendering, language breadth, resource completeness, Notio
 
 ```text
 app/
-  api/notion/       Live Notion page-creation boundary
+  api/notion/       Live Notion page-update/create boundary
   api/calendar/     Connected-calendar status boundary
   page.tsx          Interactive learner journey
-data/               Curated demo resources and language catalog
+data/               Language, community, forum, and location catalogs
 lib/calendar.mjs    Timezone-aware iCalendar generator
 tests/              Node regression tests
 public/             Brand and social-preview assets

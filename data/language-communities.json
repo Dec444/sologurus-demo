@@ -1,0 +1,258 @@
+{
+  "English": {
+    "youtube": [
+      { "name": "Rachel's English", "url": "https://www.youtube.com/@rachelsenglish", "bestFor": "American pronunciation and connected speech", "level": "A2–C1", "score": 89 },
+      { "name": "mmmEnglish", "url": "https://www.youtube.com/@mmmEnglish_Emma", "bestFor": "Fluency, vocabulary and confidence", "level": "A2–C1", "score": 88 },
+      { "name": "Oxford Online English", "url": "https://www.youtube.com/@Oxfordonlineenglish1", "bestFor": "Four-skill structured lessons", "level": "A2–C1", "score": 87 },
+      { "name": "Speak English With Vanessa", "url": "https://www.youtube.com/@SpeakEnglishWithVanessa", "bestFor": "Everyday speaking and listening", "level": "A2–B2", "score": 86 },
+      { "name": "engVid", "url": "https://www.youtube.com/@engvid", "bestFor": "Teacher-led grammar and vocabulary", "level": "A1–C1", "score": 85 },
+      { "name": "Learn English with TV Series", "url": "https://www.youtube.com/@LearnEnglishWithTVSeries", "bestFor": "Listening through entertainment clips", "level": "A2–C1", "score": 84 },
+      { "name": "JenniferESL", "url": "https://www.youtube.com/@englishwithjennifer", "bestFor": "Patient grammar and pronunciation instruction", "level": "A1–B2", "score": 83 }
+    ],
+    "forums": [
+      { "name": "English Language Learners Stack Exchange", "url": "https://ell.stackexchange.com/", "bestFor": "Specific usage, grammar and meaning questions" },
+      { "name": "Reddit · EnglishLearning", "url": "https://www.reddit.com/r/EnglishLearning/", "bestFor": "Peer questions, corrections and study advice" },
+      { "name": "UsingEnglish Forum", "url": "https://www.usingenglish.com/forum/", "bestFor": "Teacher-supported grammar and exam discussions" }
+    ]
+  },
+  "Spanish": {
+    "youtube": [
+      { "name": "Spanish After Hours", "url": "https://www.youtube.com/results?search_query=Spanish+After+Hours", "bestFor": "Comprehensible stories and natural speech", "level": "A1–B2", "score": 89 },
+      { "name": "Why Not Spanish?", "url": "https://www.youtube.com/results?search_query=Why+Not+Spanish", "bestFor": "Grammar and real-life Colombian Spanish", "level": "A1–B2", "score": 88 },
+      { "name": "Hola Spanish", "url": "https://www.youtube.com/results?search_query=Hola+Spanish", "bestFor": "Clear grammar and vocabulary lessons", "level": "A1–C1", "score": 87 },
+      { "name": "Español con Juan", "url": "https://www.youtube.com/results?search_query=Espa%C3%B1ol+con+Juan", "bestFor": "Story-led intermediate immersion", "level": "A2–C1", "score": 86 },
+      { "name": "Spring Spanish", "url": "https://www.youtube.com/results?search_query=Spring+Spanish", "bestFor": "Chunk-based conversational Spanish", "level": "A1–B2", "score": 85 },
+      { "name": "The Language Tutor Spanish", "url": "https://www.youtube.com/results?search_query=The+Language+Tutor+Spanish", "bestFor": "Sequential beginner lessons", "level": "A1–B1", "score": 84 },
+      { "name": "Spanishland School", "url": "https://www.youtube.com/results?search_query=Spanishland+School", "bestFor": "Intermediate grammar and listening", "level": "B1–C1", "score": 83 }
+    ],
+    "forums": [
+      { "name": "Spanish Language Stack Exchange", "url": "https://spanish.stackexchange.com/", "bestFor": "Detailed Spanish usage and grammar questions" },
+      { "name": "Reddit · Spanish", "url": "https://www.reddit.com/r/Spanish/", "bestFor": "Learner questions, resources and practice" },
+      { "name": "WordReference Spanish Forums", "url": "https://forum.wordreference.com/forums/spanish-english-vocabulary-vocabulario-espa%C3%B1ol-ingl%C3%A9s.83/", "bestFor": "Vocabulary, translation and regional usage" }
+    ]
+  },
+  "French": {
+    "youtube": [
+      { "name": "French Mornings with Elisa", "url": "https://www.youtube.com/results?search_query=French+Mornings+with+Elisa", "bestFor": "Natural French and pronunciation", "level": "A1–B2", "score": 89 },
+      { "name": "Français Authentique", "url": "https://www.youtube.com/results?search_query=Fran%C3%A7ais+Authentique", "bestFor": "Natural intermediate listening", "level": "B1–C1", "score": 88 },
+      { "name": "Learn French with Alexa", "url": "https://www.youtube.com/results?search_query=Learn+French+with+Alexa", "bestFor": "Structured beginner instruction", "level": "A1–B2", "score": 87 },
+      { "name": "Comme une Française", "url": "https://www.youtube.com/results?search_query=Comme+une+Fran%C3%A7aise", "bestFor": "Everyday expressions and culture", "level": "A2–C1", "score": 86 },
+      { "name": "French School TV", "url": "https://www.youtube.com/results?search_query=French+School+TV", "bestFor": "Grammar and DELF preparation", "level": "A1–C1", "score": 85 },
+      { "name": "French Comprehensible Input", "url": "https://www.youtube.com/results?search_query=French+Comprehensible+Input", "bestFor": "Levelled visual immersion", "level": "A1–B2", "score": 84 },
+      { "name": "Parlez-vous French?", "url": "https://www.youtube.com/results?search_query=Parlez-vous+French", "bestFor": "Grammar, vocabulary and pronunciation", "level": "A1–B2", "score": 83 }
+    ],
+    "forums": [
+      { "name": "French Language Stack Exchange", "url": "https://french.stackexchange.com/", "bestFor": "Detailed grammar, vocabulary and usage" },
+      { "name": "Reddit · French", "url": "https://www.reddit.com/r/French/", "bestFor": "Resources, corrections and learner support" },
+      { "name": "WordReference French Forums", "url": "https://forum.wordreference.com/forums/french-english-vocabulary-vocabulaire-fran%C3%A7ais-anglais.3/", "bestFor": "Vocabulary, translation and idiomatic usage" }
+    ]
+  },
+  "German": {
+    "youtube": [
+      { "name": "Deutsch für Euch", "url": "https://www.youtube.com/results?search_query=Deutsch+f%C3%BCr+Euch", "bestFor": "Grammar and pronunciation depth", "level": "A1–C1", "score": 89 },
+      { "name": "Learn German", "url": "https://www.youtube.com/results?search_query=Learn+German+channel", "bestFor": "Sequential CEFR-aligned lessons", "level": "A1–B2", "score": 88 },
+      { "name": "YourGermanTeacher", "url": "https://www.youtube.com/results?search_query=YourGermanTeacher", "bestFor": "Clear beginner grammar", "level": "A1–B2", "score": 87 },
+      { "name": "lingoni GERMAN", "url": "https://www.youtube.com/results?search_query=lingoni+GERMAN", "bestFor": "Vocabulary and everyday German", "level": "A1–C1", "score": 86 },
+      { "name": "Hallo Deutschschule", "url": "https://www.youtube.com/results?search_query=Hallo+Deutschschule", "bestFor": "Dialogues and exam preparation", "level": "A1–B2", "score": 85 },
+      { "name": "Natürlich German", "url": "https://www.youtube.com/results?search_query=Nat%C3%BCrlich+German", "bestFor": "Comprehensible input", "level": "A1–B2", "score": 84 },
+      { "name": "Get Germanized", "url": "https://www.youtube.com/results?search_query=Get+Germanized", "bestFor": "Language and German culture", "level": "A2–C1", "score": 83 }
+    ],
+    "forums": [
+      { "name": "German Language Stack Exchange", "url": "https://german.stackexchange.com/", "bestFor": "Grammar, meaning and usage questions" },
+      { "name": "Reddit · German", "url": "https://www.reddit.com/r/German/", "bestFor": "Study advice, questions and corrections" },
+      { "name": "WordReference German Forums", "url": "https://forum.wordreference.com/forums/german.18/", "bestFor": "Vocabulary and translation discussion" }
+    ]
+  },
+  "Italian": {
+    "youtube": [
+      { "name": "Italy Made Easy", "url": "https://www.youtube.com/results?search_query=Italy+Made+Easy", "bestFor": "Structured grammar and conversation", "level": "A1–C1", "score": 89 },
+      { "name": "Teacher Stefano", "url": "https://www.youtube.com/results?search_query=Teacher+Stefano", "bestFor": "Grammar and natural Italian", "level": "A1–C1", "score": 88 },
+      { "name": "Italiano Automatico", "url": "https://www.youtube.com/results?search_query=Italiano+Automatico", "bestFor": "Immersion and listening confidence", "level": "A2–C1", "score": 87 },
+      { "name": "LearnAmo", "url": "https://www.youtube.com/results?search_query=LearnAmo", "bestFor": "Grammar, vocabulary and culture", "level": "A1–C1", "score": 86 },
+      { "name": "Italian with Davide", "url": "https://www.youtube.com/results?search_query=Italian+with+Davide", "bestFor": "Comprehensible everyday Italian", "level": "A1–B2", "score": 85 },
+      { "name": "Dolce Vita with Luca & Marina", "url": "https://www.youtube.com/results?search_query=Dolce+Vita+with+Luca+Marina", "bestFor": "Natural dialogue and culture", "level": "A2–C1", "score": 84 },
+      { "name": "Italiano Bello", "url": "https://www.youtube.com/results?search_query=Italiano+Bello", "bestFor": "Beginner vocabulary and grammar", "level": "A1–B1", "score": 83 }
+    ],
+    "forums": [
+      { "name": "Italian Language Stack Exchange", "url": "https://italian.stackexchange.com/", "bestFor": "Italian grammar and usage questions" },
+      { "name": "Reddit · Italian Learning", "url": "https://www.reddit.com/r/italianlearning/", "bestFor": "Resources, questions and peer practice" },
+      { "name": "WordReference Italian Forums", "url": "https://forum.wordreference.com/forums/italiano-inglese.32/", "bestFor": "Vocabulary and translation discussion" }
+    ]
+  },
+  "Portuguese": {
+    "youtube": [
+      { "name": "Portuguese with Carla", "url": "https://www.youtube.com/results?search_query=Portuguese+with+Carla", "bestFor": "European Portuguese listening and usage", "level": "A1–C1", "score": 89 },
+      { "name": "Semantica Portuguese", "url": "https://www.youtube.com/results?search_query=Semantica+Portuguese", "bestFor": "Brazilian video immersion", "level": "A2–C1", "score": 88 },
+      { "name": "Learn Portuguese with PortuguesePod101", "url": "https://www.youtube.com/results?search_query=PortuguesePod101", "bestFor": "Short vocabulary and listening lessons", "level": "A1–B2", "score": 87 },
+      { "name": "Plain Portuguese", "url": "https://www.youtube.com/results?search_query=Plain+Portuguese", "bestFor": "Brazilian grammar and pronunciation", "level": "A1–B2", "score": 86 },
+      { "name": "Talk the Streets", "url": "https://www.youtube.com/results?search_query=Talk+the+Streets+Portuguese", "bestFor": "European Portuguese conversation", "level": "A1–B2", "score": 85 },
+      { "name": "Portuguese Lab", "url": "https://www.youtube.com/results?search_query=Portuguese+Lab", "bestFor": "European Portuguese structure", "level": "A1–C1", "score": 84 },
+      { "name": "Tá Falado", "url": "https://www.youtube.com/results?search_query=T%C3%A1+Falado+Portuguese", "bestFor": "Pronunciation contrasts and conversation", "level": "A2–B2", "score": 83 }
+    ],
+    "forums": [
+      { "name": "Portuguese Language Stack Exchange", "url": "https://portuguese.stackexchange.com/", "bestFor": "Portuguese grammar and usage questions" },
+      { "name": "Reddit · Portuguese", "url": "https://www.reddit.com/r/Portuguese/", "bestFor": "Brazilian and European Portuguese learning" },
+      { "name": "WordReference Portuguese Forums", "url": "https://forum.wordreference.com/forums/portugu%C3%AAs-portuguese.16/", "bestFor": "Vocabulary, varieties and translation" }
+    ]
+  },
+  "Mandarin Chinese": {
+    "youtube": [
+      { "name": "Grace Mandarin Chinese", "url": "https://www.youtube.com/results?search_query=Grace+Mandarin+Chinese", "bestFor": "Pronunciation and Taiwanese Mandarin", "level": "A1–B2", "score": 89 },
+      { "name": "ShuoshuoChinese", "url": "https://www.youtube.com/results?search_query=ShuoshuoChinese", "bestFor": "Natural expressions and grammar", "level": "A2–C1", "score": 88 },
+      { "name": "Chinese Zero to Hero", "url": "https://www.youtube.com/results?search_query=Chinese+Zero+to+Hero", "bestFor": "HSK-aligned structured study", "level": "A1–C1", "score": 87 },
+      { "name": "Richard Chinese Language", "url": "https://www.youtube.com/results?search_query=Richard+Chinese+Language", "bestFor": "Grammar and sentence patterns", "level": "A1–B2", "score": 86 },
+      { "name": "Talk in Chinese with Felix", "url": "https://www.youtube.com/results?search_query=Talk+in+Chinese+with+Felix", "bestFor": "Comprehensible conversations", "level": "A1–B2", "score": 85 },
+      { "name": "Comprehensible Chinese", "url": "https://www.youtube.com/results?search_query=Comprehensible+Chinese", "bestFor": "Visual immersion", "level": "A1–B2", "score": 84 },
+      { "name": "ChineseFor.Us", "url": "https://www.youtube.com/results?search_query=ChineseFor.Us", "bestFor": "Pronunciation, characters and grammar", "level": "A1–B2", "score": 83 }
+    ],
+    "forums": [
+      { "name": "Chinese Language Stack Exchange", "url": "https://chinese.stackexchange.com/", "bestFor": "Characters, grammar and usage questions" },
+      { "name": "Reddit · ChineseLanguage", "url": "https://www.reddit.com/r/ChineseLanguage/", "bestFor": "Resources, study logs and learner questions" },
+      { "name": "Chinese Forums", "url": "https://www.chinese-forums.com/", "bestFor": "Long-form study, exams and culture discussions" }
+    ]
+  },
+  "Japanese": {
+    "youtube": [
+      { "name": "Miku Real Japanese", "url": "https://www.youtube.com/results?search_query=Miku+Real+Japanese", "bestFor": "Natural conversation and shadowing", "level": "A1–C1", "score": 89 },
+      { "name": "Cure Dolly", "url": "https://www.youtube.com/results?search_query=Cure+Dolly+Japanese", "bestFor": "Japanese grammar structure", "level": "A1–B2", "score": 88 },
+      { "name": "That Japanese Man Yuta", "url": "https://www.youtube.com/results?search_query=That+Japanese+Man+Yuta", "bestFor": "Street interviews and real usage", "level": "A2–C1", "score": 87 },
+      { "name": "Sambon Juku", "url": "https://www.youtube.com/results?search_query=Sambon+Juku", "bestFor": "Japanese-only grammar explanations", "level": "B1–C1", "score": 86 },
+      { "name": "Nihongo no Mori", "url": "https://www.youtube.com/results?search_query=Nihongo+no+Mori", "bestFor": "JLPT grammar and vocabulary", "level": "A2–C1", "score": 85 },
+      { "name": "Onomappu", "url": "https://www.youtube.com/results?search_query=Onomappu", "bestFor": "Comprehensible Japanese stories", "level": "A2–C1", "score": 84 },
+      { "name": "Speak Japanese Naturally", "url": "https://www.youtube.com/results?search_query=Speak+Japanese+Naturally", "bestFor": "Pitch accent and pronunciation", "level": "A1–B2", "score": 83 }
+    ],
+    "forums": [
+      { "name": "Japanese Language Stack Exchange", "url": "https://japanese.stackexchange.com/", "bestFor": "Grammar, vocabulary and nuance questions" },
+      { "name": "Reddit · LearnJapanese", "url": "https://www.reddit.com/r/LearnJapanese/", "bestFor": "Study methods, resources and questions" },
+      { "name": "WaniKani Community", "url": "https://community.wanikani.com/", "bestFor": "Kanji, reading clubs and study accountability" }
+    ]
+  },
+  "Korean": {
+    "youtube": [
+      { "name": "Prof. Yoon's Korean Language Class", "url": "https://www.youtube.com/results?search_query=Prof+Yoon+Korean", "bestFor": "University-style grammar instruction", "level": "A1–C1", "score": 89 },
+      { "name": "Conversational Korean", "url": "https://www.youtube.com/results?search_query=Conversational+Korean", "bestFor": "Listening and everyday expressions", "level": "A1–B2", "score": 88 },
+      { "name": "Korean with Miss Vicky", "url": "https://www.youtube.com/results?search_query=Korean+with+Miss+Vicky", "bestFor": "Friendly grammar and vocabulary", "level": "A1–B2", "score": 87 },
+      { "name": "Learn Korean in Korean", "url": "https://www.youtube.com/results?search_query=Learn+Korean+in+Korean", "bestFor": "Immersive visual instruction", "level": "A1–B2", "score": 86 },
+      { "name": "Korean Jream", "url": "https://www.youtube.com/results?search_query=Korean+Jream", "bestFor": "Natural speech and expressions", "level": "A2–C1", "score": 85 },
+      { "name": "Tammy Korean", "url": "https://www.youtube.com/results?search_query=Tammy+Korean", "bestFor": "TOPIK and grammar preparation", "level": "A1–C1", "score": 84 },
+      { "name": "Choisusu Korean", "url": "https://www.youtube.com/results?search_query=Choisusu+Korean", "bestFor": "Comprehensible Korean vlogs", "level": "A2–C1", "score": 83 }
+    ],
+    "forums": [
+      { "name": "Korean Language Stack Exchange", "url": "https://korean.stackexchange.com/", "bestFor": "Korean grammar and usage questions" },
+      { "name": "Reddit · Korean", "url": "https://www.reddit.com/r/Korean/", "bestFor": "Study resources, questions and corrections" },
+      { "name": "Language Learners · Korean", "url": "https://forum.language-learners.org/", "bestFor": "Study logs, methods and peer accountability" }
+    ]
+  },
+  "Arabic": {
+    "youtube": [
+      { "name": "Arabic with Sam", "url": "https://www.youtube.com/results?search_query=Arabic+with+Sam", "bestFor": "Modern Standard Arabic structure", "level": "A1–B2", "score": 89 },
+      { "name": "Arabic Clearly", "url": "https://www.youtube.com/results?search_query=Arabic+Clearly", "bestFor": "Grammar and sentence patterns", "level": "A1–B2", "score": 88 },
+      { "name": "Madinah Arabic", "url": "https://www.youtube.com/results?search_query=Madinah+Arabic", "bestFor": "Classical and Modern Standard Arabic", "level": "A1–B2", "score": 87 },
+      { "name": "Learn Arabic with Khasu", "url": "https://www.youtube.com/results?search_query=Learn+Arabic+with+Khasu", "bestFor": "Jordanian Arabic and MSA", "level": "A1–B2", "score": 86 },
+      { "name": "School of Yalla", "url": "https://www.youtube.com/results?search_query=School+of+Yalla", "bestFor": "Levantine Arabic conversation", "level": "A1–B2", "score": 85 },
+      { "name": "Real Arabic", "url": "https://www.youtube.com/results?search_query=Real+Arabic+podcast", "bestFor": "Levantine listening and stories", "level": "A2–C1", "score": 84 },
+      { "name": "Learn with Zakaria Arabic", "url": "https://www.youtube.com/results?search_query=Learn+with+Zakaria+Arabic", "bestFor": "Visual beginner vocabulary", "level": "A1–A2", "score": 83 }
+    ],
+    "forums": [
+      { "name": "Arabic Language Stack Exchange", "url": "https://arabic.stackexchange.com/", "bestFor": "Arabic grammar, vocabulary and scripts" },
+      { "name": "Reddit · Learn Arabic", "url": "https://www.reddit.com/r/learn_arabic/", "bestFor": "Dialect choices, resources and learner questions" },
+      { "name": "Language Learners · Arabic", "url": "https://forum.language-learners.org/", "bestFor": "Study logs, methods and peer support" }
+    ]
+  },
+  "Vietnamese": {
+    "youtube": [
+      { "name": "Learn Vietnamese with Trang", "url": "https://www.youtube.com/results?search_query=Learn+Vietnamese+with+Trang", "bestFor": "Pronunciation and everyday conversation", "level": "A1–B2", "score": 89 },
+      { "name": "VietnamesePod101", "url": "https://www.youtube.com/results?search_query=VietnamesePod101", "bestFor": "Short vocabulary and listening lessons", "level": "A1–B2", "score": 88 },
+      { "name": "Learn Vietnamese With Thu Ha", "url": "https://www.youtube.com/results?search_query=Learn+Vietnamese+With+Thu+Ha", "bestFor": "Northern pronunciation and grammar", "level": "A1–B2", "score": 87 },
+      { "name": "Vietnamese with Vân", "url": "https://www.youtube.com/results?search_query=Vietnamese+with+Van", "bestFor": "Everyday Vietnamese dialogues", "level": "A1–B2", "score": 86 },
+      { "name": "Learn Vietnamese With TVO", "url": "https://www.youtube.com/results?search_query=Learn+Vietnamese+With+TVO", "bestFor": "Practical conversation and culture", "level": "A1–C1", "score": 85 },
+      { "name": "Easy Vietnamese", "url": "https://www.youtube.com/results?search_query=Easy+Vietnamese", "bestFor": "Street interviews and authentic listening", "level": "A2–C1", "score": 84 },
+      { "name": "Vietnamese Language Studies", "url": "https://www.youtube.com/results?search_query=Vietnamese+Language+Studies", "bestFor": "Structured lessons and pronunciation", "level": "A1–B2", "score": 83 }
+    ],
+    "forums": [
+      { "name": "Vietnamese Language Stack Exchange", "url": "https://vietnamese.stackexchange.com/", "bestFor": "Vietnamese grammar and usage questions" },
+      { "name": "Reddit · Learn Vietnamese", "url": "https://www.reddit.com/r/learnvietnamese/", "bestFor": "Pronunciation, resources and learner support" },
+      { "name": "Language Learners · Vietnamese", "url": "https://forum.language-learners.org/", "bestFor": "Study logs and peer accountability" }
+    ]
+  },
+  "Dutch": {
+    "youtube": [
+      { "name": "Learn Dutch with Niels", "url": "https://www.youtube.com/results?search_query=Learn+Dutch+with+Niels", "bestFor": "Grammar and everyday Dutch", "level": "A1–B2", "score": 89 },
+      { "name": "Dutch Round 1", "url": "https://www.youtube.com/results?search_query=Dutch+Round+1", "bestFor": "Beginner listening and phrases", "level": "A1–B1", "score": 88 },
+      { "name": "Learn Dutch with Kim", "url": "https://www.youtube.com/results?search_query=Learn+Dutch+with+Kim", "bestFor": "Clear grammar and vocabulary", "level": "A1–B2", "score": 87 },
+      { "name": "Heb je zin?", "url": "https://www.youtube.com/results?search_query=Heb+je+zin+Dutch", "bestFor": "Story-led comprehensible Dutch", "level": "A1–B1", "score": 86 },
+      { "name": "Dutch Today", "url": "https://www.youtube.com/results?search_query=Dutch+Today+language", "bestFor": "Pronunciation and practical usage", "level": "A1–B2", "score": 85 },
+      { "name": "The Dutch Online Academy", "url": "https://www.youtube.com/results?search_query=The+Dutch+Online+Academy", "bestFor": "Grammar and NT2 preparation", "level": "A1–C1", "score": 84 },
+      { "name": "Learn Dutch with DutchPod101", "url": "https://www.youtube.com/results?search_query=DutchPod101", "bestFor": "Short vocabulary and listening lessons", "level": "A1–B2", "score": 83 }
+    ],
+    "forums": [
+      { "name": "Dutch Language Stack Exchange", "url": "https://dutch.stackexchange.com/", "bestFor": "Dutch grammar and usage questions" },
+      { "name": "Reddit · Learn Dutch", "url": "https://www.reddit.com/r/learndutch/", "bestFor": "Study resources and learner questions" },
+      { "name": "WordReference Dutch Forums", "url": "https://forum.wordreference.com/forums/nederlands-dutch.17/", "bestFor": "Vocabulary, translation and usage" }
+    ]
+  },
+  "Swedish": {
+    "youtube": [
+      { "name": "Katrin Berndt Swedish", "url": "https://www.youtube.com/results?search_query=Katrin+Berndt+Swedish", "bestFor": "Everyday Swedish and culture", "level": "A1–B2", "score": 89 },
+      { "name": "Learn Swedish with SwedishPod101", "url": "https://www.youtube.com/results?search_query=SwedishPod101", "bestFor": "Short vocabulary and listening lessons", "level": "A1–B2", "score": 88 },
+      { "name": "Svenska med Kalle", "url": "https://www.youtube.com/results?search_query=Svenska+med+Kalle", "bestFor": "Swedish-only comprehensible lessons", "level": "A2–C1", "score": 87 },
+      { "name": "Svenska för alla", "url": "https://www.youtube.com/results?search_query=Svenska+f%C3%B6r+alla", "bestFor": "SFI grammar and vocabulary", "level": "A1–B2", "score": 86 },
+      { "name": "Swedish Made Easy", "url": "https://www.youtube.com/results?search_query=Swedish+Made+Easy", "bestFor": "Pronunciation and grammar", "level": "A1–B2", "score": 85 },
+      { "name": "Simple Swedish Podcast", "url": "https://www.youtube.com/results?search_query=Simple+Swedish+Podcast", "bestFor": "Slow natural Swedish", "level": "A2–B2", "score": 84 },
+      { "name": "Svenska med Anastasia", "url": "https://www.youtube.com/results?search_query=Svenska+med+Anastasia", "bestFor": "Vocabulary and natural Swedish", "level": "A1–B2", "score": 83 }
+    ],
+    "forums": [
+      { "name": "Reddit · Svenska", "url": "https://www.reddit.com/r/Svenska/", "bestFor": "Swedish learner questions and corrections" },
+      { "name": "WordReference Nordic Languages", "url": "https://forum.wordreference.com/forums/nordic-languages.75/", "bestFor": "Swedish vocabulary and usage discussion" },
+      { "name": "Language Learners · Swedish", "url": "https://forum.language-learners.org/", "bestFor": "Study logs, methods and peer support" }
+    ]
+  },
+  "Turkish": {
+    "youtube": [
+      { "name": "Ali Yılmaz Turkish", "url": "https://www.youtube.com/results?search_query=Ali+Yilmaz+Turkish", "bestFor": "Clear grammar and conversation", "level": "A1–B2", "score": 89 },
+      { "name": "Learn Turkish with Muki", "url": "https://www.youtube.com/results?search_query=Learn+Turkish+with+Muki", "bestFor": "Beginner grammar and expressions", "level": "A1–B2", "score": 88 },
+      { "name": "Turkishaholic", "url": "https://www.youtube.com/results?search_query=Turkishaholic", "bestFor": "Structured Turkish lessons", "level": "A1–C1", "score": 87 },
+      { "name": "Learn Turkish with Jihan", "url": "https://www.youtube.com/results?search_query=Learn+Turkish+with+Jihan", "bestFor": "Everyday vocabulary and grammar", "level": "A1–B2", "score": 86 },
+      { "name": "Yasin Durak Turkish", "url": "https://www.youtube.com/results?search_query=Yasin+Durak+Turkish", "bestFor": "Comprehensible Turkish stories", "level": "A1–B2", "score": 85 },
+      { "name": "Learn Turkish via", "url": "https://www.youtube.com/results?search_query=Learn+Turkish+via", "bestFor": "Dialogues and practical phrases", "level": "A1–B2", "score": 84 },
+      { "name": "Turkish with Ahmet", "url": "https://www.youtube.com/results?search_query=Turkish+with+Ahmet", "bestFor": "Grammar and speaking practice", "level": "A1–C1", "score": 83 }
+    ],
+    "forums": [
+      { "name": "Reddit · Turkish Learning", "url": "https://www.reddit.com/r/turkishlearning/", "bestFor": "Turkish study questions and resources" },
+      { "name": "TurkishClass Forums", "url": "https://www.turkishclass.com/forum", "bestFor": "Language, translation and culture discussions" },
+      { "name": "Language Learners · Turkish", "url": "https://forum.language-learners.org/", "bestFor": "Study logs, methods and peer support" }
+    ]
+  },
+  "Hindi": {
+    "youtube": [
+      { "name": "Hindi University", "url": "https://www.youtube.com/results?search_query=Hindi+University", "bestFor": "Grammar and sentence-building lessons", "level": "A1–B2", "score": 89 },
+      { "name": "Learn Hindi with Kaushik Lele", "url": "https://www.youtube.com/results?search_query=Learn+Hindi+with+Kaushik+Lele", "bestFor": "Structured beginner Hindi", "level": "A1–B2", "score": 88 },
+      { "name": "Hindi Sumvaad", "url": "https://www.youtube.com/results?search_query=Hindi+Sumvaad", "bestFor": "Natural Hindi listening", "level": "A2–C1", "score": 87 },
+      { "name": "Learn Hindi On The Go", "url": "https://www.youtube.com/results?search_query=Learn+Hindi+On+The+Go", "bestFor": "Practical phrases and conversation", "level": "A1–B2", "score": 86 },
+      { "name": "Hindi with Rachna", "url": "https://www.youtube.com/results?search_query=Hindi+with+Rachna", "bestFor": "Grammar, vocabulary and pronunciation", "level": "A1–B2", "score": 85 },
+      { "name": "Pebbles Hindi", "url": "https://www.youtube.com/results?search_query=Pebbles+Hindi+learning", "bestFor": "Visual beginner vocabulary", "level": "A1–A2", "score": 84 },
+      { "name": "Learn Hindi through English", "url": "https://www.youtube.com/results?search_query=Learn+Hindi+through+English", "bestFor": "Sequential language lessons", "level": "A1–B1", "score": 83 }
+    ],
+    "forums": [
+      { "name": "Reddit · Hindi", "url": "https://www.reddit.com/r/Hindi/", "bestFor": "Hindi learning, literature and usage questions" },
+      { "name": "WordReference Indo-Iranian Languages", "url": "https://forum.wordreference.com/forums/indo-iranian-languages.102/", "bestFor": "Hindi vocabulary and translation discussion" },
+      { "name": "Language Learners · Hindi", "url": "https://forum.language-learners.org/", "bestFor": "Study logs, methods and peer support" }
+    ]
+  },
+  "Indonesian": {
+    "youtube": [
+      { "name": "Learn Indonesian with Isti", "url": "https://www.youtube.com/results?search_query=Learn+Indonesian+with+Isti", "bestFor": "Short vocabulary and listening lessons", "level": "A1–B2", "score": 89 },
+      { "name": "Bahasa Indonesia with Lina", "url": "https://www.youtube.com/results?search_query=Bahasa+Indonesia+with+Lina", "bestFor": "Everyday Indonesian conversation", "level": "A1–B2", "score": 88 },
+      { "name": "Learn Indonesian with Fiki", "url": "https://www.youtube.com/results?search_query=Learn+Indonesian+with+Fiki", "bestFor": "Natural phrases and pronunciation", "level": "A1–B2", "score": 87 },
+      { "name": "Indonesian Online", "url": "https://www.youtube.com/results?search_query=Indonesian+Online+language", "bestFor": "Structured grammar lessons", "level": "A1–C1", "score": 86 },
+      { "name": "Bahasa Indonesia Itu Mudah", "url": "https://www.youtube.com/results?search_query=Bahasa+Indonesia+Itu+Mudah", "bestFor": "Indonesian-only learning content", "level": "A2–B2", "score": 85 },
+      { "name": "Indonesian with Lauren", "url": "https://www.youtube.com/results?search_query=Indonesian+with+Lauren", "bestFor": "Natural conversation and listening", "level": "A2–C1", "score": 84 },
+      { "name": "Learn Bahasa Indonesia", "url": "https://www.youtube.com/results?search_query=Learn+Bahasa+Indonesia", "bestFor": "Beginner vocabulary and phrases", "level": "A1–B1", "score": 83 }
+    ],
+    "forums": [
+      { "name": "Reddit · Indonesian", "url": "https://www.reddit.com/r/Indonesian/", "bestFor": "Indonesian learner questions and resources" },
+      { "name": "WordReference Indonesian Forum", "url": "https://forum.wordreference.com/forums/indonesian.68/", "bestFor": "Vocabulary, grammar and translation" },
+      { "name": "Language Learners · Indonesian", "url": "https://forum.language-learners.org/", "bestFor": "Study logs, methods and peer support" }
+    ]
+  }
+}

@@ -17,17 +17,18 @@ Sologurus turns a learner's goal, level, location, deadline, and weekly availabi
 The agent:
 
 - Supports 16 target-language choices.
-- Compares six recognized English-language tests and recommends the best match for the learner's goal.
+- Compares recognized tests for the selected language and recommends the best match for the learner's goal.
 - Shows real test-center locations and official booking links.
 - Ranks ten YouTube educators with learner-fit explanations.
+- Recommends three language-specific study forums.
 - Exposes listening, speaking, reading, and writing materials instead of hiding them inside a generated plan.
 - Produces three genuinely different strategies: Test-First, Immersion-Led, and Balanced Four-Skill.
 - Checks that each strategy stays inside the learner's declared weekly time limit.
 - Creates a four-week calendar containing 12 study sessions and three recurring daily habit reminders.
-- Connects the plan to a real Notion study database and recurring Google Calendar events.
+- Replaces a connected Notion page with the current selected plan and links recurring Google Calendar events.
 - Exports a standards-based `.ics` file for Google, Apple, or Outlook Calendar without requiring OAuth.
 
-The public demo uses a deterministic IELTS scenario so judges can experience the complete workflow without API keys or unreliable live-search results. The application also includes a server-side Notion API route for creating learner-specific pages when deployment credentials are configured.
+The public demo uses dated, source-linked catalogs for all 16 languages. Its server-side Notion route can replace one connected page or create learner-specific child pages when deployment credentials are configured.
 
 ## How we built it
 
@@ -48,7 +49,7 @@ Codex accelerated the work by translating the project plan and PRD into the inte
 
 ## Challenges we ran into
 
-The first challenge was scope. Language learning is enormous, but a hackathon demo must be understandable in minutes. We solved this by offering broad target-language selection while researching one English/IELTS journey deeply enough to be credible.
+The first challenge was scope. Language learning is enormous, but a hackathon demo must be understandable in minutes. We solved this with a shared evidence schema and dated, source-linked catalogs for all 16 selectable languages.
 
 The second challenge was transparency. Early versions generated a useful plan but did not expose all the evidence behind it. A learner needs to see the test centers, recommended educators, and every listening, speaking, reading, and writing resource. We redesigned the results as a browsable research library with official outbound links.
 
@@ -97,3 +98,23 @@ We also plan to add:
 - Multi-user accounts, secure OAuth, source monitoring, and integration failure recovery.
 
 Our long-term goal is simple: Sologurus should help any self-directed learner move from “I want to learn” to “I know exactly what to do today.”
+
+## build with
+
+`OpenAI Codex`
+`GPT-5.6`
+`Next.js`
+`React`
+`TypeScript`
+`Node.js`
+`Vite`
+`Vinext`
+`Tailwind CSS`
+`Cloudflare Workers`
+`Notion API`
+`Google Calendar`
+`iCalendar`
+`GitHub Actions`
+`ESLint`
+`HTML5`
+`CSS3`

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import catalog from "../../../data/language-resources.json";
+import communities from "../../../data/language-communities.json";
 
 type CatalogLanguage = keyof typeof catalog;
 
@@ -13,6 +14,7 @@ export async function GET(request: NextRequest) {
   const city = clean(request.nextUrl.searchParams.get("city"), "your city");
   const country = clean(request.nextUrl.searchParams.get("country"), "your country");
   const entry = catalog[language];
+  const community = communities[language];
   const exactLocations = entry.locations.filter(
     (location) => location.city.toLocaleLowerCase() === city.toLocaleLowerCase()
       && location.country.toLocaleLowerCase() === country.toLocaleLowerCase(),
@@ -28,6 +30,8 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(
     {
       ...entry,
+      youtube: [...entry.youtube, ...community.youtube],
+      forums: community.forums,
       language,
       requestedLocation: { city, country },
       testCenters: exactLocations.length > 0 ? [...exactLocations, directoryResult] : [directoryResult],

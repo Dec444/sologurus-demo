@@ -2,9 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import languages from "../data/languages.json";
+import locations from "../data/locations.json";
 import { makeCalendarIcs } from "../lib/calendar.mjs";
 
-type ResourceTab = "tests" | "youtube" | "listening" | "speaking" | "reading" | "writing";
+type ResourceTab = "tests" | "youtube" | "forums" | "listening" | "speaking" | "reading" | "writing";
 
 type Profile = {
   language: string;
@@ -30,6 +31,7 @@ type Plan = {
 type TestOption = { name: string; fit: string; format: string; sourceUrl: string };
 type TestCenter = { name: string; provider: string; address: string; availability: string; registrationUrl: string };
 type Channel = { name: string; url: string; bestFor: string; level: string; score: number };
+type Forum = { name: string; url: string; bestFor: string };
 type Material = { name: string; url: string; cost: string; level: string; use: string };
 type ResourceData = {
   language: string;
@@ -40,6 +42,7 @@ type ResourceData = {
   tests: TestOption[];
   testCenters: TestCenter[];
   youtube: Channel[];
+  forums: Forum[];
   materials: Record<"listening" | "speaking" | "reading" | "writing", Material[]>;
 };
 
@@ -52,6 +55,15 @@ const demoProfile: Profile = {
   date: "2026-12-05",
   hours: 8,
   timezone: "Asia/Ho_Chi_Minh",
+};
+
+const countryTimezones: Record<keyof typeof locations, string> = {
+  Australia: "Australia/Sydney", Brazil: "America/Sao_Paulo", Canada: "America/Toronto", China: "Asia/Shanghai",
+  France: "Europe/Paris", Germany: "Europe/Berlin", India: "Asia/Kolkata", Indonesia: "Asia/Jakarta",
+  Italy: "Europe/Rome", Japan: "Asia/Tokyo", Mexico: "America/Mexico_City", Netherlands: "Europe/Amsterdam",
+  Portugal: "Europe/Lisbon", Singapore: "Asia/Singapore", "South Korea": "Asia/Seoul", Spain: "Europe/Madrid",
+  Sweden: "Europe/Stockholm", Taiwan: "Asia/Taipei", Türkiye: "Europe/Istanbul", "United Arab Emirates": "Asia/Dubai",
+  "United Kingdom": "Europe/London", "United States": "America/New_York", Vietnam: "Asia/Ho_Chi_Minh",
 };
 
 function buildPlans(data: ResourceData | null, language: string): Plan[] {
@@ -114,7 +126,6 @@ export default function Home() {
   const [notionMessage, setNotionMessage] = useState("");
   const [notionUrl, setNotionUrl] = useState("");
   const [notionApiConfigured, setNotionApiConfigured] = useState(false);
-  const [notionDatabaseUrl, setNotionDatabaseUrl] = useState("");
   const [calendarReady, setCalendarReady] = useState(false);
   const [googleCalendarUrl, setGoogleCalendarUrl] = useState("");
   const [resourceData, setResourceData] = useState<ResourceData | null>(null);
@@ -131,6 +142,7 @@ export default function Home() {
   const resourceTabs: [ResourceTab, string][] = useMemo(() => [
     ["tests", `Tests & centres · ${resourceData ? resourceData.tests.length + resourceData.testCenters.length : 0}`],
     ["youtube", `YouTube · ${resourceData?.youtube.length ?? 0}`],
+    ["forums", `Forums · ${resourceData?.forums.length ?? 0}`],
     ["listening", `Listening · ${resourceData?.materials.listening.length ?? 0}`],
     ["speaking", `Speaking · ${resourceData?.materials.speaking.length ?? 0}`],
     ["reading", `Reading · ${resourceData?.materials.reading.length ?? 0}`],
@@ -145,7 +157,7 @@ export default function Home() {
   }, [resourceData]);
   const toolSteps = useMemo(() => [
     ["search_tests", resourceData ? `${resourceData.tests.length} exams · ${resourceData.testCenters.length} location sources` : "Loading verified sources", `${profile.language} · ${profile.city}, ${profile.country}`],
-    ["rank_guidance", resourceData ? `${resourceData.youtube.length} recommended educators` : "Loading educators", `Selected for ${profile.language} learner fit`],
+    ["rank_guidance", resourceData ? `${resourceData.youtube.length} educators · ${resourceData.forums.length} forums` : "Loading educators and forums", `Selected for ${profile.language} learner fit`],
     ["curate_resources", resourceData ? `${Object.values(resourceData.materials).flat().length} skill resources` : "Loading four-skill materials", "Listening · speaking · reading · writing"],
     ["generate_plans", `3 strategies · ${profile.hours} h/week`, "Constraint check passed"],
   ], [profile.city, profile.country, profile.hours, profile.language, resourceData]);
@@ -154,9 +166,8 @@ export default function Home() {
     Promise.all([
       fetch("/api/notion").then((response) => response.json()),
       fetch("/api/calendar").then((response) => response.json()),
-    ]).then(([notion, calendar]: [{ configured?: boolean; databaseUrl?: string | null }, { eventUrl?: string | null }]) => {
+    ]).then(([notion, calendar]: [{ configured?: boolean }, { eventUrl?: string | null }]) => {
       setNotionApiConfigured(Boolean(notion.configured));
-      setNotionDatabaseUrl(notion.databaseUrl ?? "");
       setGoogleCalendarUrl(calendar.eventUrl ?? "");
     }).catch(() => undefined);
   }, []);
@@ -193,6 +204,13 @@ export default function Home() {
       : `Reach B2 ${language} for study and work`,
   }));
 
+  const updateCountry = (country: string) => setProfile((current) => ({
+    ...current,
+    country,
+    city: locations[country as keyof typeof locations][0],
+    timezone: countryTimezones[country as keyof typeof locations],
+  }));
+
   const runAgent = async () => {
     if (resourceLoading || !resourceData) return;
     setStage("running");
@@ -217,14 +235,6 @@ export default function Home() {
   };
 
   const connectNotion = async () => {
-    if (!notionApiConfigured && notionDatabaseUrl) {
-      window.open(notionDatabaseUrl, "_blank", "noopener,noreferrer");
-      setNotionUrl(notionDatabaseUrl);
-      setNotionMessage("Opened the verified Sologurus database with real study tasks.");
-      setNotionStatus("success");
-      setStage("exported");
-      return;
-    }
     setNotionStatus("connecting");
     setNotionMessage("");
     setNotionUrl("");
@@ -232,12 +242,12 @@ export default function Home() {
       const response = await fetch("/api/notion", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profile, plan: selectedPlan }),
+        body: JSON.stringify({ profile, plan: selectedPlan, resources: resourceData }),
       });
       const result = await response.json() as { ok?: boolean; url?: string; message?: string };
       if (!response.ok || !result.ok || !result.url) throw new Error(result.message || "Notion page creation failed.");
       setNotionUrl(result.url);
-      setNotionMessage("A new page was written by the Sologurus server integration.");
+      setNotionMessage("The page was written from the current profile, strategy, tests, educators, forums, and skill resources.");
       setNotionStatus("success");
       setStage("exported");
     } catch (error) {
@@ -275,8 +285,8 @@ export default function Home() {
               <div className="form-grid">
                 <label>Target language<select value={profile.language} onChange={(e) => updateLanguage(e.target.value)}>{languages.map((language) => <option key={language.name} value={language.name}>{language.name} · {language.nativeName}</option>)}</select></label>
                 <label>Current level<select value={profile.level} onChange={(e) => update("level", e.target.value)}><option>B1 · Intermediate</option><option>A2 · Elementary</option><option>B2 · Upper-intermediate</option></select></label>
-                <label>City<input value={profile.city} onChange={(e) => update("city", e.target.value)} /></label>
-                <label>Country<input value={profile.country} onChange={(e) => update("country", e.target.value)} /></label>
+                <label>Country<select value={profile.country} onChange={(e) => updateCountry(e.target.value)}>{Object.keys(locations).map((country) => <option key={country} value={country}>{country}</option>)}</select></label>
+                <label>City<select value={profile.city} onChange={(e) => update("city", e.target.value)}>{locations[profile.country as keyof typeof locations].map((city) => <option key={city} value={city}>{city}</option>)}</select></label>
                 <label className="wide">Goal<input value={profile.goal} onChange={(e) => update("goal", e.target.value)} /></label>
                 <label>Target date<input type="date" value={profile.date} onChange={(e) => update("date", e.target.value)} /></label>
                 <label>Hours each week<div className="range-row"><input aria-label="Hours each week" type="range" min="3" max="20" value={profile.hours} onChange={(e) => update("hours", Number(e.target.value))} /><output>{profile.hours}h</output></div></label>
@@ -323,7 +333,7 @@ export default function Home() {
               <section className="resource-explorer" aria-labelledby="all-resources-title">
                 <div className="resource-heading">
                   <div><span className="kicker">AGENT RESEARCH · FULL RESULTS</span><h3 id="all-resources-title">See every recommendation.</h3></div>
-                  <p>{profile.language} test options, official centre directories, educators, and four-skill materials. Catalog checked {resourceData.lastVerified}; availability is always rechecked at the source.</p>
+                  <p>{profile.language} test options, official centre directories, 10 educators, 3 study forums, and four-skill materials. Catalog checked {resourceData.lastVerified}; availability is always rechecked at the source.</p>
                 </div>
                 <div className="resource-tabs" role="tablist" aria-label="Research result categories">
                   {resourceTabs.map(([id, label]) => (
@@ -359,7 +369,15 @@ export default function Home() {
                     </div>
                   )}
 
-                  {resourceTab !== "tests" && resourceTab !== "youtube" && (
+                  {resourceTab === "forums" && (
+                    <div className="resource-list forum-list">
+                      {resourceData.forums.map((forum, index) => (
+                        <a href={forum.url} target="_blank" rel="noreferrer" key={forum.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{forum.name}</b><p>{forum.bestFor}</p><small>Active study community · verify community rules before posting</small></div><span className="open-link">Join ↗</span></a>
+                      ))}
+                    </div>
+                  )}
+
+                  {resourceTab !== "tests" && resourceTab !== "youtube" && resourceTab !== "forums" && (
                     <div className="material-grid">
                       {resourceData.materials[resourceTab].map((material, index) => (
                         <a href={material.url} target="_blank" rel="noreferrer" key={material.name}><span className="material-number">0{index + 1}</span><div><b>{material.name}</b><p>{material.use}</p><small>{material.cost} · {material.level}</small></div><span className="open-link">Open ↗</span></a>
@@ -371,12 +389,12 @@ export default function Home() {
 
               <div className="export-row">
                 <div><b>Send the plan somewhere real.</b><span>Live Notion and Google Calendar connections, plus a universal 15-event calendar file.</span></div>
-                <button className="secondary" data-testid="connect-notion" disabled={notionStatus === "connecting"} onClick={connectNotion}>{notionStatus === "connecting" ? "Creating page…" : !notionApiConfigured && notionDatabaseUrl ? "Open connected Notion plan ↗" : "Create Notion page ↗"}</button>
+                <button className="secondary" data-testid="connect-notion" disabled={notionStatus === "connecting"} onClick={connectNotion}>{notionStatus === "connecting" ? "Updating Notion…" : notionApiConfigured ? "Update Notion page ↗" : "Connect Notion to update ↗"}</button>
                 {googleCalendarUrl && <a className="secondary action-link" href={googleCalendarUrl} target="_blank" rel="noreferrer">Open Google Calendar ↗</a>}
                 <button className="primary compact" data-testid="download-ics" onClick={downloadIcs}>Download universal .ICS ↓</button>
               </div>
-              {notionStatus === "error" && <div className="integration-error" role="alert"><span>!</span><div><b>Notion is not connected yet.</b><p>{notionMessage}</p></div></div>}
-              {notionStatus === "success" && <div className="success" role="status"><span>✓</span><div><b>Notion is connected.</b><p>{notionMessage} <a href={notionUrl} target="_blank" rel="noreferrer">Open it in Notion ↗</a></p></div></div>}
+              {notionStatus === "error" && <div className="integration-error" role="alert"><span>!</span><div><b>Notion needs a write connection.</b><p>{notionMessage}</p></div></div>}
+              {notionStatus === "success" && <div className="success" role="status"><span>✓</span><div><b>Notion matches this plan.</b><p>{notionMessage} <a href={notionUrl} target="_blank" rel="noreferrer">Open updated page ↗</a></p></div></div>}
               {calendarReady && <div className="success" role="status"><span>✓</span><div><b>Calendar file generated with 15 events.</b><p>Import it into Google, Apple, or Outlook Calendar. Events use {profile.timezone} and reminders repeat through {profile.date}.</p></div></div>}
             </div>
           )}

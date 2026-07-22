@@ -17,6 +17,8 @@ test("Notion export is a real API route, not a preview-only state change", async
   assert.match(route, /api\.notion\.com\/v1\/pages/);
   assert.match(route, /NOTION_TOKEN/);
   assert.match(route, /NOTION_PARENT_PAGE_ID/);
+  assert.match(route, /NOTION_TARGET_PAGE_ID/);
+  assert.match(route, /method: "PATCH"/);
   assert.match(route, /2026-03-11/);
 });
 
