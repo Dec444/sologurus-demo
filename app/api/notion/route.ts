@@ -9,6 +9,8 @@ type NotionRequest = {
     testCenters?: Array<{ name?: string; address?: string; registrationUrl?: string }>;
     youtube?: Array<{ name?: string; bestFor?: string; url?: string }>;
     forums?: Array<{ name?: string; bestFor?: string; url?: string }>;
+    tvShows?: Array<{ name?: string; genre?: string; origin?: string; level?: string; url?: string }>;
+    mockExams?: Array<{ name?: string; exam?: string; access?: string; url?: string }>;
     materials?: Record<string, Array<{ name?: string; use?: string; url?: string }>>;
   };
 };
@@ -56,7 +58,7 @@ export async function POST(request: Request) {
   const profile = body.profile;
   const plan = body.plan;
   const resources = body.resources;
-  if (!profile?.goal || !profile.date || !plan?.name || !Array.isArray(plan.sample) || plan.sample.length === 0 || !resources?.youtube?.length || !resources.forums?.length) {
+  if (!profile?.goal || !profile.date || !plan?.name || !Array.isArray(plan.sample) || plan.sample.length === 0 || !resources?.youtube?.length || !resources.forums?.length || !resources.tvShows?.length || !resources.mockExams?.length) {
     return Response.json({ ok: false, message: "The learner profile, selected plan, and current research results are required." }, { status: 400 });
   }
 
@@ -92,6 +94,10 @@ export async function POST(request: Request) {
     ...resources.youtube.slice(0, 10).map((item) => bullet(item.name ?? "Educator", item.bestFor ?? "Language study", item.url)),
     heading("Study forums"),
     ...resources.forums.slice(0, 3).map((item) => bullet(item.name ?? "Study forum", item.bestFor ?? "Peer learning", item.url)),
+    heading("TV immersion watchlist"),
+    ...resources.tvShows.slice(0, 10).map((item) => bullet(item.name ?? "TV show", `${item.genre ?? "Series"} · ${item.origin ?? profile.language ?? "Target language"} · suggested ${item.level ?? "mixed levels"}`, item.url)),
+    heading("Mock exam platforms"),
+    ...resources.mockExams.slice(0, 3).map((item) => bullet(item.name ?? "Mock exam", `${item.exam ?? "Language exam"} · ${item.access ?? "Practice platform"}`, item.url)),
     ...Object.entries(resources.materials ?? {}).flatMap(([skill, items]) => [
       heading(`${skill[0]?.toUpperCase() ?? ""}${skill.slice(1)} resources`),
       ...items.slice(0, 5).map((item) => bullet(item.name ?? "Study material", item.use ?? "Skill practice", item.url)),

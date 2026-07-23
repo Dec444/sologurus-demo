@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import catalog from "../../../data/language-resources.json";
 import communities from "../../../data/language-communities.json";
+import mediaAndExams from "../../../data/language-media-exams.json";
 
 type CatalogLanguage = keyof typeof catalog;
 
@@ -15,6 +16,7 @@ export async function GET(request: NextRequest) {
   const country = clean(request.nextUrl.searchParams.get("country"), "your country");
   const entry = catalog[language];
   const community = communities[language];
+  const enrichment = mediaAndExams[language];
   const exactLocations = entry.locations.filter(
     (location) => location.city.toLocaleLowerCase() === city.toLocaleLowerCase()
       && location.country.toLocaleLowerCase() === country.toLocaleLowerCase(),
@@ -32,11 +34,17 @@ export async function GET(request: NextRequest) {
       ...entry,
       youtube: [...entry.youtube, ...community.youtube],
       forums: community.forums,
+      tvShows: enrichment.tvShows.map((show) => ({
+        ...show,
+        url: `https://www.themoviedb.org/search?query=${encodeURIComponent(show.name)}`,
+      })),
+      mockExams: enrichment.mockExams,
       language,
+      lastVerified: enrichment.lastVerified,
       requestedLocation: { city, country },
       testCenters: exactLocations.length > 0 ? [...exactLocations, directoryResult] : [directoryResult],
       centerMode: exactLocations.length > 0 ? "verified-local-and-directory" : "official-directory",
-      sourceMode: "curated-official",
+      sourceMode: "curated-live-sources",
     },
     { headers: { "Cache-Control": "no-store, max-age=0" } },
   );

@@ -30,7 +30,7 @@ Open the [live Sologurus demo](https://sologurus-study-agent.lu-liu398220.chatgp
 2. Select **Use demo profile**.
 3. Run **Build my study system** and watch the structured research steps.
 4. Compare the three study strategies.
-5. Browse every test center, all 10 YouTube recommendations, 3 study forums, and four-skill resources.
+5. Browse every test center, all 10 YouTube recommendations, 3 study forums, 10 target-language TV shows, 3 mock-exam platforms, and four-skill resources.
 6. With Notion write credentials configured, update the selected Notion page; otherwise use Google Calendar or download the universal `.ics` calendar.
 
 The seeded learner is an intermediate English speaker in Ho Chi Minh City pursuing IELTS 7.0 for Canadian permanent residence with eight hours available each week.
@@ -42,6 +42,8 @@ The seeded learner is an intermediate English speaker in Ho Chi Minh City pursui
 | Learner profile | 16 target languages, dependent country/city menus, level, goal, deadline, and weekly hours |
 | Test explorer | Language-specific recognized tests, an explained recommendation, verified local records where available, and an official center finder everywhere |
 | Guidance | Exactly 10 language-specific YouTube educators and 3 study forums |
+| Immersion | Exactly 10 native-language TV shows with origin, genre, and suggested learner level |
+| Mock exams | Exactly 3 language-specific exam simulators or official sample-test platforms |
 | Resource library | Listening, speaking, reading, and writing materials that reload with the target language |
 | Strategy builder | Test-First, Immersion-Led, and Balanced Four-Skill plans |
 | Constraint check | Every plan stays inside the learner's declared weekly limit |
@@ -59,7 +61,8 @@ Learner profile
 Planner / orchestrator
       ├── search_tests()      → test choices, sources, and local centers
       ├── rank_guidance()     → ranked educators with rationale
-      ├── curate_resources()  → free-first materials grouped by skill
+      ├── curate_resources()  → free-first materials + target-language TV immersion
+      ├── match_mock_exams()  → three exam-specific practice environments
       └── generate_plans()    → 3 strategies + weekly constraint check
                                       │
                                       ▼
@@ -123,7 +126,7 @@ app/
   api/notion/       Live Notion page-update/create boundary
   api/calendar/     Connected-calendar status boundary
   page.tsx          Interactive learner journey
-data/               Language, community, forum, and location catalogs
+data/               Language, community, TV, mock-exam, forum, and location catalogs
 lib/calendar.mjs    Timezone-aware iCalendar generator
 tests/              Node regression tests
 public/             Brand and social-preview assets

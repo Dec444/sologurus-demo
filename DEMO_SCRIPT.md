@@ -34,15 +34,15 @@ Before recording:
 
 ## 1:03–1:47 — Evidence and strategic plans
 
-[Point to the IELTS recommendation. Scroll to **See every recommendation**. Open **Tests & centres**, **YouTube**, **Forums**, and **Listening** briefly. Then click each plan card once; settle on **Balanced Four-Skill**.]
+[Point to the IELTS recommendation. Scroll to **See every recommendation**. Open **Tests & centres**, **YouTube**, **Forums**, **TV shows**, **Mock exams**, and **Listening** briefly. Then click each plan card once; settle on **Balanced Four-Skill**.]
 
-“For Canadian PR, the agent recommends IELTS and explains the fit. Linh can inspect every result: verified local records plus the official test-centre finder, exactly ten ranked YouTube teachers, three study forums, and dedicated listening, speaking, reading, and writing materials. If a city has no verified address, Sologurus says that plainly and opens the exam owner’s live directory.”
+“For Canadian PR, the agent recommends IELTS and explains the fit. Linh can inspect every result: verified local records plus the official test-centre finder, exactly ten ranked YouTube teachers, three study forums, ten English-language TV shows, three mock-exam platforms, and dedicated listening, speaking, reading, and writing materials. If the target language changes, this entire library changes with it.”
 
 ## 1:47–2:12 — The payoff
 
-[Scroll to the first-week block and resources. In a credentialed demo, click **Update Notion page** and show that the page contains this language, plan, ten educators, three forums, and all four skills. Return, open Google Calendar, then download the universal `.ICS`.]
+[Scroll to the first-week block and resources. In a credentialed demo, click **Update Notion page** and show that the page contains this language, plan, ten educators, three forums, ten TV shows, three mock exams, and all four skills. Return, open Google Calendar, then download the universal `.ICS`.]
 
-“The selected plan goes somewhere real. Sologurus replaces the connected Notion page with the current profile, strategy, tasks, educators, forums, and skill resources—so stale English results cannot survive a language change. The universal ICS adds 12 study sessions and three recurring reminders to Google, Apple, or Outlook.”
+“The selected plan goes somewhere real. Sologurus replaces the connected Notion page with the current profile, strategy, tasks, educators, forums, TV watchlist, mock-exam links, and skill resources—so stale English results cannot survive a language change. The universal ICS adds 12 study sessions and three recurring reminders to Google, Apple, or Outlook.”
 
 ## 2:12–2:47 — How we built it (graded)
 

@@ -5,7 +5,7 @@ import languages from "../data/languages.json";
 import locations from "../data/locations.json";
 import { makeCalendarIcs } from "../lib/calendar.mjs";
 
-type ResourceTab = "tests" | "youtube" | "forums" | "listening" | "speaking" | "reading" | "writing";
+type ResourceTab = "tests" | "youtube" | "forums" | "tv" | "mocks" | "listening" | "speaking" | "reading" | "writing";
 
 type Profile = {
   language: string;
@@ -33,16 +33,20 @@ type TestCenter = { name: string; provider: string; address: string; availabilit
 type Channel = { name: string; url: string; bestFor: string; level: string; score: number };
 type Forum = { name: string; url: string; bestFor: string };
 type Material = { name: string; url: string; cost: string; level: string; use: string };
+type TvShow = { name: string; url: string; origin: string; genre: string; level: string };
+type MockExam = { name: string; url: string; exam: string; access: string };
 type ResourceData = {
   language: string;
   lastVerified: string;
-  sourceMode: "curated-official";
+  sourceMode: "curated-live-sources";
   centerMode: "verified-local-and-directory" | "official-directory";
   recommendation: { name: string; reason: string; sourceUrl: string };
   tests: TestOption[];
   testCenters: TestCenter[];
   youtube: Channel[];
   forums?: Forum[];
+  tvShows: TvShow[];
+  mockExams: MockExam[];
   materials: Record<"listening" | "speaking" | "reading" | "writing", Material[]>;
 };
 
@@ -67,11 +71,12 @@ const countryTimezones: Record<keyof typeof locations, string> = {
 };
 
 function buildPlans(data: ResourceData | null, language: string): Plan[] {
-  const exam = data?.recommendation.name ?? `${language} proficiency test`;
   const listening = data?.materials.listening[0]?.name ?? `${language} listening practice`;
   const speaking = data?.youtube[0]?.name ?? `${language} speaking lesson`;
   const writing = data?.materials.writing[0]?.name ?? `${language} writing practice`;
   const reading = data?.materials.reading[0]?.name ?? `${language} reading practice`;
+  const tvShow = data?.tvShows?.[0]?.name ?? `${language} TV episode`;
+  const mockExam = data?.mockExams?.[0]?.name ?? `${language} mock exam`;
 
   return [
   {
@@ -82,7 +87,7 @@ function buildPlans(data: ResourceData | null, language: string): Plan[] {
     split: "40% drills · 25% feedback · 20% vocabulary · 15% input",
     outcome: "Best for a near-term score target. Expected: 6.5–7.0 with consistent review.",
     sample: [
-      `25 min · ${exam} reading task, timed`,
+      `25 min · ${mockExam}, timed`,
       "20 min · Error log: label 3 mistake patterns",
       `15 min · ${speaking} speaking prompt, record + compare`,
     ],
@@ -96,7 +101,7 @@ function buildPlans(data: ResourceData | null, language: string): Plan[] {
     outcome: "Best for durable fluency. Score gains may be slower in the first month.",
     sample: [
       `25 min · ${listening} ×2, shadow the second`,
-      `20 min · ${language} video with target-language subtitles`,
+      `20 min · ${tvShow} with target-language subtitles`,
       `15 min · Voice note: retell it in ${language} without notes`,
     ],
   },
@@ -143,6 +148,8 @@ export default function Home() {
     ["tests", `Tests & centres · ${resourceData ? resourceData.tests.length + resourceData.testCenters.length : 0}`],
     ["youtube", `YouTube · ${resourceData?.youtube.length ?? 0}`],
     ["forums", `Forums · ${resourceData?.forums?.length ?? 0}`],
+    ["tv", `TV shows · ${resourceData?.tvShows.length ?? 0}`],
+    ["mocks", `Mock exams · ${resourceData?.mockExams.length ?? 0}`],
     ["listening", `Listening · ${resourceData?.materials.listening.length ?? 0}`],
     ["speaking", `Speaking · ${resourceData?.materials.speaking.length ?? 0}`],
     ["reading", `Reading · ${resourceData?.materials.reading.length ?? 0}`],
@@ -158,7 +165,8 @@ export default function Home() {
   const toolSteps = useMemo(() => [
     ["search_tests", resourceData ? `${resourceData.tests.length} exams · ${resourceData.testCenters.length} location sources` : "Loading verified sources", `${profile.language} · ${profile.city}, ${profile.country}`],
     ["rank_guidance", resourceData ? `${resourceData.youtube.length} educators · ${resourceData.forums?.length ?? 0} forums` : "Loading educators and forums", `Selected for ${profile.language} learner fit`],
-    ["curate_resources", resourceData ? `${Object.values(resourceData.materials).flat().length} skill resources` : "Loading four-skill materials", "Listening · speaking · reading · writing"],
+    ["curate_resources", resourceData ? `${Object.values(resourceData.materials).flat().length} skill resources · ${resourceData.tvShows.length} TV shows` : "Loading four-skill materials", "Listening · speaking · reading · writing · immersion"],
+    ["match_mock_exams", resourceData ? `${resourceData.mockExams.length} exam simulators` : "Loading mock platforms", `Matched to ${resourceData?.recommendation.name ?? profile.language}`],
     ["generate_plans", `3 strategies · ${profile.hours} h/week`, "Constraint check passed"],
   ], [profile.city, profile.country, profile.hours, profile.language, resourceData]);
 
@@ -247,7 +255,7 @@ export default function Home() {
       const result = await response.json() as { ok?: boolean; url?: string; message?: string };
       if (!response.ok || !result.ok || !result.url) throw new Error(result.message || "Notion page creation failed.");
       setNotionUrl(result.url);
-      setNotionMessage("The page was written from the current profile, strategy, tests, educators, forums, and skill resources.");
+      setNotionMessage("The page was written from the current profile, strategy, tests, mock exams, educators, TV shows, forums, and skill resources.");
       setNotionStatus("success");
       setStage("exported");
     } catch (error) {
@@ -333,7 +341,7 @@ export default function Home() {
               <section className="resource-explorer" aria-labelledby="all-resources-title">
                 <div className="resource-heading">
                   <div><span className="kicker">AGENT RESEARCH · FULL RESULTS</span><h3 id="all-resources-title">See every recommendation.</h3></div>
-                  <p>{profile.language} test options, official centre directories, 10 educators, 3 study forums, and four-skill materials. Catalog checked {resourceData.lastVerified}; availability is always rechecked at the source.</p>
+                  <p>{profile.language} test options, official centre directories, 10 educators, 3 study forums, 10 TV shows, 3 mock-exam platforms, and four-skill materials. Catalog checked {resourceData.lastVerified}; availability is always rechecked at the source.</p>
                 </div>
                 <div className="resource-tabs" role="tablist" aria-label="Research result categories">
                   {resourceTabs.map(([id, label]) => (
@@ -377,7 +385,23 @@ export default function Home() {
                     </div>
                   )}
 
-                  {resourceTab !== "tests" && resourceTab !== "youtube" && resourceTab !== "forums" && (
+                  {resourceTab === "tv" && (
+                    <div className="material-grid media-grid">
+                      {resourceData.tvShows.map((show, index) => (
+                        <a href={show.url} target="_blank" rel="noreferrer" key={show.name}><span className="material-number">{String(index + 1).padStart(2, "0")}</span><div><b>{show.name}</b><p>{show.genre} · {show.origin}</p><small>Suggested learner level {show.level} · check local streaming availability</small></div><span className="open-link">Show guide ↗</span></a>
+                      ))}
+                    </div>
+                  )}
+
+                  {resourceTab === "mocks" && (
+                    <div className="resource-list tests-list mock-list">
+                      {resourceData.mockExams.map((mock, index) => (
+                        <a href={mock.url} target="_blank" rel="noreferrer" key={mock.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{mock.name}</b><p>{mock.access}</p><small>{mock.exam} · confirm current access terms at source</small></div><span className="open-link">Practice ↗</span></a>
+                      ))}
+                    </div>
+                  )}
+
+                  {resourceTab !== "tests" && resourceTab !== "youtube" && resourceTab !== "forums" && resourceTab !== "tv" && resourceTab !== "mocks" && (
                     <div className="material-grid">
                       {resourceData.materials[resourceTab].map((material, index) => (
                         <a href={material.url} target="_blank" rel="noreferrer" key={material.name}><span className="material-number">0{index + 1}</span><div><b>{material.name}</b><p>{material.use}</p><small>{material.cost} · {material.level}</small></div><span className="open-link">Open ↗</span></a>

@@ -5,6 +5,7 @@ import test from "node:test";
 const languagesUrl = new URL("../data/languages.json", import.meta.url);
 const catalogUrl = new URL("../data/language-resources.json", import.meta.url);
 const communitiesUrl = new URL("../data/language-communities.json", import.meta.url);
+const mediaAndExamsUrl = new URL("../data/language-media-exams.json", import.meta.url);
 const locationsUrl = new URL("../data/locations.json", import.meta.url);
 const pageUrl = new URL("../app/page.tsx", import.meta.url);
 const notionRouteUrl = new URL("../app/api/notion/route.ts", import.meta.url);
@@ -13,6 +14,7 @@ test("every selectable language has verified, actionable resources", async () =>
   const languages = JSON.parse(await readFile(languagesUrl, "utf8"));
   const catalog = JSON.parse(await readFile(catalogUrl, "utf8"));
   const communities = JSON.parse(await readFile(communitiesUrl, "utf8"));
+  const mediaAndExams = JSON.parse(await readFile(mediaAndExamsUrl, "utf8"));
 
   for (const { name } of languages) {
     const entry = catalog[name];
@@ -32,6 +34,13 @@ test("every selectable language has verified, actionable resources", async () =>
       for (const resource of entry.materials[skill]) {
         assert.match(resource.url, /^https:\/\//, `${resource.name} needs a live URL`);
       }
+    }
+
+    assert.equal(mediaAndExams[name].tvShows.length, 10, `${name} needs exactly ten TV shows`);
+    assert.equal(new Set(mediaAndExams[name].tvShows.map((show) => show.name)).size, 10, `${name} needs ten distinct TV shows`);
+    assert.equal(mediaAndExams[name].mockExams.length, 3, `${name} needs exactly three mock-exam platforms`);
+    for (const mock of mediaAndExams[name].mockExams) {
+      assert.match(mock.url, /^https:\/\//, `${mock.name} needs a live URL`);
     }
   }
 });
@@ -58,6 +67,8 @@ test("Notion receives the selected research instead of opening a static fallback
   assert.match(notionRoute, /resources\?/, "accept the selected research payload");
   assert.match(notionRoute, /Recommended educators/, "write educators to the Notion page");
   assert.match(notionRoute, /Study forums/, "write forums to the Notion page");
+  assert.match(notionRoute, /TV immersion watchlist/, "write TV recommendations to the Notion page");
+  assert.match(notionRoute, /Mock exam platforms/, "write mock-exam platforms to the Notion page");
   assert.match(notionRoute, /Recognized tests and centre sources/, "write tests and centre sources to the Notion page");
 });
 
@@ -72,4 +83,5 @@ test("the client reloads research when language or location changes", async () =
   assert.match(page, /profile\.country/, "country must be part of the request");
   assert.match(page, /cache: "no-store"/, "client must not reuse a prior resource schema");
   assert.match(resourceRoute, /Cache-Control": "no-store/, "server must not cache stale language schemas");
+  assert.match(resourceRoute, /language-media-exams\.json/, "server must load language-specific TV and mock-exam data");
 });

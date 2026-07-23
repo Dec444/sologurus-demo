@@ -21,6 +21,8 @@ The agent:
 - Shows real test-center locations and official booking links.
 - Ranks ten YouTube educators with learner-fit explanations.
 - Recommends three language-specific study forums.
+- Curates ten native-language TV shows for guided immersion.
+- Provides three exam-specific mock platforms or official sample-test environments.
 - Exposes listening, speaking, reading, and writing materials instead of hiding them inside a generated plan.
 - Produces three genuinely different strategies: Test-First, Immersion-Led, and Balanced Four-Skill.
 - Checks that each strategy stays inside the learner's declared weekly time limit.
@@ -32,12 +34,13 @@ The public demo uses dated, source-linked catalogs for all 16 languages. Its ser
 
 ## How we built it
 
-We designed Sologurus as a planner over structured tools rather than a chatbot that writes one long study-plan response. The product flow models four explicit operations:
+We designed Sologurus as a planner over structured tools rather than a chatbot that writes one long study-plan response. The product flow models five explicit operations:
 
 1. `search_tests()` returns test options, official sources, and nearby centers.
 2. `rank_guidance()` scores educators and communities for the learner's level and goal.
-3. `curate_resources()` organizes free-first materials by language skill.
-4. `generate_plans()` composes three strategies and checks the weekly time constraint.
+3. `curate_resources()` organizes free-first materials and a ten-show immersion watchlist.
+4. `match_mock_exams()` selects three exam-specific practice environments.
+5. `generate_plans()` composes three strategies and checks the weekly time constraint.
 
 The interface is built with Next.js-compatible React and TypeScript, with a responsive dark product design inspired by the clarity and information density of modern tools such as Linear. Comic Neue gives the major headings a friendly educational character, while a clean sans-serif keeps the working interface readable.
 

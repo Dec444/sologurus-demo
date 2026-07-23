@@ -1,0 +1,322 @@
+{
+  "English": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "Friends", "origin": "United States", "genre": "Sitcom", "level": "A2–B2" },
+      { "name": "The Office (US)", "origin": "United States", "genre": "Workplace comedy", "level": "B1–C1" },
+      { "name": "Sherlock", "origin": "United Kingdom", "genre": "Crime drama", "level": "B2–C2" },
+      { "name": "The Crown", "origin": "United Kingdom", "genre": "Historical drama", "level": "B2–C2" },
+      { "name": "Stranger Things", "origin": "United States", "genre": "Science-fiction drama", "level": "B1–C1" },
+      { "name": "Brooklyn Nine-Nine", "origin": "United States", "genre": "Sitcom", "level": "B1–C1" },
+      { "name": "The Good Place", "origin": "United States", "genre": "Fantasy comedy", "level": "B1–C1" },
+      { "name": "Ted Lasso", "origin": "United States / United Kingdom", "genre": "Sports comedy-drama", "level": "B1–C1" },
+      { "name": "Downton Abbey", "origin": "United Kingdom", "genre": "Period drama", "level": "B2–C2" },
+      { "name": "Abbott Elementary", "origin": "United States", "genre": "Workplace comedy", "level": "B1–C1" }
+    ],
+    "mockExams": [
+      { "name": "IELTS Ready Member", "exam": "IELTS", "access": "Free practice tests and familiarisation", "url": "https://takeielts.britishcouncil.org/take-ielts/prepare/ielts-ready/member" },
+      { "name": "TOEFL TestReady", "exam": "TOEFL iBT", "access": "Free account with section practice and feedback", "url": "https://testready.ets.org/" },
+      { "name": "Cambridge English sample tests", "exam": "Cambridge English", "access": "Official digital and paper sample tests", "url": "https://www.cambridgeenglish.org/learning-english/exam-preparation/" }
+    ]
+  },
+  "Spanish": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "La casa de papel", "origin": "Spain", "genre": "Crime thriller", "level": "B1–C1" },
+      { "name": "Las chicas del cable", "origin": "Spain", "genre": "Period drama", "level": "B1–C1" },
+      { "name": "Club de Cuervos", "origin": "Mexico", "genre": "Comedy-drama", "level": "B1–C1" },
+      { "name": "Élite", "origin": "Spain", "genre": "Teen drama", "level": "B1–C1" },
+      { "name": "Paquita Salas", "origin": "Spain", "genre": "Comedy", "level": "B2–C1" },
+      { "name": "El Ministerio del Tiempo", "origin": "Spain", "genre": "Historical fantasy", "level": "B2–C2" },
+      { "name": "Gran Hotel", "origin": "Spain", "genre": "Period mystery", "level": "B1–C1" },
+      { "name": "Los Espookys", "origin": "Mexico / United States", "genre": "Comedy", "level": "B1–C1" },
+      { "name": "Valeria", "origin": "Spain", "genre": "Romantic comedy-drama", "level": "B1–C1" },
+      { "name": "La casa de las flores", "origin": "Mexico", "genre": "Dark comedy", "level": "B1–C1" }
+    ],
+    "mockExams": [
+      { "name": "Instituto Cervantes DELE models", "exam": "DELE A1–C2", "access": "Official past papers, audio and answer keys", "url": "https://examenes.cervantes.es/es/dele/preparar-prueba" },
+      { "name": "Instituto Cervantes SIELE model", "exam": "SIELE", "access": "Official guide and full model exam", "url": "https://examenes.cervantes.es/es/siele/preparar-prueba" },
+      { "name": "AVE Global", "exam": "DELE / general Spanish", "access": "Interactive Cervantes practice environment", "url": "https://ave.cervantes.es/" }
+    ]
+  },
+  "French": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "Dix pour cent", "origin": "France", "genre": "Comedy-drama", "level": "B1–C1" },
+      { "name": "Lupin", "origin": "France", "genre": "Mystery thriller", "level": "B1–C1" },
+      { "name": "Plan cœur", "origin": "France", "genre": "Romantic comedy", "level": "B1–C1" },
+      { "name": "Les Revenants", "origin": "France", "genre": "Supernatural drama", "level": "B2–C1" },
+      { "name": "Le Bureau des légendes", "origin": "France", "genre": "Spy thriller", "level": "B2–C2" },
+      { "name": "HPI", "origin": "France", "genre": "Crime comedy", "level": "B1–C1" },
+      { "name": "Drôle", "origin": "France", "genre": "Comedy-drama", "level": "B1–C1" },
+      { "name": "Family Business", "origin": "France", "genre": "Comedy", "level": "B1–C1" },
+      { "name": "Marianne", "origin": "France", "genre": "Horror", "level": "B2–C1" },
+      { "name": "Un village français", "origin": "France", "genre": "Historical drama", "level": "B2–C2" }
+    ],
+    "mockExams": [
+      { "name": "France Éducation international DELF models", "exam": "DELF / DALF", "access": "Official sample papers by CEFR level", "url": "https://www.france-education-international.fr/diplome/delf-tout-public" },
+      { "name": "France Éducation international TCF examples", "exam": "TCF", "access": "Official sample tasks and candidate materials", "url": "https://www.france-education-international.fr/test/exemples-epreuves-tcf" },
+      { "name": "TV5MONDE TCF simulator", "exam": "TCF", "access": "Interactive listening and language-structure practice", "url": "https://apprendre.tv5monde.com/fr/tcf" }
+    ]
+  },
+  "German": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "Dark", "origin": "Germany", "genre": "Science-fiction thriller", "level": "B2–C2" },
+      { "name": "Deutschland 83", "origin": "Germany", "genre": "Spy drama", "level": "B2–C1" },
+      { "name": "Babylon Berlin", "origin": "Germany", "genre": "Period crime drama", "level": "B2–C2" },
+      { "name": "How to Sell Drugs Online (Fast)", "origin": "Germany", "genre": "Comedy-drama", "level": "B1–C1" },
+      { "name": "Biohackers", "origin": "Germany", "genre": "Tech thriller", "level": "B1–C1" },
+      { "name": "Kleo", "origin": "Germany", "genre": "Action comedy", "level": "B1–C1" },
+      { "name": "Türkisch für Anfänger", "origin": "Germany", "genre": "Family comedy", "level": "B1–C1" },
+      { "name": "Tatort", "origin": "Germany / Austria / Switzerland", "genre": "Crime drama", "level": "B2–C2" },
+      { "name": "Der Tatortreiniger", "origin": "Germany", "genre": "Dark comedy", "level": "B2–C1" },
+      { "name": "Dogs of Berlin", "origin": "Germany", "genre": "Crime drama", "level": "B2–C1" }
+    ],
+    "mockExams": [
+      { "name": "Goethe-Institut exam training", "exam": "Goethe-Zertifikat A1–C2", "access": "Official model sets, audio and answer keys", "url": "https://www.goethe.de/en/spr/prf/ueb.html" },
+      { "name": "Digital TestDaF preparation", "exam": "TestDaF", "access": "Official digital test tutorials and sample tasks", "url": "https://www.testdaf.de/de/teilnehmende/der-digitale-testdaf/vorbereitung-auf-den-digitalen-testdaf/" },
+      { "name": "telc mock examinations", "exam": "telc Deutsch", "access": "Official free mock papers by level", "url": "https://www.telc.net/sprachpruefungen/zertifikatspruefung/deutsch/" }
+    ]
+  },
+  "Italian": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "L'amica geniale", "origin": "Italy", "genre": "Period drama", "level": "B2–C2" },
+      { "name": "Suburra: Blood on Rome", "origin": "Italy", "genre": "Crime drama", "level": "B2–C1" },
+      { "name": "Baby", "origin": "Italy", "genre": "Teen drama", "level": "B1–C1" },
+      { "name": "Luna Park", "origin": "Italy", "genre": "Period drama", "level": "B1–C1" },
+      { "name": "SKAM Italia", "origin": "Italy", "genre": "Teen drama", "level": "B1–C1" },
+      { "name": "Prisma", "origin": "Italy", "genre": "Coming-of-age drama", "level": "B1–C1" },
+      { "name": "Boris", "origin": "Italy", "genre": "Satirical comedy", "level": "B2–C1" },
+      { "name": "Il commissario Montalbano", "origin": "Italy", "genre": "Crime drama", "level": "B2–C2" },
+      { "name": "Mare Fuori", "origin": "Italy", "genre": "Drama", "level": "B1–C1" },
+      { "name": "Guida astrologica per cuori infranti", "origin": "Italy", "genre": "Romantic comedy", "level": "B1–C1" }
+    ],
+    "mockExams": [
+      { "name": "CILS sample examinations", "exam": "CILS A1–C2", "access": "Official past papers and audio by level", "url": "https://cils.unistrasi.it/1/89/188/Esempi-prove-di-esami.htm" },
+      { "name": "CELI preparation materials", "exam": "CELI", "access": "Official example papers from CVCL", "url": "https://www.cvcl.it/categorie/categoria-70" },
+      { "name": "PLIDA preparation", "exam": "PLIDA", "access": "Official exam examples and preparation materials", "url": "https://plida.dante.global/it/preparati-allesame/" }
+    ]
+  },
+  "Portuguese": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "3%", "origin": "Brazil", "genre": "Science-fiction thriller", "level": "B1–C1" },
+      { "name": "Cidade Invisível", "origin": "Brazil", "genre": "Fantasy drama", "level": "B1–C1" },
+      { "name": "Bom Dia, Verônica", "origin": "Brazil", "genre": "Crime thriller", "level": "B2–C1" },
+      { "name": "Sintonia", "origin": "Brazil", "genre": "Crime drama", "level": "B2–C1" },
+      { "name": "Coisa Mais Linda", "origin": "Brazil", "genre": "Period drama", "level": "B1–C1" },
+      { "name": "Glória", "origin": "Portugal", "genre": "Spy thriller", "level": "B2–C2" },
+      { "name": "Rabo de Peixe", "origin": "Portugal", "genre": "Crime drama", "level": "B2–C1" },
+      { "name": "Pôr do Sol", "origin": "Portugal", "genre": "Satirical comedy", "level": "B2–C2" },
+      { "name": "Os Outros", "origin": "Brazil", "genre": "Drama", "level": "B2–C1" },
+      { "name": "Sob Pressão", "origin": "Brazil", "genre": "Medical drama", "level": "B2–C1" }
+    ],
+    "mockExams": [
+      { "name": "CAPLE exam models", "exam": "CAPLE / CIPLE–DUPLE", "access": "Official European Portuguese exam information and models", "url": "https://caple.letras.ulisboa.pt/exames" },
+      { "name": "Inep Celpe-Bras past exams", "exam": "Celpe-Bras", "access": "Official past papers, oral prompts and media", "url": "https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/celpe-bras/orientacoes/antes-do-exame" },
+      { "name": "CELPE-BRAS Practice", "exam": "Celpe-Bras", "access": "Timed mock tasks with automated feedback", "url": "https://www.celpebras.study/en/celpe-bras-practice-test" }
+    ]
+  },
+  "Mandarin Chinese": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "开端 (Reset)", "origin": "Mainland China", "genre": "Time-loop thriller", "level": "B1–C1" },
+      { "name": "想见你 (Someday or One Day)", "origin": "Taiwan", "genre": "Romance mystery", "level": "B1–C1" },
+      { "name": "琅琊榜 (Nirvana in Fire)", "origin": "Mainland China", "genre": "Historical drama", "level": "C1–C2" },
+      { "name": "隐秘的角落 (The Bad Kids)", "origin": "Mainland China", "genre": "Crime thriller", "level": "B2–C1" },
+      { "name": "去有风的地方 (Meet Yourself)", "origin": "Mainland China", "genre": "Romance drama", "level": "B1–C1" },
+      { "name": "狂飙 (The Knockout)", "origin": "Mainland China", "genre": "Crime drama", "level": "B2–C2" },
+      { "name": "爱很美味 (Delicious Romance)", "origin": "Mainland China", "genre": "Comedy-drama", "level": "B1–C1" },
+      { "name": "三十而已 (Nothing But Thirty)", "origin": "Mainland China", "genre": "Drama", "level": "B1–C1" },
+      { "name": "陈情令 (The Untamed)", "origin": "Mainland China", "genre": "Fantasy drama", "level": "B2–C2" },
+      { "name": "华灯初上 (Light the Night)", "origin": "Taiwan", "genre": "Mystery drama", "level": "B2–C1" }
+    ],
+    "mockExams": [
+      { "name": "Mandarin.ac.cn HSK samples", "exam": "HSK 1–9", "access": "Sample papers, audio and answer materials", "url": "https://www.mandarin.ac.cn/tests/hsk/hsk-prepare-for-the-chinese-proficiency-test.html" },
+      { "name": "HSK Mock", "exam": "HSK", "access": "Browser-based timed mock tests", "url": "https://www.hskmock.com/" },
+      { "name": "TOCFL mock tests", "exam": "TOCFL", "access": "Official listening and reading mock materials", "url": "https://tocfl.edu.tw/index.php/exam/test/page/19" }
+    ]
+  },
+  "Japanese": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "深夜食堂 (Midnight Diner)", "origin": "Japan", "genre": "Slice-of-life drama", "level": "B1–C1" },
+      { "name": "First Love 初恋", "origin": "Japan", "genre": "Romance drama", "level": "B1–C1" },
+      { "name": "カルテット (Quartet)", "origin": "Japan", "genre": "Comedy-drama", "level": "B2–C2" },
+      { "name": "今際の国のアリス (Alice in Borderland)", "origin": "Japan", "genre": "Science-fiction thriller", "level": "B1–C1" },
+      { "name": "舞妓さんちのまかないさん (The Makanai)", "origin": "Japan", "genre": "Slice-of-life drama", "level": "B1–C1" },
+      { "name": "ブラッシュアップライフ (Brush Up Life)", "origin": "Japan", "genre": "Comedy-drama", "level": "B2–C1" },
+      { "name": "MIU404", "origin": "Japan", "genre": "Crime drama", "level": "B2–C1" },
+      { "name": "逃げるは恥だが役に立つ (Full-Time Wife Escapist)", "origin": "Japan", "genre": "Romantic comedy", "level": "B1–C1" },
+      { "name": "アンナチュラル (Unnatural)", "origin": "Japan", "genre": "Medical mystery", "level": "B2–C2" },
+      { "name": "ガンニバル (Gannibal)", "origin": "Japan", "genre": "Horror thriller", "level": "B2–C1" }
+    ],
+    "mockExams": [
+      { "name": "JLPT sample questions", "exam": "JLPT N5–N1", "access": "Official interactive question examples", "url": "https://www.jlpt.jp/e/samples/forlearners.html" },
+      { "name": "JFT-Basic sample questions", "exam": "JFT-Basic", "access": "Official computer-test sample interface", "url": "https://www.jpf.go.jp/jft-basic/sample/q01.html" },
+      { "name": "Nihongo-Pro quizzes", "exam": "JLPT-style Japanese", "access": "Free timed quizzes by level and skill", "url": "https://www.nihongo-pro.com/free-japanese-quizzes" }
+    ]
+  },
+  "Korean": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "사랑의 불시착 (Crash Landing on You)", "origin": "South Korea", "genre": "Romance drama", "level": "B1–C1" },
+      { "name": "응답하라 1988 (Reply 1988)", "origin": "South Korea", "genre": "Family comedy-drama", "level": "B1–C1" },
+      { "name": "슬기로운 의사생활 (Hospital Playlist)", "origin": "South Korea", "genre": "Medical drama", "level": "B2–C1" },
+      { "name": "이상한 변호사 우영우 (Extraordinary Attorney Woo)", "origin": "South Korea", "genre": "Legal drama", "level": "B2–C1" },
+      { "name": "나의 아저씨 (My Mister)", "origin": "South Korea", "genre": "Drama", "level": "B2–C2" },
+      { "name": "이태원 클라쓰 (Itaewon Class)", "origin": "South Korea", "genre": "Drama", "level": "B1–C1" },
+      { "name": "갯마을 차차차 (Hometown Cha-Cha-Cha)", "origin": "South Korea", "genre": "Romantic comedy", "level": "B1–C1" },
+      { "name": "시그널 (Signal)", "origin": "South Korea", "genre": "Crime thriller", "level": "B2–C1" },
+      { "name": "킹덤 (Kingdom)", "origin": "South Korea", "genre": "Historical horror", "level": "B2–C2" },
+      { "name": "스물다섯 스물하나 (Twenty-Five Twenty-One)", "origin": "South Korea", "genre": "Coming-of-age drama", "level": "B1–C1" }
+    ],
+    "mockExams": [
+      { "name": "TOPIK Guide previous papers", "exam": "TOPIK I / II", "access": "Past papers organized for timed practice", "url": "https://www.topikguide.com/previous-papers/" },
+      { "name": "EPS-TOPIK experience", "exam": "EPS-TOPIK", "access": "Official computer-test experience and question books", "url": "https://epstopik.hrdkorea.or.kr/epstopik/home/main/mainPage.do?lang=en" },
+      { "name": "helloTopik", "exam": "EPS-TOPIK", "access": "Interactive mock tests and free sample test", "url": "https://hellotopik.com/en" }
+    ]
+  },
+  "Arabic": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "الهيبة (Al Hayba)", "origin": "Lebanon / Syria", "genre": "Crime drama", "level": "B2–C2" },
+      { "name": "البحث عن علا (Finding Ola)", "origin": "Egypt", "genre": "Comedy-drama", "level": "B1–C1" },
+      { "name": "ما وراء الطبيعة (Paranormal)", "origin": "Egypt", "genre": "Horror drama", "level": "B2–C1" },
+      { "name": "مدرسة الروابي للبنات (AlRawabi School for Girls)", "origin": "Jordan", "genre": "Teen drama", "level": "B1–C1" },
+      { "name": "لعبة نيوتن (Newton's Cradle)", "origin": "Egypt", "genre": "Drama", "level": "B2–C1" },
+      { "name": "الصفقة (The Exchange)", "origin": "Kuwait", "genre": "Period drama", "level": "B2–C1" },
+      { "name": "تكي (Takki)", "origin": "Saudi Arabia", "genre": "Drama", "level": "B1–C1" },
+      { "name": "دولار (Dollar)", "origin": "Lebanon", "genre": "Drama", "level": "B1–C1" },
+      { "name": "جن (Jinn)", "origin": "Jordan", "genre": "Fantasy drama", "level": "B1–C1" },
+      { "name": "محافظة مسامير (Masameer County)", "origin": "Saudi Arabia", "genre": "Animated satire", "level": "B2–C2" }
+    ],
+    "mockExams": [
+      { "name": "ACTFL Arabic familiarisation tests", "exam": "ACTFL Arabic OPI / WPT", "access": "Assessment descriptions with repeatable practice interfaces", "url": "https://cla.umn.edu/language-center/programs/language-testing/actfl-testing/actfl-test-descriptions" },
+      { "name": "AlifBee Arabic level test", "exam": "General Arabic", "access": "Free online placement assessment", "url": "https://www.alifbee.com/en/arabic-level-test" },
+      { "name": "Lenguia Arabic CEFR test", "exam": "General Arabic A1–C1", "access": "Multi-skill browser test with instant result", "url": "https://www.lenguia.com/tools/cefr-level-test/arabic" }
+    ]
+  },
+  "Vietnamese": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "Về Nhà Đi Con", "origin": "Vietnam", "genre": "Family drama", "level": "B1–C1" },
+      { "name": "Gạo Nếp Gạo Tẻ", "origin": "Vietnam", "genre": "Family drama", "level": "B1–C1" },
+      { "name": "Người Phán Xử", "origin": "Vietnam", "genre": "Crime drama", "level": "B2–C1" },
+      { "name": "Sống Chung Với Mẹ Chồng", "origin": "Vietnam", "genre": "Family drama", "level": "B1–C1" },
+      { "name": "Quỳnh Búp Bê", "origin": "Vietnam", "genre": "Drama", "level": "B2–C1" },
+      { "name": "Hương Vị Tình Thân", "origin": "Vietnam", "genre": "Family drama", "level": "B1–C1" },
+      { "name": "Cây Táo Nở Hoa", "origin": "Vietnam", "genre": "Family drama", "level": "B1–C1" },
+      { "name": "Thương Ngày Nắng Về", "origin": "Vietnam", "genre": "Family drama", "level": "B1–C1" },
+      { "name": "Gia Đình Mình Vui Bất Thình Lình", "origin": "Vietnam", "genre": "Family comedy-drama", "level": "B1–C1" },
+      { "name": "Kính Vạn Hoa", "origin": "Vietnam", "genre": "Youth comedy-drama", "level": "A2–B2" }
+    ],
+    "mockExams": [
+      { "name": "TDTU Vietnamese sample test", "exam": "Vietnamese Language Proficiency Assessment", "access": "Official four-skill downloadable sample", "url": "https://vietnamesestudies.tdtu.edu.vn/en/vietnamese-language-certificate/sample-test" },
+      { "name": "VNU-USSH Vietnamese studies centre", "exam": "Vietnamese proficiency certificate", "access": "Exam format, schedules and candidate guidance", "url": "https://vsl.ussh.vnu.edu.vn/" },
+      { "name": "VNU-HCM Vietnamese Language Center", "exam": "Vietnamese proficiency assessment", "access": "Official exam information and preparation notices", "url": "https://vlc.hcmussh.edu.vn/" }
+    ]
+  },
+  "Dutch": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "Undercover", "origin": "Belgium / Netherlands", "genre": "Crime drama", "level": "B1–C1" },
+      { "name": "Ares", "origin": "Netherlands", "genre": "Horror mystery", "level": "B2–C1" },
+      { "name": "Toon", "origin": "Netherlands", "genre": "Comedy", "level": "B1–C1" },
+      { "name": "Dirty Lines", "origin": "Netherlands", "genre": "Comedy-drama", "level": "B2–C1" },
+      { "name": "Penoza", "origin": "Netherlands", "genre": "Crime drama", "level": "B2–C1" },
+      { "name": "Het Gouden Uur", "origin": "Netherlands", "genre": "Thriller", "level": "B2–C1" },
+      { "name": "Oogappels", "origin": "Netherlands", "genre": "Family drama", "level": "B1–C1" },
+      { "name": "Flikken Maastricht", "origin": "Netherlands", "genre": "Police drama", "level": "B1–C1" },
+      { "name": "De Luizenmoeder", "origin": "Netherlands", "genre": "Comedy", "level": "B2–C1" },
+      { "name": "Mocro Maffia", "origin": "Netherlands", "genre": "Crime drama", "level": "B2–C2" }
+    ],
+    "mockExams": [
+      { "name": "Staatsexamen NT2 practice environment", "exam": "Staatsexamen NT2", "access": "Official complete practice environment", "url": "https://www.staatsexamensnt2.nl/voorbereiden/examens-oefenen" },
+      { "name": "NT2 Oefening", "exam": "Staatsexamen NT2 / Inburgering", "access": "Online mock exams with automated feedback", "url": "https://www.nt2.nl/en/nt2oefening" },
+      { "name": "CNaVT example exams", "exam": "CNaVT", "access": "Official example materials by profile", "url": "https://cnavt.org/voorbereiding/voorbeeldexamens" }
+    ]
+  },
+  "Swedish": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "Young Royals", "origin": "Sweden", "genre": "Teen drama", "level": "B1–C1" },
+      { "name": "Bonusfamiljen", "origin": "Sweden", "genre": "Family comedy-drama", "level": "B1–C1" },
+      { "name": "Störst av allt (Quicksand)", "origin": "Sweden", "genre": "Crime drama", "level": "B2–C1" },
+      { "name": "Bron (The Bridge)", "origin": "Sweden / Denmark", "genre": "Crime thriller", "level": "B2–C2" },
+      { "name": "Kalifat", "origin": "Sweden", "genre": "Thriller", "level": "B2–C1" },
+      { "name": "Kärlek & Anarki", "origin": "Sweden", "genre": "Romantic comedy-drama", "level": "B1–C1" },
+      { "name": "Snabba Cash", "origin": "Sweden", "genre": "Crime drama", "level": "B2–C2" },
+      { "name": "Solsidan", "origin": "Sweden", "genre": "Comedy", "level": "B1–C1" },
+      { "name": "Tunna blå linjen", "origin": "Sweden", "genre": "Police drama", "level": "B2–C1" },
+      { "name": "Clark", "origin": "Sweden", "genre": "Crime comedy-drama", "level": "B2–C1" }
+    ],
+    "mockExams": [
+      { "name": "Swedex model tests", "exam": "Swedex A2–C1", "access": "Official model papers, audio and answer keys", "url": "https://www.folkuniversitetet.se/mer-om-sprak/sprakexamina-och-sprakprov/swedex-swedish-examinations/modelltest/" },
+      { "name": "Stockholm University Tisus examples", "exam": "Tisus", "access": "Official subtest information and example tasks", "url": "https://www.su.se/enheter/tisus---test-i-svenska-for-universitets--och-hogskolestudier/" },
+      { "name": "Folkuniversitetet Swedish level test", "exam": "General Swedish", "access": "Free online placement and readiness check", "url": "https://www.folkuniversitetet.se/in-english/language-level-test/" }
+    ]
+  },
+  "Turkish": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "Bir Başkadır (Ethos)", "origin": "Türkiye", "genre": "Drama", "level": "B2–C2" },
+      { "name": "Hakan: Muhafız (The Protector)", "origin": "Türkiye", "genre": "Fantasy action", "level": "B1–C1" },
+      { "name": "Atiye (The Gift)", "origin": "Türkiye", "genre": "Mystery fantasy", "level": "B1–C1" },
+      { "name": "Şahsiyet", "origin": "Türkiye", "genre": "Crime drama", "level": "B2–C2" },
+      { "name": "Masum", "origin": "Türkiye", "genre": "Crime drama", "level": "B2–C1" },
+      { "name": "Erkenci Kuş", "origin": "Türkiye", "genre": "Romantic comedy", "level": "B1–C1" },
+      { "name": "Aşk-ı Memnu", "origin": "Türkiye", "genre": "Romantic drama", "level": "B2–C1" },
+      { "name": "Kulüp", "origin": "Türkiye", "genre": "Period drama", "level": "B2–C2" },
+      { "name": "Kızılcık Şerbeti", "origin": "Türkiye", "genre": "Family drama", "level": "B2–C1" },
+      { "name": "Yargı", "origin": "Türkiye", "genre": "Legal drama", "level": "B2–C1" }
+    ],
+    "mockExams": [
+      { "name": "Yunus Emre TYS portal", "exam": "TYS", "access": "Official exam guide and sample access", "url": "https://tys.yee.org.tr/" },
+      { "name": "SDÜ TÖMER sample examination", "exam": "Turkish proficiency", "access": "Four-skill official sample questions", "url": "https://tomer.sdu.edu.tr/tr/haber/turkce-dil-yeterlik-sinavi-ornegi-30350h.html" },
+      { "name": "İBU TÖMER sample questions", "exam": "Turkish proficiency", "access": "Official listening and reading examples", "url": "https://tomer.ibu.edu.tr/tr/page/turkce-yeterlik-sinavi/16452" }
+    ]
+  },
+  "Hindi": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "Panchayat", "origin": "India", "genre": "Comedy-drama", "level": "B1–C1" },
+      { "name": "Kota Factory", "origin": "India", "genre": "Coming-of-age drama", "level": "B1–C1" },
+      { "name": "Sacred Games", "origin": "India", "genre": "Crime thriller", "level": "B2–C2" },
+      { "name": "Delhi Crime", "origin": "India", "genre": "Police drama", "level": "B2–C1" },
+      { "name": "Gullak", "origin": "India", "genre": "Family comedy-drama", "level": "B1–C1" },
+      { "name": "Made in Heaven", "origin": "India", "genre": "Drama", "level": "B2–C1" },
+      { "name": "Scam 1992", "origin": "India", "genre": "Financial drama", "level": "B2–C2" },
+      { "name": "Aspirants", "origin": "India", "genre": "Drama", "level": "B1–C1" },
+      { "name": "Rocket Boys", "origin": "India", "genre": "Historical drama", "level": "B2–C1" },
+      { "name": "Yeh Meri Family", "origin": "India", "genre": "Family comedy-drama", "level": "A2–B2" }
+    ],
+    "mockExams": [
+      { "name": "ACTFL Hindi familiarisation tests", "exam": "ACTFL Hindi OPI / WPT", "access": "Assessment descriptions with repeatable practice interfaces", "url": "https://cla.umn.edu/language-center/programs/language-testing/actfl-testing/actfl-test-descriptions" },
+      { "name": "Sanskriti Hindi assessment", "exam": "General Hindi", "access": "Free diagnostic assessment by level", "url": "https://sanskritiglobal.org/assessment-level-one/" },
+      { "name": "Avant STAMP sample tests", "exam": "STAMP Hindi", "access": "Official sample-test environment by skill", "url": "https://www.avantassessment.com/sample-tests" }
+    ]
+  },
+  "Indonesian": {
+    "lastVerified": "2026-07-23",
+    "tvShows": [
+      { "name": "Gadis Kretek", "origin": "Indonesia", "genre": "Period drama", "level": "B2–C1" },
+      { "name": "Layangan Putus", "origin": "Indonesia", "genre": "Drama", "level": "B1–C1" },
+      { "name": "Imperfect The Series", "origin": "Indonesia", "genre": "Comedy-drama", "level": "B1–C1" },
+      { "name": "My Lecturer My Husband", "origin": "Indonesia", "genre": "Romantic comedy", "level": "B1–C1" },
+      { "name": "Wedding Agreement the Series", "origin": "Indonesia", "genre": "Romance drama", "level": "B1–C1" },
+      { "name": "Pertaruhan the Series", "origin": "Indonesia", "genre": "Action drama", "level": "B2–C1" },
+      { "name": "Teluh Darah", "origin": "Indonesia", "genre": "Horror drama", "level": "B2–C1" },
+      { "name": "Nightmares and Daydreams", "origin": "Indonesia", "genre": "Science-fiction anthology", "level": "B2–C1" },
+      { "name": "Mendua", "origin": "Indonesia", "genre": "Drama", "level": "B1–C1" },
+      { "name": "Hubungi Agen Gue!", "origin": "Indonesia", "genre": "Comedy-drama", "level": "B1–C1" }
+    ],
+    "mockExams": [
+      { "name": "UKBI simulation and practice", "exam": "UKBI Adaptif Merdeka", "access": "Official 20-item simulation and 105-item practice", "url": "https://ukbi.kemendikdasmen.go.id/beranda" },
+      { "name": "UKBI Adaptive Simulation", "exam": "UKBI Adaptif", "access": "Official five-section simulation platform", "url": "https://simulasiukbi.kemendikdasmen.go.id/" },
+      { "name": "Goethe-Verlag Indonesian test", "exam": "General Indonesian", "access": "Free browser-based proficiency exercises", "url": "https://www.goethe-verlag.com/tests/test/ID/EN/90/easy" }
+    ]
+  }
+}
