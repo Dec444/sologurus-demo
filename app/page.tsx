@@ -5,8 +5,6 @@ import languages from "../data/languages.json";
 import locations from "../data/locations.json";
 import { makeCalendarIcs } from "../lib/calendar.mjs";
 
-type ResourceTab = "tests" | "youtube" | "forums" | "tv" | "mocks" | "listening" | "speaking" | "reading" | "writing";
-
 type Profile = {
   language: string;
   level: string;
@@ -126,7 +124,6 @@ export default function Home() {
   const [stage, setStage] = useState<"profile" | "running" | "plans" | "exported">("profile");
   const [activeTool, setActiveTool] = useState(0);
   const [selected, setSelected] = useState("balanced");
-  const [resourceTab, setResourceTab] = useState<ResourceTab>("tests");
   const [notionStatus, setNotionStatus] = useState<"idle" | "connecting" | "success" | "error">("idle");
   const [notionMessage, setNotionMessage] = useState("");
   const [notionUrl, setNotionUrl] = useState("");
@@ -144,17 +141,6 @@ export default function Home() {
   const resourceLoading = loadedResourceKey !== resourceQueryKey;
   const plans = useMemo(() => buildPlans(resourceData, profile.language), [resourceData, profile.language]);
   const selectedPlan = useMemo(() => plans.find((plan) => plan.id === selected) ?? plans[2], [plans, selected]);
-  const resourceTabs: [ResourceTab, string][] = useMemo(() => [
-    ["tests", `Tests & centres · ${resourceData ? resourceData.tests.length + resourceData.testCenters.length : 0}`],
-    ["youtube", `YouTube · ${resourceData?.youtube.length ?? 0}`],
-    ["forums", `Forums · ${resourceData?.forums?.length ?? 0}`],
-    ["tv", `TV shows · ${resourceData?.tvShows.length ?? 0}`],
-    ["mocks", `Mock exams · ${resourceData?.mockExams.length ?? 0}`],
-    ["listening", `Listening · ${resourceData?.materials.listening.length ?? 0}`],
-    ["speaking", `Speaking · ${resourceData?.materials.speaking.length ?? 0}`],
-    ["reading", `Reading · ${resourceData?.materials.reading.length ?? 0}`],
-    ["writing", `Writing · ${resourceData?.materials.writing.length ?? 0}`],
-  ], [resourceData]);
   const featuredResources = useMemo(() => {
     if (!resourceData) return [];
     return (["listening", "speaking", "reading", "writing"] as const).map((skill) => {
@@ -341,74 +327,84 @@ export default function Home() {
               <section className="resource-explorer" aria-labelledby="all-resources-title">
                 <div className="resource-heading">
                   <div><span className="kicker">AGENT RESEARCH · FULL RESULTS</span><h3 id="all-resources-title">See every recommendation.</h3></div>
-                  <p>{profile.language} test options, official centre directories, 10 educators, 3 study forums, 10 TV shows, 3 mock-exam platforms, and four-skill materials. Catalog checked {resourceData.lastVerified}; availability is always rechecked at the source.</p>
+                  <p>All {profile.language} research is grouped into four complete sections below. Catalog checked {resourceData.lastVerified}; availability is always rechecked at the source.</p>
                 </div>
-                <div className="resource-tabs" role="tablist" aria-label="Research result categories">
-                  {resourceTabs.map(([id, label]) => (
-                    <button key={id} role="tab" aria-selected={resourceTab === id} className={resourceTab === id ? "active" : ""} onClick={() => setResourceTab(id)}>{label}</button>
+
+                <section className="research-section" aria-labelledby="tests-centres-title">
+                  <div className="research-section-heading">
+                    <span className="section-index">01</span>
+                    <div><h3 id="tests-centres-title">Tests &amp; centres</h3><p>Compare recognized exams and open current registration sources for {profile.city}, {profile.country}.</p></div>
+                  </div>
+                  <div className="result-subhead"><b>Test centres near {profile.city}</b><span>{resourceData.centerMode === "official-directory" ? "official finder — no address invented" : `${resourceData.testCenters.length - 1} local record(s) + official finder`}</span></div>
+                  <div className="center-grid">
+                    {resourceData.testCenters.map((center) => (
+                      <a className="center-card" href={center.registrationUrl} target="_blank" rel="noreferrer" key={center.name}>
+                        <span className="pin">⌖</span><div><b>{center.name}</b><small>{center.provider}</small><address>{center.address}</address><p>{center.availability}</p></div><span className="open-link">Official source ↗</span>
+                      </a>
+                    ))}
+                  </div>
+                  <div className="result-subhead secondary-head"><b>Recognized {profile.language} tests</b><span>{resourceData.tests.length} options compared</span></div>
+                  <div className="resource-list tests-list">
+                    {resourceData.tests.map((test) => (
+                      <a href={test.sourceUrl} target="_blank" rel="noreferrer" key={test.name}><span className="rank">TEST</span><div><b>{test.name}</b><p>{test.fit}</p><small>{test.format}</small></div><span className="open-link">Source ↗</span></a>
+                    ))}
+                  </div>
+                </section>
+
+                <section className="research-section" aria-labelledby="guidance-immersion-title">
+                  <div className="research-section-heading">
+                    <span className="section-index">02</span>
+                    <div><h3 id="guidance-immersion-title">YouTube, forums &amp; TV shows</h3><p>Learn with 10 ranked educators, 3 learner communities, and 10 target-language shows.</p></div>
+                  </div>
+                  <div className="result-subhead"><b>YouTube educators</b><span>{resourceData.youtube.length} ranked channels</span></div>
+                  <div className="resource-list">
+                    {resourceData.youtube.map((channel, index) => (
+                      <a href={channel.url} target="_blank" rel="noreferrer" key={channel.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{channel.name}</b><p>{channel.bestFor}</p><small>{channel.level} · learner-fit score {channel.score}/100</small></div><span className="open-link">Watch ↗</span></a>
+                    ))}
+                  </div>
+                  <div className="result-subhead secondary-head"><b>Study forums</b><span>{resourceData.forums?.length ?? 0} active communities</span></div>
+                  <div className="resource-list forum-list">
+                    {(resourceData.forums ?? []).map((forum, index) => (
+                      <a href={forum.url} target="_blank" rel="noreferrer" key={forum.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{forum.name}</b><p>{forum.bestFor}</p><small>Active study community · verify community rules before posting</small></div><span className="open-link">Join ↗</span></a>
+                    ))}
+                  </div>
+                  <div className="result-subhead secondary-head"><b>TV immersion watchlist</b><span>{resourceData.tvShows.length} shows in {profile.language}</span></div>
+                  <div className="material-grid media-grid">
+                    {resourceData.tvShows.map((show, index) => (
+                      <a href={show.url} target="_blank" rel="noreferrer" key={show.name}><span className="material-number">{String(index + 1).padStart(2, "0")}</span><div><b>{show.name}</b><p>{show.genre} · {show.origin}</p><small>Suggested learner level {show.level} · check local streaming availability</small></div><span className="open-link">Show guide ↗</span></a>
+                    ))}
+                  </div>
+                </section>
+
+                <section className="research-section" aria-labelledby="four-skills-title">
+                  <div className="research-section-heading">
+                    <span className="section-index">03</span>
+                    <div><h3 id="four-skills-title">Reading, speaking, listening &amp; writing</h3><p>Skill-specific materials keep every part of the study plan actionable and balanced.</p></div>
+                  </div>
+                  {(["reading", "speaking", "listening", "writing"] as const).map((skill, skillIndex) => (
+                    <div className={`skill-group ${skillIndex > 0 ? "secondary-head" : ""}`} key={skill}>
+                      <div className="result-subhead"><b>{skill[0].toUpperCase() + skill.slice(1)}</b><span>{resourceData.materials[skill].length} curated materials</span></div>
+                      <div className="material-grid">
+                        {resourceData.materials[skill].map((material, index) => (
+                          <a href={material.url} target="_blank" rel="noreferrer" key={material.name}><span className="material-number">{String(index + 1).padStart(2, "0")}</span><div><b>{material.name}</b><p>{material.use}</p><small>{material.cost} · {material.level}</small></div><span className="open-link">Open ↗</span></a>
+                        ))}
+                      </div>
+                    </div>
                   ))}
-                </div>
+                </section>
 
-                <div className="resource-results" role="tabpanel">
-                  {resourceTab === "tests" && (
-                    <>
-                      <div className="result-subhead"><b>Test centres near {profile.city}</b><span>{resourceData.centerMode === "official-directory" ? "official finder — no address invented" : `${resourceData.testCenters.length - 1} local record(s) + official finder`}</span></div>
-                      <div className="center-grid">
-                        {resourceData.testCenters.map((center) => (
-                          <a className="center-card" href={center.registrationUrl} target="_blank" rel="noreferrer" key={center.name}>
-                            <span className="pin">⌖</span><div><b>{center.name}</b><small>{center.provider}</small><address>{center.address}</address><p>{center.availability}</p></div><span className="open-link">Official source ↗</span>
-                          </a>
-                        ))}
-                      </div>
-                      <div className="result-subhead secondary-head"><b>Recognized {profile.language} tests</b><span>{resourceData.tests.length} options compared</span></div>
-                      <div className="resource-list tests-list">
-                        {resourceData.tests.map((test) => (
-                          <a href={test.sourceUrl} target="_blank" rel="noreferrer" key={test.name}><span className="rank">TEST</span><div><b>{test.name}</b><p>{test.fit}</p><small>{test.format}</small></div><span className="open-link">Source ↗</span></a>
-                        ))}
-                      </div>
-                    </>
-                  )}
-
-                  {resourceTab === "youtube" && (
-                    <div className="resource-list">
-                      {resourceData.youtube.map((channel, index) => (
-                        <a href={channel.url} target="_blank" rel="noreferrer" key={channel.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{channel.name}</b><p>{channel.bestFor}</p><small>{channel.level} · learner-fit score {channel.score}/100</small></div><span className="open-link">Watch ↗</span></a>
-                      ))}
-                    </div>
-                  )}
-
-                  {resourceTab === "forums" && (
-                    <div className="resource-list forum-list">
-                      {(resourceData.forums ?? []).map((forum, index) => (
-                        <a href={forum.url} target="_blank" rel="noreferrer" key={forum.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{forum.name}</b><p>{forum.bestFor}</p><small>Active study community · verify community rules before posting</small></div><span className="open-link">Join ↗</span></a>
-                      ))}
-                    </div>
-                  )}
-
-                  {resourceTab === "tv" && (
-                    <div className="material-grid media-grid">
-                      {resourceData.tvShows.map((show, index) => (
-                        <a href={show.url} target="_blank" rel="noreferrer" key={show.name}><span className="material-number">{String(index + 1).padStart(2, "0")}</span><div><b>{show.name}</b><p>{show.genre} · {show.origin}</p><small>Suggested learner level {show.level} · check local streaming availability</small></div><span className="open-link">Show guide ↗</span></a>
-                      ))}
-                    </div>
-                  )}
-
-                  {resourceTab === "mocks" && (
-                    <div className="resource-list tests-list mock-list">
-                      {resourceData.mockExams.map((mock, index) => (
-                        <a href={mock.url} target="_blank" rel="noreferrer" key={mock.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{mock.name}</b><p>{mock.access}</p><small>{mock.exam} · confirm current access terms at source</small></div><span className="open-link">Practice ↗</span></a>
-                      ))}
-                    </div>
-                  )}
-
-                  {resourceTab !== "tests" && resourceTab !== "youtube" && resourceTab !== "forums" && resourceTab !== "tv" && resourceTab !== "mocks" && (
-                    <div className="material-grid">
-                      {resourceData.materials[resourceTab].map((material, index) => (
-                        <a href={material.url} target="_blank" rel="noreferrer" key={material.name}><span className="material-number">0{index + 1}</span><div><b>{material.name}</b><p>{material.use}</p><small>{material.cost} · {material.level}</small></div><span className="open-link">Open ↗</span></a>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <section className="research-section" aria-labelledby="mock-exams-title">
+                  <div className="research-section-heading">
+                    <span className="section-index">04</span>
+                    <div><h3 id="mock-exams-title">Mock exams</h3><p>Practice with 3 exam-specific platforms matched to the recommended certification path.</p></div>
+                  </div>
+                  <div className="result-subhead"><b>Practice platforms</b><span>{resourceData.mockExams.length} current options</span></div>
+                  <div className="resource-list tests-list mock-list">
+                    {resourceData.mockExams.map((mock, index) => (
+                      <a href={mock.url} target="_blank" rel="noreferrer" key={mock.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{mock.name}</b><p>{mock.access}</p><small>{mock.exam} · confirm current access terms at source</small></div><span className="open-link">Practice ↗</span></a>
+                    ))}
+                  </div>
+                </section>
               </section>
 
               <div className="export-row">

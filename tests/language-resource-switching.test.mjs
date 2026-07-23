@@ -85,3 +85,24 @@ test("the client reloads research when language or location changes", async () =
   assert.match(resourceRoute, /Cache-Control": "no-store/, "server must not cache stale language schemas");
   assert.match(resourceRoute, /language-media-exams\.json/, "server must load language-specific TV and mock-exam data");
 });
+
+test("all research is visible in four separate sections without a shared tab panel", async () => {
+  const page = await readFile(pageUrl, "utf8");
+  const sectionTitles = [
+    "Tests &amp; centres",
+    "YouTube, forums &amp; TV shows",
+    "Reading, speaking, listening &amp; writing",
+    "Mock exams",
+  ];
+
+  let previousPosition = -1;
+  for (const title of sectionTitles) {
+    const position = page.indexOf(title);
+    assert.ok(position > previousPosition, `${title} must appear in the requested section order`);
+    previousPosition = position;
+  }
+
+  assert.doesNotMatch(page, /role="tablist"/, "research groups should not hide behind a tab list");
+  assert.doesNotMatch(page, /resourceTab|setResourceTab/, "research groups should remain visible together");
+  assert.equal((page.match(/className="research-section"/g) ?? []).length, 4, "render exactly four top-level research sections");
+});

@@ -34,7 +34,7 @@ Before recording:
 
 ## 1:03–1:47 — Evidence and strategic plans
 
-[Point to the IELTS recommendation. Scroll to **See every recommendation**. Open **Tests & centres**, **YouTube**, **Forums**, **TV shows**, **Mock exams**, and **Listening** briefly. Then click each plan card once; settle on **Balanced Four-Skill**.]
+[Point to the IELTS recommendation. Scroll to **See every recommendation**. Move through the four visible sections: **Tests & centres**; **YouTube, forums & TV shows**; **Reading, speaking, listening & writing**; and **Mock exams**. Then click each plan card once; settle on **Balanced Four-Skill**.]
 
 “For Canadian PR, the agent recommends IELTS and explains the fit. Linh can inspect every result: verified local records plus the official test-centre finder, exactly ten ranked YouTube teachers, three study forums, ten English-language TV shows, three mock-exam platforms, and dedicated listening, speaking, reading, and writing materials. If the target language changes, this entire library changes with it.”
 

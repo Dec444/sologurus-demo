@@ -30,7 +30,7 @@ Open the [live Sologurus demo](https://sologurus-study-agent.lu-liu398220.chatgp
 2. Select **Use demo profile**.
 3. Run **Build my study system** and watch the structured research steps.
 4. Compare the three study strategies.
-5. Browse every test center, all 10 YouTube recommendations, 3 study forums, 10 target-language TV shows, 3 mock-exam platforms, and four-skill resources.
+5. Scroll through four complete research sections: tests and centers; YouTube, forums, and TV shows; four-skill materials; and mock-exam platforms.
 6. With Notion write credentials configured, update the selected Notion page; otherwise use Google Calendar or download the universal `.ics` calendar.
 
 The seeded learner is an intermediate English speaker in Ho Chi Minh City pursuing IELTS 7.0 for Canadian permanent residence with eight hours available each week.
