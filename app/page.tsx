@@ -254,16 +254,37 @@ export default function Home() {
     <main>
       <header className="topbar">
         <a className="brand" href="#top" aria-label="Sologurus home"><span className="brand-mark">S</span><span>Sologurus</span></a>
-        <div className="status"><span className="status-dot" /> 16 language catalogs · sources dated</div>
+        <div className="status"><span className="status-dot" /> Live research · 16 languages</div>
       </header>
 
       <section className="hero" id="top">
-        <div className="eyebrow">Your study system, built around your life</div>
-        <h1>One goal. A plan you can<br /><em>actually follow.</em></h1>
+        <div className="eyebrow">Independent learning, intelligently designed</div>
+        <h1>Better direction.<br /><em>Smarter study.</em></h1>
         <p>Sologurus turns a language-test goal into verified options, credible resources, and a calendar-ready study plan — without a tutor or subscription.</p>
+        <a className="hero-cta" href="#planner">Build my study system</a>
+        <div className="hero-visual" aria-label="A preview of a personalized Sologurus study plan">
+          <div className="visual-orb" />
+          <div className="visual-card visual-card-main"><span>STUDY PULSE</span><b>Balanced plan ready</b><small>8 hours / week · constraint passed</small></div>
+          <div className="visual-card visual-card-score"><span>READINESS</span><b>84</b><small>goal fit</small></div>
+          <div className="visual-card visual-card-source"><span>SOURCES</span><b>Verified</b><small>language + location matched</small></div>
+        </div>
+        <ul className="hero-proof" aria-label="Sologurus benefits">
+          <li><span>✓</span>Research matched to your language and location</li>
+          <li><span>✓</span>Three strategies tailored to your goal</li>
+          <li><span>✓</span>A study calendar built around your real time</li>
+        </ul>
+        <div className="hero-metrics" aria-hidden="true">
+          <div className="metric-card metric-dark"><span>RESEARCH SET</span><b>10 + 3 + 10</b><small>educators · forums · TV shows</small></div>
+          <div className="metric-card metric-blue"><span>WEEKLY PLAN</span><b>8h</b><small>balanced across four skills</small></div>
+        </div>
       </section>
 
-      <section className="workspace" aria-label="Sologurus agent workspace">
+      <section className="workspace-intro">
+        <span className="kicker">PERSONAL STUDY SYSTEM</span>
+        <h2>A learning plan designed around<br />your real life</h2>
+      </section>
+
+      <section className="workspace" id="planner" aria-label="Sologurus agent workspace">
         <aside className="steps">
           <div className="step done"><span>01</span><div><b>Learning goal</b><small>Your context + constraints</small></div></div>
           <div className={`step ${stage !== "profile" ? "done" : ""}`}><span>02</span><div><b>Agent research</b><small>Tests, guidance, resources</small></div></div>
@@ -313,7 +334,7 @@ export default function Home() {
               <div className="insight-strip"><b>Recommended test: {resourceData.recommendation.name}</b><span>{resourceData.recommendation.reason} Dates, local availability and acceptance should be rechecked before booking.</span><a href={resourceData.recommendation.sourceUrl} target="_blank" rel="noreferrer">Official source ↗</a></div>
               <div className="plan-grid">
                 {plans.map((plan) => (
-                  <button aria-pressed={selected === plan.id} className={`plan-card ${selected === plan.id ? "selected" : ""}`} key={plan.id} onClick={() => setSelected(plan.id)}>
+                  <button aria-pressed={selected === plan.id} className={`plan-card plan-${plan.id} ${selected === plan.id ? "selected" : ""}`} key={plan.id} onClick={() => setSelected(plan.id)}>
                     <span className={`swatch ${plan.accent.toLowerCase()}`} /><span className="plan-name">{plan.name}</span><span className="check">{selected === plan.id ? "✓" : ""}</span>
                     <strong>{plan.tagline}</strong><small>{profile.hours} hours/week · {plan.split}</small><p>{plan.outcome}</p>
                   </button>

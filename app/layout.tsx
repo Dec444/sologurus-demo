@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { Comic_Neue, DM_Sans } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 
 const sans = DM_Sans({ variable: "--font-sans", subsets: ["latin"] });
-const display = Comic_Neue({ variable: "--font-display", subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sologurus-study-agent.lu-liu398220.chatgpt.site"),
@@ -12,18 +11,18 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.svg" },
   openGraph: {
     title: "Sologurus — Your self-directed study agent",
-    description: "One goal. A plan you can actually follow.",
+    description: "Better direction. Smarter study.",
     type: "website",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Sologurus study planning agent" }],
+    images: [{ url: "/og-editorial.png", width: 1200, height: 630, alt: "Sologurus — Better direction. Smarter study." }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Sologurus — Your self-directed study agent",
-    description: "One goal. A plan you can actually follow.",
-    images: ["/og.png"],
+    description: "Better direction. Smarter study.",
+    images: ["/og-editorial.png"],
   },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body className={`${sans.variable} ${display.variable}`}>{children}</body></html>;
+  return <html lang="en"><body className={sans.variable}>{children}</body></html>;
 }

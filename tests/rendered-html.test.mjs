@@ -16,8 +16,10 @@ test("server-renders the Sologurus demo shell", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
   const html = await response.text();
   assert.match(html, /<title>Sologurus — Your self-directed study agent<\/title>/i);
-  assert.match(html, /One goal\. A plan you can/);
+  assert.match(html, /Better direction\./);
+  assert.match(html, /Smarter study\./);
   assert.match(html, /Build my study system/);
-  assert.match(html, /16 language catalogs · sources dated/);
+  assert.match(html, /Live research · 16 languages/);
+  assert.match(html, /A learning plan designed around/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/);
 });

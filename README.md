@@ -1,6 +1,6 @@
 <div align="center">
 
-![Sologurus — one goal, a plan you can actually follow](public/og.png)
+![Sologurus — better direction, smarter study](public/og-editorial.png)
 
 # Sologurus
 
