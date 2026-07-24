@@ -38,6 +38,50 @@ Open the [live Sologurus demo](https://sologurus-study-agent.lu-liu398220.chatgp
 
 The seeded learner is an intermediate English speaker in Ho Chi Minh City pursuing IELTS 7.0 for Canadian permanent residence, studying 1.5 hours per day across six days each week.
 
+## Product tour
+
+### 1. Home
+
+Start with the complete learning workflow, integration status, and a clear route into the study-system builder.
+
+![Sologurus homepage with the study agent overview](docs/figures/01-home-and-community.jpg)
+
+### 2. Community
+
+Choose a target language and radius, then use real browser location to discover nearby opt-in learner profiles.
+
+![Sologurus community finder with real-location permission](docs/figures/02-community.jpg)
+
+### 3. Learning goals
+
+Define the language, level, location, deadline, availability, and experience the agent uses to assess feasibility.
+
+![Sologurus learning-goal and constraint form](docs/figures/03-learning-goals.jpg)
+
+### 4. Agent research
+
+Inspect the evidence library before accepting a plan, including tests, centres, media, materials, textbooks, and mock exams.
+
+![Sologurus agent research evidence library](docs/figures/04-agent-research.jpg)
+
+### 5. Choose a strategy
+
+Compare three distinct learning approaches against the same honest weekly time budget.
+
+![Sologurus strategy comparison](docs/figures/05-choose-strategy.jpg)
+
+### 6. Start studying
+
+Turn the chosen strategy into dated sessions, resources, completion controls, and integration-ready actions.
+
+![Sologurus generated study system](docs/figures/06-start-studying.jpg)
+
+### 7. Track progress
+
+Review completion, focused time, remaining sessions, and daily, weekly, or monthly statistics.
+
+![Sologurus progress-tracking dashboard](docs/figures/07-track-progress.jpg)
+
 ## What it does
 
 | Capability | Demo result |
