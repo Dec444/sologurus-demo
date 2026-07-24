@@ -6,6 +6,7 @@ const languagesUrl = new URL("../data/languages.json", import.meta.url);
 const catalogUrl = new URL("../data/language-resources.json", import.meta.url);
 const communitiesUrl = new URL("../data/language-communities.json", import.meta.url);
 const mediaAndExamsUrl = new URL("../data/language-media-exams.json", import.meta.url);
+const textbooksUrl = new URL("../data/language-textbooks.json", import.meta.url);
 const locationsUrl = new URL("../data/locations.json", import.meta.url);
 const pageUrl = new URL("../app/page.tsx", import.meta.url);
 const notionRouteUrl = new URL("../app/api/notion/route.ts", import.meta.url);
@@ -15,6 +16,7 @@ test("every selectable language has verified, actionable resources", async () =>
   const catalog = JSON.parse(await readFile(catalogUrl, "utf8"));
   const communities = JSON.parse(await readFile(communitiesUrl, "utf8"));
   const mediaAndExams = JSON.parse(await readFile(mediaAndExamsUrl, "utf8"));
+  const textbooks = JSON.parse(await readFile(textbooksUrl, "utf8"));
 
   for (const { name } of languages) {
     const entry = catalog[name];
@@ -42,6 +44,12 @@ test("every selectable language has verified, actionable resources", async () =>
     for (const mock of mediaAndExams[name].mockExams) {
       assert.match(mock.url, /^https:\/\//, `${mock.name} needs a live URL`);
     }
+    assert.equal(textbooks[name].length, 3, `${name} needs exactly three textbook recommendations`);
+    assert.equal(new Set(textbooks[name].map((book) => book.name)).size, 3, `${name} needs three distinct textbooks`);
+    for (const book of textbooks[name]) {
+      assert.match(book.url, /^https:\/\//, `${book.name} needs a live source URL`);
+      assert.ok(book.authorPublisher, `${book.name} needs author or publisher attribution`);
+    }
   }
 });
 
@@ -63,13 +71,16 @@ test("Notion receives the selected research instead of opening a static fallback
   const notionRoute = await readFile(notionRouteUrl, "utf8");
 
   assert.doesNotMatch(page, /window\.open\(notionDatabaseUrl/, "a static Notion link cannot represent the selected plan");
-  assert.match(page, /JSON\.stringify\(\{ profile, plan: selectedPlan, resources: resourceData \}\)/, "send the selected research to Notion");
+  assert.match(page, /JSON\.stringify\(\{ profile: \{ \.\.\.profile, hours: feasibility\.weeklyHours \}, feasibility, plan: selectedPlan, resources: resourceData, studyPlan \}\)/, "send the selected research and dated plan to Notion");
   assert.match(notionRoute, /resources\?/, "accept the selected research payload");
   assert.match(notionRoute, /Recommended educators/, "write educators to the Notion page");
   assert.match(notionRoute, /Study forums/, "write forums to the Notion page");
   assert.match(notionRoute, /TV immersion watchlist/, "write TV recommendations to the Notion page");
   assert.match(notionRoute, /Mock exam platforms/, "write mock-exam platforms to the Notion page");
+  assert.match(notionRoute, /Textbook recommendations/, "write textbooks to the Notion page");
   assert.match(notionRoute, /Recognized tests and centre sources/, "write tests and centre sources to the Notion page");
+  assert.match(notionRoute, /createStudyPlanSubpage/, "create the dated plan as a child page");
+  assert.match(notionRoute, /export async function PUT/, "offer real checkbox progress sync");
 });
 
 test("the client reloads research when language or location changes", async () => {
@@ -86,12 +97,13 @@ test("the client reloads research when language or location changes", async () =
   assert.match(resourceRoute, /language-media-exams\.json/, "server must load language-specific TV and mock-exam data");
 });
 
-test("all research is visible in four separate sections without a shared tab panel", async () => {
+test("all research is visible in five separately headed sections without a shared tab panel", async () => {
   const page = await readFile(pageUrl, "utf8");
   const sectionTitles = [
     "Tests &amp; centres",
     "YouTube, forums &amp; TV shows",
     "Reading, speaking, listening &amp; writing",
+    "Textbook recommendations",
     "Mock exams",
   ];
 
@@ -104,10 +116,12 @@ test("all research is visible in four separate sections without a shared tab pan
 
   assert.doesNotMatch(page, /role="tablist"/, "research groups should not hide behind a tab list");
   assert.doesNotMatch(page, /resourceTab|setResourceTab/, "research groups should remain visible together");
-  assert.equal((page.match(/className="research-section"/g) ?? []).length, 4, "render exactly four top-level research sections");
+  assert.equal((page.match(/className="research-group"/g) ?? []).length, 5, "render exactly five top-level research groups");
+  assert.equal((page.match(/className="research-section-heading"/g) ?? []).length, 5, "place every research title outside its black content card");
+  assert.equal((page.match(/className="research-section"/g) ?? []).length, 5, "render exactly five black content cards");
 });
 
-test("the learner journey uses four page-like views instead of a stretching side panel", async () => {
+test("the learner journey uses five page-like views instead of a stretching side panel", async () => {
   const page = await readFile(pageUrl, "utf8");
 
   assert.match(page, /<nav className="steps" aria-label="Study-system pages">/, "use a compact page navigator");
@@ -116,6 +130,8 @@ test("the learner journey uses four page-like views instead of a stretching side
   assert.match(page, /stage === "running" && resourceData/, "agent research needs its own view");
   assert.match(page, /stage === "plans" && resourceData/, "strategy selection needs its own view");
   assert.match(page, /stage === "exported" && resourceData/, "start studying needs its own view");
+  assert.match(page, /stage === "progress" && resourceData/, "progress tracking needs its own view");
+  assert.match(page, /"daily", "weekly", "monthly"/, "progress chart needs daily, weekly, and monthly views");
   assert.equal((page.match(/className="resource-explorer"/g) ?? []).length, 1, "research should live on one page only");
   assert.equal((page.match(/className="export-row"/g) ?? []).length, 1, "integrations should live on the start-study page only");
 });

@@ -1,0 +1,82 @@
+{
+  "English": [
+    {"name":"English Grammar in Use","authorPublisher":"Raymond Murphy · Cambridge University Press","bestFor":"Self-study grammar with clear explanations and practice","level":"B1–B2","url":"https://books.google.com/books?q=English+Grammar+in+Use+Raymond+Murphy"},
+    {"name":"Complete IELTS Bands 6.5–7.5","authorPublisher":"Guy Brook-Hart and Vanessa Jakeman · Cambridge University Press","bestFor":"Integrated IELTS preparation around a band-7 target","level":"B2–C1","url":"https://books.google.com/books?q=Complete+IELTS+Bands+6.5-7.5"},
+    {"name":"Official IELTS Practice Materials","authorPublisher":"Cambridge University Press","bestFor":"Authentic task formats, answer keys, and examiner guidance","level":"B1–C1","url":"https://books.google.com/books?q=Official+IELTS+Practice+Materials"}
+  ],
+  "Spanish": [
+    {"name":"Aula Internacional Plus","authorPublisher":"Difusión","bestFor":"Communication-led classroom or guided self-study","level":"A1–B2","url":"https://books.google.com/books?q=Aula+Internacional+Plus"},
+    {"name":"Gramática de uso del español","authorPublisher":"SM ELE","bestFor":"Levelled grammar explanations and targeted exercises","level":"A1–B2","url":"https://books.google.com/books?q=Gramatica+de+uso+del+espanol"},
+    {"name":"Preparación al DELE B2","authorPublisher":"Edelsa","bestFor":"DELE task practice and exam strategy","level":"B2","url":"https://books.google.com/books?q=Preparacion+al+DELE+B2+Edelsa"}
+  ],
+  "French": [
+    {"name":"Cosmopolite","authorPublisher":"Hachette FLE","bestFor":"Structured communication practice with authentic contexts","level":"A1–C1","url":"https://books.google.com/books?q=Cosmopolite+Hachette+FLE"},
+    {"name":"Grammaire progressive du français","authorPublisher":"CLE International","bestFor":"Systematic grammar study with graduated exercises","level":"A1–C1","url":"https://books.google.com/books?q=Grammaire+progressive+du+francais"},
+    {"name":"Réussir le TCF Canada","authorPublisher":"Didier FLE","bestFor":"TCF Canada formats, timed practice, and review","level":"B1–C1","url":"https://books.google.com/books?q=Reussir+le+TCF+Canada"}
+  ],
+  "German": [
+    {"name":"Netzwerk neu","authorPublisher":"Klett Sprachen","bestFor":"Integrated skills and modern everyday German","level":"A1–B1","url":"https://books.google.com/books?q=Netzwerk+neu+Klett"},
+    {"name":"Grammatik aktiv","authorPublisher":"Cornelsen","bestFor":"Self-study grammar and active production drills","level":"A1–C1","url":"https://books.google.com/books?q=Grammatik+aktiv+Cornelsen"},
+    {"name":"Mit Erfolg zum Goethe-Zertifikat","authorPublisher":"Klett Sprachen","bestFor":"Goethe exam tasks and timed preparation","level":"B1–C1","url":"https://books.google.com/books?q=Mit+Erfolg+zum+Goethe-Zertifikat"}
+  ],
+  "Italian": [
+    {"name":"Nuovo Espresso","authorPublisher":"Alma Edizioni","bestFor":"Communicative Italian with video and cultural contexts","level":"A1–C1","url":"https://books.google.com/books?q=Nuovo+Espresso+Alma+Edizioni"},
+    {"name":"Nuova grammatica pratica della lingua italiana","authorPublisher":"Alma Edizioni","bestFor":"Concise grammar review and self-correcting exercises","level":"A1–B2","url":"https://books.google.com/books?q=Nuova+grammatica+pratica+della+lingua+italiana"},
+    {"name":"Via del Corso","authorPublisher":"Edilingua","bestFor":"Story-driven, four-skill Italian progression","level":"A1–B2","url":"https://books.google.com/books?q=Via+del+Corso+Edilingua"}
+  ],
+  "Portuguese": [
+    {"name":"Português em Foco","authorPublisher":"Lidel","bestFor":"European Portuguese communication and grammar","level":"A1–C1","url":"https://books.google.com/books?q=Portugues+em+Foco+Lidel"},
+    {"name":"Falar... Ler... Escrever... Português","authorPublisher":"EPU","bestFor":"Brazilian Portuguese foundations and written practice","level":"A1–B1","url":"https://books.google.com/books?q=Falar+Ler+Escrever+Portugues"},
+    {"name":"Ponto de Encontro","authorPublisher":"Pearson","bestFor":"Comparing Brazilian and European Portuguese varieties","level":"A1–B2","url":"https://books.google.com/books?q=Ponto+de+Encontro+Portuguese"}
+  ],
+  "Mandarin Chinese": [
+    {"name":"Integrated Chinese","authorPublisher":"Cheng & Tsui","bestFor":"Balanced college-style Mandarin progression","level":"A1–B2","url":"https://books.google.com/books?q=Integrated+Chinese+Cheng+Tsui"},
+    {"name":"HSK Standard Course","authorPublisher":"Beijing Language and Culture University Press","bestFor":"Vocabulary and tasks aligned to HSK levels","level":"HSK 1–6","url":"https://books.google.com/books?q=HSK+Standard+Course"},
+    {"name":"New Practical Chinese Reader","authorPublisher":"Beijing Language and Culture University Press","bestFor":"Dialogue, characters, grammar, and cultural notes","level":"A1–B2","url":"https://books.google.com/books?q=New+Practical+Chinese+Reader"}
+  ],
+  "Japanese": [
+    {"name":"GENKI","authorPublisher":"The Japan Times Publishing","bestFor":"Four-skill beginner Japanese with strong self-study support","level":"A1–A2","url":"https://books.google.com/books?q=GENKI+Japanese+textbook"},
+    {"name":"Minna no Nihongo","authorPublisher":"3A Corporation","bestFor":"Intensive grammar and pattern practice","level":"A1–B1","url":"https://books.google.com/books?q=Minna+no+Nihongo"},
+    {"name":"Tobira: Gateway to Advanced Japanese","authorPublisher":"Kurosio Publishers","bestFor":"Bridging intermediate learners to authentic Japanese","level":"B1–B2","url":"https://books.google.com/books?q=Tobira+Gateway+to+Advanced+Japanese"}
+  ],
+  "Korean": [
+    {"name":"Integrated Korean","authorPublisher":"University of Hawai‘i Press","bestFor":"Systematic grammar, vocabulary, and culture","level":"A1–C1","url":"https://books.google.com/books?q=Integrated+Korean+textbook"},
+    {"name":"Korean Grammar in Use","authorPublisher":"Darakwon","bestFor":"Reference-style grammar explanations and exercises","level":"A1–C1","url":"https://books.google.com/books?q=Korean+Grammar+in+Use"},
+    {"name":"Sejong Korean","authorPublisher":"King Sejong Institute Foundation","bestFor":"Practical communication and standardized progression","level":"A1–B2","url":"https://books.google.com/books?q=Sejong+Korean+textbook"}
+  ],
+  "Arabic": [
+    {"name":"Al-Kitaab fii Ta'allum al-'Arabiyya","authorPublisher":"Georgetown University Press","bestFor":"Modern Standard Arabic with dialect exposure","level":"A1–C1","url":"https://books.google.com/books?q=Al-Kitaab+Arabic"},
+    {"name":"Mastering Arabic","authorPublisher":"Jane Wightwick and Mahmoud Gaafar · Bloomsbury","bestFor":"Friendly self-study Arabic foundations","level":"A1–B1","url":"https://books.google.com/books?q=Mastering+Arabic+Wightwick+Gaafar"},
+    {"name":"Arabic Between Your Hands","authorPublisher":"Arabic for All","bestFor":"Immersive Modern Standard Arabic progression","level":"A1–C1","url":"https://books.google.com/books?q=Arabic+Between+Your+Hands"}
+  ],
+  "Vietnamese": [
+    {"name":"Elementary Vietnamese","authorPublisher":"Binh Nhu Ngo · Tuttle Publishing","bestFor":"Structured grammar, dialogues, and pronunciation","level":"A1–B1","url":"https://books.google.com/books?q=Elementary+Vietnamese+Binh+Nhu+Ngo"},
+    {"name":"Vietnamese for Beginners","authorPublisher":"Jake Catlett and Huong Nguyen · Tuttle Publishing","bestFor":"Accessible self-study and practical conversation","level":"A1–A2","url":"https://books.google.com/books?q=Vietnamese+for+Beginners+Tuttle"},
+    {"name":"Colloquial Vietnamese","authorPublisher":"Bac Hoai Tran and Ha Minh Nguyen · Routledge","bestFor":"Everyday spoken Vietnamese with audio-led practice","level":"A1–B1","url":"https://books.google.com/books?q=Colloquial+Vietnamese+Routledge"}
+  ],
+  "Dutch": [
+    {"name":"Nederlands in gang","authorPublisher":"Coutinho","bestFor":"Practical Dutch from beginner to A2","level":"A1–A2","url":"https://books.google.com/books?q=Nederlands+in+gang"},
+    {"name":"De opmaat","authorPublisher":"Boom","bestFor":"Integrated Dutch progression for educated adults","level":"A2–B1","url":"https://books.google.com/books?q=De+opmaat+Dutch"},
+    {"name":"Dutch Grammar You Really Need to Know","authorPublisher":"Gerdi Quist and Dennis Strik · Teach Yourself","bestFor":"English-language grammar reference and practice","level":"A1–B2","url":"https://books.google.com/books?q=Dutch+Grammar+You+Really+Need+to+Know"}
+  ],
+  "Swedish": [
+    {"name":"Rivstart","authorPublisher":"Natur & Kultur","bestFor":"Fast-paced communication and Swedish grammar","level":"A1–B2","url":"https://books.google.com/books?q=Rivstart+Swedish"},
+    {"name":"Form i fokus","authorPublisher":"Folkuniversitetets förlag","bestFor":"Systematic Swedish grammar exercises","level":"A1–C1","url":"https://books.google.com/books?q=Form+i+fokus"},
+    {"name":"Complete Swedish","authorPublisher":"Anneli Haake · Teach Yourself","bestFor":"Guided independent study with audio practice","level":"A1–B2","url":"https://books.google.com/books?q=Complete+Swedish+Anneli+Haake"}
+  ],
+  "Turkish": [
+    {"name":"İstanbul Yabancılar İçin Türkçe","authorPublisher":"Kültür Sanat Basımevi","bestFor":"Integrated Turkish skills and CEFR progression","level":"A1–C1","url":"https://books.google.com/books?q=Istanbul+Yabancilar+Icin+Turkce"},
+    {"name":"Yeni Hitit","authorPublisher":"Ankara University TÖMER","bestFor":"Intensive classroom-style Turkish development","level":"A1–C1","url":"https://books.google.com/books?q=Yeni+Hitit+Turkish"},
+    {"name":"Turkish Grammar in Practice","authorPublisher":"Yusuf Buz · Foxton Books","bestFor":"Clear self-study grammar with short exercises","level":"A1–B2","url":"https://books.google.com/books?q=Turkish+Grammar+in+Practice+Yusuf+Buz"}
+  ],
+  "Hindi": [
+    {"name":"Complete Hindi","authorPublisher":"Rupert Snell · Teach Yourself","bestFor":"Independent study with script, grammar, and audio","level":"A1–B2","url":"https://books.google.com/books?q=Complete+Hindi+Rupert+Snell"},
+    {"name":"Colloquial Hindi","authorPublisher":"Tej K. Bhatia · Routledge","bestFor":"Everyday Hindi dialogues and functional grammar","level":"A1–B1","url":"https://books.google.com/books?q=Colloquial+Hindi+Tej+Bhatia"},
+    {"name":"Elementary Hindi","authorPublisher":"Richard Delacy and Sudha Joshi · Tuttle Publishing","bestFor":"Devanagari literacy and structured foundations","level":"A1–A2","url":"https://books.google.com/books?q=Elementary+Hindi+Delacy+Joshi"}
+  ],
+  "Indonesian": [
+    {"name":"The Indonesian Way","authorPublisher":"University of Hawai‘i Press","bestFor":"Interactive beginner Indonesian with cultural context","level":"A1–A2","url":"https://books.google.com/books?q=The+Indonesian+Way"},
+    {"name":"Colloquial Indonesian","authorPublisher":"Sutanto Atmosumarto · Routledge","bestFor":"Everyday communication and independent study","level":"A1–B1","url":"https://books.google.com/books?q=Colloquial+Indonesian+Routledge"},
+    {"name":"Complete Indonesian","authorPublisher":"Christopher Byrnes and Eva Nyimas · Teach Yourself","bestFor":"Audio-led self-study through intermediate level","level":"A1–B2","url":"https://books.google.com/books?q=Complete+Indonesian+Teach+Yourself"}
+  ]
+}

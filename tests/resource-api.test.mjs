@@ -8,10 +8,11 @@ const { default: worker } = await import(workerUrl.href);
 const env = { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } };
 const ctx = { waitUntil() {}, passThroughOnException() {} };
 
-test("the live resource endpoint switches TV shows and mock exams with every language", async () => {
+test("the live resource endpoint switches media, mock exams, and textbooks with every language", async () => {
   const languages = JSON.parse(await readFile(new URL("../data/languages.json", import.meta.url), "utf8"));
   const firstShows = new Set();
   const firstMocks = new Set();
+  const firstTextbooks = new Set();
 
   for (const { name } of languages) {
     const query = new URLSearchParams({ language: name, city: "Madrid", country: "Spain" });
@@ -22,12 +23,16 @@ test("the live resource endpoint switches TV shows and mock exams with every lan
     assert.equal(data.language, name);
     assert.equal(data.tvShows.length, 10, `${name} must return ten TV shows`);
     assert.equal(data.mockExams.length, 3, `${name} must return three mock-exam platforms`);
+    assert.equal(data.textbooks.length, 3, `${name} must return three textbooks`);
     assert.ok(data.tvShows.every((show) => /^https:\/\//.test(show.url)), `${name} TV shows need live guide links`);
     assert.ok(data.mockExams.every((mock) => /^https:\/\//.test(mock.url)), `${name} mock exams need live links`);
+    assert.ok(data.textbooks.every((book) => /^https:\/\//.test(book.url)), `${name} textbooks need live source links`);
     firstShows.add(data.tvShows[0].name);
     firstMocks.add(data.mockExams[0].name);
+    firstTextbooks.add(data.textbooks[0].name);
   }
 
   assert.equal(firstShows.size, languages.length, "each language should lead with a different TV recommendation");
   assert.equal(firstMocks.size, languages.length, "each language should lead with a different mock-exam recommendation");
+  assert.equal(firstTextbooks.size, languages.length, "each language should lead with a different textbook recommendation");
 });

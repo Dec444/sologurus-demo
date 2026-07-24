@@ -23,14 +23,17 @@ The agent:
 - Recommends three language-specific study forums.
 - Curates ten native-language TV shows for guided immersion.
 - Provides three exam-specific mock platforms or official sample-test environments.
+- Recommends three established, language-specific textbooks.
 - Exposes listening, speaking, reading, and writing materials instead of hiding them inside a generated plan.
 - Produces three genuinely different strategies: Test-First, Immersion-Led, and Balanced Four-Skill.
-- Checks that each strategy stays inside the learner's declared weekly time limit.
+- Asks about daily hours, study days, consistency, and exam experience, then flags tight or impractical deadlines.
+- Generates a dated, phased study plan with a textbook, practice resource, duration, and checkbox for every session.
+- Tracks completion with switchable daily, weekly, and monthly charts.
 - Creates a four-week calendar containing 12 study sessions and three recurring daily habit reminders.
-- Replaces a connected Notion page with the current selected plan and links recurring Google Calendar events.
+- Writes the research overview to Notion, creates the dated plan as its subpage, and reads completed checkboxes back into progress.
 - Exports a standards-based `.ics` file for Google, Apple, or Outlook Calendar without requiring OAuth.
 
-The public demo uses dated, source-linked catalogs for all 16 languages. Its server-side Notion route can replace one connected page or create learner-specific child pages when deployment credentials are configured.
+The public demo uses dated, source-linked catalogs for all 16 languages. Its server-side Notion route can replace or create an overview, nest a study plan beneath it, and sync completed plan checkboxes when deployment credentials are configured.
 
 ## How we built it
 
@@ -40,7 +43,7 @@ We designed Sologurus as a planner over structured tools rather than a chatbot t
 2. `rank_guidance()` scores educators and communities for the learner's level and goal.
 3. `curate_resources()` organizes free-first materials and a ten-show immersion watchlist.
 4. `match_mock_exams()` selects three exam-specific practice environments.
-5. `generate_plans()` composes three strategies and checks the weekly time constraint.
+5. `generate_plans()` checks feasibility, composes three strategies, and schedules dated sessions through the target date.
 
 The interface is built with Next.js-compatible React and TypeScript, with a responsive dark product design inspired by the clarity and information density of modern tools such as Linear. Comic Neue gives the major headings a friendly educational character, while a clean sans-serif keeps the working interface readable.
 
@@ -69,7 +72,8 @@ We are especially proud of:
 - Turning a broad educational problem into a focused end-to-end learner journey.
 - Making every resource category visible and directly accessible.
 - Producing three strategies that differ by learning philosophy rather than simple intensity levels.
-- Enforcing an honest weekly time budget.
+- Giving an honest feasibility verdict before asking a learner to commit.
+- Turning the chosen strategy into a workbook-like dated plan and switchable progress statistics.
 - Building a dependency-free, timezone-aware calendar exporter.
 - Connecting real Notion and Google Calendar records.
 - Delivering a zero-key judge path without pretending that seeded data is live search.
@@ -94,7 +98,7 @@ We also plan to add:
 - Deep resource catalogs and exam guidance for every supported target language.
 - Placement diagnostics that identify skill-specific gaps.
 - Adaptive weekly replanning based on completed tasks and reflections.
-- Two-way Notion and Google Calendar synchronization.
+- Secure account-based persistence and deeper calendar synchronization.
 - Speaking practice with recording, transcription, and feedback.
 - Writing feedback linked to recurring error patterns.
 - Progress views that track consistency and skill balance without encouraging unhealthy streak behavior.

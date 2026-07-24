@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import languages from "../data/languages.json";
 import locations from "../data/locations.json";
 import { makeCalendarIcs } from "../lib/calendar.mjs";
+import { assessFeasibility, buildProgressSeries, buildStudyPlan, type StudyPlanRow } from "../lib/learning-plan.mjs";
 
 type Profile = {
   language: string;
@@ -12,7 +13,10 @@ type Profile = {
   country: string;
   goal: string;
   date: string;
-  hours: number;
+  dailyHours: number;
+  studyDays: number;
+  consistency: "steady" | "sometimes" | "starting";
+  examExperience: "taken" | "similar" | "first";
   timezone: string;
 };
 
@@ -33,7 +37,8 @@ type Forum = { name: string; url: string; bestFor: string };
 type Material = { name: string; url: string; cost: string; level: string; use: string };
 type TvShow = { name: string; url: string; origin: string; genre: string; level: string };
 type MockExam = { name: string; url: string; exam: string; access: string };
-type JourneyStage = "profile" | "running" | "plans" | "exported";
+type Textbook = { name: string; authorPublisher: string; bestFor: string; level: string; url: string };
+type JourneyStage = "profile" | "running" | "plans" | "exported" | "progress";
 type ResourceData = {
   language: string;
   lastVerified: string;
@@ -46,6 +51,7 @@ type ResourceData = {
   forums?: Forum[];
   tvShows: TvShow[];
   mockExams: MockExam[];
+  textbooks: Textbook[];
   materials: Record<"listening" | "speaking" | "reading" | "writing", Material[]>;
 };
 
@@ -54,6 +60,7 @@ const journeyStages: { id: JourneyStage; label: string; note: string }[] = [
   { id: "running", label: "Agent research", note: "Tests + resources" },
   { id: "plans", label: "Choose a strategy", note: "Three distinct paths" },
   { id: "exported", label: "Start studying", note: "Schedule + integrations" },
+  { id: "progress", label: "Track progress", note: "Daily + weekly + monthly" },
 ];
 
 const demoProfile: Profile = {
@@ -63,7 +70,10 @@ const demoProfile: Profile = {
   country: "Vietnam",
   goal: "IELTS 7.0 for Canadian PR",
   date: "2026-12-05",
-  hours: 8,
+  dailyHours: 1.5,
+  studyDays: 6,
+  consistency: "steady",
+  examExperience: "similar",
   timezone: "Asia/Ho_Chi_Minh",
 };
 
@@ -140,6 +150,11 @@ export default function Home() {
   const [notionApiConfigured, setNotionApiConfigured] = useState(false);
   const [calendarReady, setCalendarReady] = useState(false);
   const [googleCalendarUrl, setGoogleCalendarUrl] = useState("");
+  const [notionPlanPageId, setNotionPlanPageId] = useState("");
+  const [progressView, setProgressView] = useState<"daily" | "weekly" | "monthly">("weekly");
+  const [completedDays, setCompletedDays] = useState<number[]>([]);
+  const [progressSyncStatus, setProgressSyncStatus] = useState<"idle" | "syncing" | "success" | "error">("idle");
+  const [progressSyncMessage, setProgressSyncMessage] = useState("");
   const [resourceData, setResourceData] = useState<ResourceData | null>(null);
   const [loadedResourceKey, setLoadedResourceKey] = useState("");
   const [resourceError, setResourceError] = useState("");
@@ -152,6 +167,16 @@ export default function Home() {
   const plans = useMemo(() => buildPlans(resourceData, profile.language), [resourceData, profile.language]);
   const selectedPlan = useMemo(() => plans.find((plan) => plan.id === selected) ?? plans[2], [plans, selected]);
   const currentStageIndex = journeyStages.findIndex((item) => item.id === stage);
+  const feasibility = useMemo(() => assessFeasibility(profile), [profile]);
+  const studyPlan = useMemo(
+    () => resourceData ? buildStudyPlan(profile, selectedPlan, resourceData) : [],
+    [profile, resourceData, selectedPlan],
+  );
+  const progressSeries = useMemo(
+    () => buildProgressSeries(studyPlan, completedDays, progressView),
+    [completedDays, progressView, studyPlan],
+  );
+  const completionPercent = studyPlan.length > 0 ? Math.round(completedDays.length / studyPlan.length * 100) : 0;
   const featuredResources = useMemo(() => {
     if (!resourceData) return [];
     return (["listening", "speaking", "reading", "writing"] as const).map((skill) => {
@@ -162,10 +187,10 @@ export default function Home() {
   const toolSteps = useMemo(() => [
     ["search_tests", resourceData ? `${resourceData.tests.length} exams · ${resourceData.testCenters.length} location sources` : "Loading verified sources", `${profile.language} · ${profile.city}, ${profile.country}`],
     ["rank_guidance", resourceData ? `${resourceData.youtube.length} educators · ${resourceData.forums?.length ?? 0} forums` : "Loading educators and forums", `Selected for ${profile.language} learner fit`],
-    ["curate_resources", resourceData ? `${Object.values(resourceData.materials).flat().length} skill resources · ${resourceData.tvShows.length} TV shows` : "Loading four-skill materials", "Listening · speaking · reading · writing · immersion"],
+    ["curate_resources", resourceData ? `${Object.values(resourceData.materials).flat().length} skill resources · ${resourceData.tvShows.length} TV shows · ${resourceData.textbooks.length} textbooks` : "Loading four-skill materials", "Listening · speaking · reading · writing · immersion"],
     ["match_mock_exams", resourceData ? `${resourceData.mockExams.length} exam simulators` : "Loading mock platforms", `Matched to ${resourceData?.recommendation.name ?? profile.language}`],
-    ["generate_plans", `3 strategies · ${profile.hours} h/week`, "Constraint check passed"],
-  ], [profile.city, profile.country, profile.hours, profile.language, resourceData]);
+    ["generate_plans", `3 strategies · ${feasibility.weeklyHours} h/week`, feasibility.status === "not-practical" ? "Timeline warning included" : "Constraint check passed"],
+  ], [feasibility.status, feasibility.weeklyHours, profile.city, profile.country, profile.language, resourceData]);
 
   useEffect(() => {
     Promise.all([
@@ -218,6 +243,8 @@ export default function Home() {
 
   const runAgent = async () => {
     if (resourceLoading || !resourceData) return;
+    setCompletedDays([]);
+    setNotionPlanPageId("");
     setStage("running");
     setUnlockedStage((current) => Math.max(current, 1));
     setResearchRunning(true);
@@ -231,7 +258,7 @@ export default function Home() {
   };
 
   const downloadIcs = () => {
-    const blob = new Blob([makeCalendarIcs(profile, selectedPlan)], { type: "text/calendar;charset=utf-8" });
+    const blob = new Blob([makeCalendarIcs({ ...profile, hours: feasibility.weeklyHours }, selectedPlan)], { type: "text/calendar;charset=utf-8" });
     const href = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = href;
@@ -249,16 +276,42 @@ export default function Home() {
       const response = await fetch("/api/notion", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profile, plan: selectedPlan, resources: resourceData }),
+        body: JSON.stringify({ profile: { ...profile, hours: feasibility.weeklyHours }, feasibility, plan: selectedPlan, resources: resourceData, studyPlan }),
       });
-      const result = await response.json() as { ok?: boolean; url?: string; message?: string };
+      const result = await response.json() as { ok?: boolean; url?: string; planPageId?: string; planUrl?: string; message?: string };
       if (!response.ok || !result.ok || !result.url) throw new Error(result.message || "Notion page creation failed.");
       setNotionUrl(result.url);
-      setNotionMessage("The page was written from the current profile, strategy, tests, mock exams, educators, TV shows, forums, and skill resources.");
+      setNotionPlanPageId(result.planPageId ?? "");
+      setNotionMessage(`The main page and its ${studyPlan.length}-session study-plan subpage now match this learner.`);
       setNotionStatus("success");
     } catch (error) {
       setNotionStatus("error");
       setNotionMessage(error instanceof Error ? error.message : "Notion page creation failed.");
+    }
+  };
+
+  const toggleStudyDay = (day: number) => {
+    setCompletedDays((current) => current.includes(day) ? current.filter((item) => item !== day) : [...current, day].sort((a, b) => a - b));
+  };
+
+  const syncNotionProgress = async () => {
+    if (!notionPlanPageId) return;
+    setProgressSyncStatus("syncing");
+    setProgressSyncMessage("");
+    try {
+      const response = await fetch("/api/notion", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ planPageId: notionPlanPageId }),
+      });
+      const result = await response.json() as { ok?: boolean; completedDays?: number[]; message?: string };
+      if (!response.ok || !result.ok || !result.completedDays) throw new Error(result.message || "Could not sync Notion progress.");
+      setCompletedDays(result.completedDays);
+      setProgressSyncStatus("success");
+      setProgressSyncMessage(`Synced ${result.completedDays.length} completed sessions from the Notion study-plan subpage.`);
+    } catch (error) {
+      setProgressSyncStatus("error");
+      setProgressSyncMessage(error instanceof Error ? error.message : "Could not sync Notion progress.");
     }
   };
 
@@ -276,7 +329,7 @@ export default function Home() {
         <a className="hero-cta" href="#planner">Build my study system</a>
         <div className="hero-visual" aria-label="A preview of a personalized Sologurus study plan">
           <div className="visual-orb" />
-          <div className="visual-card visual-card-main"><span>STUDY PULSE</span><b>Balanced plan ready</b><small>8 hours / week · constraint passed</small></div>
+          <div className="visual-card visual-card-main"><span>STUDY PULSE</span><b>Balanced plan ready</b><small>1.5 hours / day · feasibility checked</small></div>
           <div className="visual-card visual-card-score"><span>READINESS</span><b>84</b><small>goal fit</small></div>
           <div className="visual-card visual-card-source"><span>SOURCES</span><b>Verified</b><small>language + location matched</small></div>
         </div>
@@ -287,7 +340,7 @@ export default function Home() {
         </ul>
         <div className="hero-metrics" aria-hidden="true">
           <div className="metric-card metric-dark"><span>RESEARCH SET</span><b>10 + 3 + 10</b><small>educators · forums · TV shows</small></div>
-          <div className="metric-card metric-blue"><span>WEEKLY PLAN</span><b>8h</b><small>balanced across four skills</small></div>
+          <div className="metric-card metric-blue"><span>PROGRESS</span><b>3 views</b><small>daily · weekly · monthly</small></div>
         </div>
       </section>
 
@@ -323,7 +376,14 @@ export default function Home() {
                 <label>City<select value={profile.city} onChange={(e) => update("city", e.target.value)}>{locations[profile.country as keyof typeof locations].map((city) => <option key={city} value={city}>{city}</option>)}</select></label>
                 <label className="wide">Goal<input value={profile.goal} onChange={(e) => update("goal", e.target.value)} /></label>
                 <label>Target date<input type="date" value={profile.date} onChange={(e) => update("date", e.target.value)} /></label>
-                <label>Hours each week<div className="range-row"><input aria-label="Hours each week" type="range" min="3" max="20" value={profile.hours} onChange={(e) => update("hours", Number(e.target.value))} /><output>{profile.hours}h</output></div></label>
+                <label>Study days each week<select value={profile.studyDays} onChange={(e) => update("studyDays", Number(e.target.value))}><option value={3}>3 days</option><option value={4}>4 days</option><option value={5}>5 days</option><option value={6}>6 days</option><option value={7}>7 days</option></select></label>
+                <label>Recent study consistency<select value={profile.consistency} onChange={(e) => update("consistency", e.target.value)}><option value="steady">I study most weeks</option><option value="sometimes">I study some weeks</option><option value="starting">I am building the habit now</option></select></label>
+                <label>Exam experience<select value={profile.examExperience} onChange={(e) => update("examExperience", e.target.value)}><option value="taken">I have taken this test</option><option value="similar">I have taken a similar test</option><option value="first">This is my first language test</option></select></label>
+                <label className="wide">Estimated hours on each study day<div className="range-row"><input aria-label="Estimated hours on each study day" type="range" min="0.5" max="6" step="0.5" value={profile.dailyHours} onChange={(e) => update("dailyHours", Number(e.target.value))} /><output>{profile.dailyHours}h</output></div></label>
+              </div>
+              <div className={`feasibility-card ${feasibility.status}`} role="status">
+                <div><span>{feasibility.status === "practical" ? "✓" : feasibility.status === "tight" ? "!" : "×"}</span><div><b>{feasibility.title}</b><p>{feasibility.advice}</p></div></div>
+                <dl><div><dt>Effective time</dt><dd>{feasibility.availableHours}h</dd></div><div><dt>Estimated need</dt><dd>{feasibility.neededHours}h</dd></div><div><dt>Weekly plan</dt><dd>{feasibility.weeklyHours}h</dd></div></dl>
               </div>
               {resourceError && <div className="integration-error" role="alert"><span>!</span><div><b>Research could not load.</b><p>{resourceError}</p></div></div>}
               <button className="primary" aria-label="Build my study system" data-testid="run-agent" disabled={resourceLoading || !resourceData} onClick={runAgent}>{resourceLoading ? `Loading ${profile.language} sources…` : "Build my study system"} <span>→</span></button>
@@ -355,14 +415,15 @@ export default function Home() {
                   <section className="resource-explorer" aria-labelledby="all-resources-title">
                     <div className="resource-heading">
                       <div><span className="kicker">AGENT RESEARCH · FULL RESULTS</span><h3 id="all-resources-title">See every recommendation.</h3></div>
-                      <p>All {profile.language} research is grouped into four complete sections below. Catalog checked {resourceData.lastVerified}; availability is always rechecked at the source.</p>
+                      <p>All {profile.language} research is grouped into five clearly separated sections below. Catalog checked {resourceData.lastVerified}; availability is always rechecked at the source.</p>
                     </div>
 
-                    <section className="research-section" aria-labelledby="tests-centres-title">
+                    <section className="research-group" aria-labelledby="tests-centres-title">
                       <div className="research-section-heading">
                         <span className="section-index">01</span>
                         <div><h3 id="tests-centres-title">Tests &amp; centres</h3><p>Compare recognized exams and open current registration sources for {profile.city}, {profile.country}.</p></div>
                       </div>
+                      <div className="research-section">
                       <div className="result-subhead"><b>Test centres near {profile.city}</b><span>{resourceData.centerMode === "official-directory" ? "official finder — no address invented" : `${resourceData.testCenters.length - 1} local record(s) + official finder`}</span></div>
                       <div className="center-grid">
                         {resourceData.testCenters.map((center) => (
@@ -377,13 +438,15 @@ export default function Home() {
                           <a href={test.sourceUrl} target="_blank" rel="noreferrer" key={test.name}><span className="rank">TEST</span><div><b>{test.name}</b><p>{test.fit}</p><small>{test.format}</small></div><span className="open-link">Source ↗</span></a>
                         ))}
                       </div>
+                      </div>
                     </section>
 
-                    <section className="research-section" aria-labelledby="guidance-immersion-title">
+                    <section className="research-group" aria-labelledby="guidance-immersion-title">
                       <div className="research-section-heading">
                         <span className="section-index">02</span>
                         <div><h3 id="guidance-immersion-title">YouTube, forums &amp; TV shows</h3><p>Learn with 10 ranked educators, 3 learner communities, and 10 target-language shows.</p></div>
                       </div>
+                      <div className="research-section">
                       <div className="result-subhead"><b>YouTube educators</b><span>{resourceData.youtube.length} ranked channels</span></div>
                       <div className="resource-list">
                         {resourceData.youtube.map((channel, index) => (
@@ -402,13 +465,15 @@ export default function Home() {
                           <a href={show.url} target="_blank" rel="noreferrer" key={show.name}><span className="material-number">{String(index + 1).padStart(2, "0")}</span><div><b>{show.name}</b><p>{show.genre} · {show.origin}</p><small>Suggested learner level {show.level} · check local streaming availability</small></div><span className="open-link">Show guide ↗</span></a>
                         ))}
                       </div>
+                      </div>
                     </section>
 
-                    <section className="research-section" aria-labelledby="four-skills-title">
+                    <section className="research-group" aria-labelledby="four-skills-title">
                       <div className="research-section-heading">
                         <span className="section-index">03</span>
                         <div><h3 id="four-skills-title">Reading, speaking, listening &amp; writing</h3><p>Skill-specific materials keep every part of the study plan actionable and balanced.</p></div>
                       </div>
+                      <div className="research-section">
                       {(["reading", "speaking", "listening", "writing"] as const).map((skill, skillIndex) => (
                         <div className={`skill-group ${skillIndex > 0 ? "secondary-head" : ""}`} key={skill}>
                           <div className="result-subhead"><b>{skill[0].toUpperCase() + skill.slice(1)}</b><span>{resourceData.materials[skill].length} curated materials</span></div>
@@ -419,18 +484,36 @@ export default function Home() {
                           </div>
                         </div>
                       ))}
+                      </div>
                     </section>
 
-                    <section className="research-section" aria-labelledby="mock-exams-title">
+                    <section className="research-group" aria-labelledby="textbooks-title">
                       <div className="research-section-heading">
                         <span className="section-index">04</span>
+                        <div><h3 id="textbooks-title">Textbook recommendations</h3><p>Use 3 established coursebooks selected for the target language, level, and exam pathway.</p></div>
+                      </div>
+                      <div className="research-section">
+                        <div className="result-subhead"><b>Structured coursebooks</b><span>{resourceData.textbooks.length} recommendations</span></div>
+                        <div className="resource-list textbook-list">
+                          {resourceData.textbooks.map((book, index) => (
+                            <a href={book.url} target="_blank" rel="noreferrer" key={book.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{book.name}</b><p>{book.bestFor}</p><small>{book.authorPublisher} · {book.level}</small></div><span className="open-link">Book ↗</span></a>
+                          ))}
+                        </div>
+                      </div>
+                    </section>
+
+                    <section className="research-group" aria-labelledby="mock-exams-title">
+                      <div className="research-section-heading">
+                        <span className="section-index">05</span>
                         <div><h3 id="mock-exams-title">Mock exams</h3><p>Practice with 3 exam-specific platforms matched to the recommended certification path.</p></div>
                       </div>
+                      <div className="research-section">
                       <div className="result-subhead"><b>Practice platforms</b><span>{resourceData.mockExams.length} current options</span></div>
                       <div className="resource-list tests-list mock-list">
                         {resourceData.mockExams.map((mock, index) => (
                           <a href={mock.url} target="_blank" rel="noreferrer" key={mock.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{mock.name}</b><p>{mock.access}</p><small>{mock.exam} · confirm current access terms at source</small></div><span className="open-link">Practice ↗</span></a>
                         ))}
+                      </div>
                       </div>
                     </section>
                   </section>
@@ -443,12 +526,12 @@ export default function Home() {
           {stage === "plans" && resourceData && (
             <div className="plans-view">
               <div className="panel-heading"><div><span className="kicker">STEP 03 · CHOOSE A STRATEGY</span><h2>Three strategies. One honest time budget.</h2></div><button className="text-button" onClick={() => setStage("running")}>Review research</button></div>
-              <div className="insight-strip"><b>{resourceData.recommendation.name} · {profile.hours} hours/week</b><span>Every strategy uses the verified {profile.language} research set and stays inside your declared weekly limit.</span></div>
+              <div className="insight-strip"><b>{resourceData.recommendation.name} · {feasibility.weeklyHours} hours/week</b><span>Every strategy uses the verified {profile.language} research set and includes the deadline-feasibility assessment.</span></div>
               <div className="plan-grid">
                 {plans.map((plan) => (
                   <button aria-pressed={selected === plan.id} className={`plan-card plan-${plan.id} ${selected === plan.id ? "selected" : ""}`} key={plan.id} onClick={() => setSelected(plan.id)}>
                     <span className={`swatch ${plan.accent.toLowerCase()}`} /><span className="plan-name">{plan.name}</span><span className="check">{selected === plan.id ? "✓" : ""}</span>
-                    <strong>{plan.tagline}</strong><small>{profile.hours} hours/week · {plan.split}</small><p>{plan.outcome}</p>
+                    <strong>{plan.tagline}</strong><small>{feasibility.weeklyHours} hours/week · {plan.split}</small><p>{plan.outcome}</p>
                   </button>
                 ))}
               </div>
@@ -459,21 +542,72 @@ export default function Home() {
           {stage === "exported" && resourceData && (
             <div className="start-view">
               <div className="panel-heading"><div><span className="kicker">STEP 04 · START STUDYING</span><h2>Your study system is ready.</h2></div><button className="text-button" onClick={() => setStage("plans")}>Change strategy</button></div>
-              <div className="start-summary"><span>{profile.language}</span><b>{selectedPlan.name}</b><small>{profile.hours} hours/week · target {profile.date}</small></div>
+              <div className="start-summary"><span>{profile.language}</span><b>{selectedPlan.name}</b><small>{profile.dailyHours}h/day · {profile.studyDays} days/week · target {profile.date}</small></div>
               <div className="schedule">
                 <div><span className="kicker">YOUR FIRST STUDY BLOCK</span><h3>{selectedPlan.name} · Week one</h3>{selectedPlan.sample.map((item) => <p key={item}><span>✓</span>{item}</p>)}</div>
                 <div className="resource-stack"><span className="kicker">RESOURCES IN THIS PLAN</span>{featuredResources.map(([skill, name, meta]) => <div key={skill}><b>{skill}</b><span>{name}</span><small>{meta}</small></div>)}</div>
               </div>
+              <section className="study-plan-section" aria-labelledby="study-plan-title">
+                <div className="study-plan-heading"><div><span className="kicker">DATED STUDY PLAN</span><h3 id="study-plan-title">{studyPlan.length} focused sessions to your target</h3></div><p>Adapted from the workbook model: dated phases, daily focus, a coursebook, skill practice, duration, and a completion checkbox.</p></div>
+                <div className="study-plan-scroll">
+                  <table>
+                    <thead><tr><th>Day</th><th>Date</th><th>Phase</th><th>Today&apos;s focus</th><th>Textbook</th><th>Practice</th><th>Done</th></tr></thead>
+                    <tbody>
+                      {studyPlan.map((row: StudyPlanRow) => (
+                        <tr key={row.day} className={`phase-${row.phase.toLowerCase().replaceAll(" ", "-").replaceAll("&", "and")}`}>
+                          <td>{row.day}</td><td>{row.dateLabel}</td><td>{row.phase}</td><td>{row.focus}</td><td>{row.textbook}</td><td>{row.practice}<small>{row.durationMinutes} min</small></td>
+                          <td><input type="checkbox" aria-label={`Mark study day ${row.day} complete`} checked={completedDays.includes(row.day)} onChange={() => toggleStudyDay(row.day)} /></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
               <div className="export-row">
-                <div><b>Send the plan somewhere real.</b><span>Live Notion and Google Calendar connections, plus a universal 15-event calendar file.</span></div>
-                <button className="secondary" data-testid="connect-notion" disabled={notionStatus === "connecting"} onClick={connectNotion}>{notionStatus === "connecting" ? "Updating Notion…" : notionApiConfigured ? "Update Notion page ↗" : "Connect Notion to update ↗"}</button>
+                <div><b>Send the plan somewhere real.</b><span>Notion receives the overview plus this dated plan as a child subpage. Calendar export remains universal.</span></div>
+                <button className="secondary" data-testid="connect-notion" disabled={notionStatus === "connecting"} onClick={connectNotion}>{notionStatus === "connecting" ? "Updating Notion…" : notionApiConfigured ? "Update Notion + subpage ↗" : "Connect Notion to update ↗"}</button>
                 {googleCalendarUrl && <a className="secondary action-link" href={googleCalendarUrl} target="_blank" rel="noreferrer">Open Google Calendar ↗</a>}
                 <button className="primary compact" data-testid="download-ics" onClick={downloadIcs}>Download universal .ICS ↓</button>
               </div>
               {notionStatus === "error" && <div className="integration-error" role="alert"><span>!</span><div><b>Notion needs a write connection.</b><p>{notionMessage}</p></div></div>}
               {notionStatus === "success" && <div className="success" role="status"><span>✓</span><div><b>Notion matches this plan.</b><p>{notionMessage} <a href={notionUrl} target="_blank" rel="noreferrer">Open updated page ↗</a></p></div></div>}
               {calendarReady && <div className="success" role="status"><span>✓</span><div><b>Calendar file generated with 15 events.</b><p>Import it into Google, Apple, or Outlook Calendar. Events use {profile.timezone} and reminders repeat through {profile.date}.</p></div></div>}
-              <div className="page-actions"><button className="text-button" onClick={() => setStage("plans")}>← Choose a strategy</button></div>
+              <div className="page-actions"><button className="text-button" onClick={() => setStage("plans")}>← Choose a strategy</button><button className="primary compact" onClick={() => { setUnlockedStage(4); setStage("progress"); }}>Track progress →</button></div>
+            </div>
+          )}
+
+          {stage === "progress" && resourceData && (
+            <div className="progress-view">
+              <div className="panel-heading"><div><span className="kicker">STEP 05 · TRACK PROGRESS</span><h2>See the work adding up.</h2></div><button className="text-button" onClick={() => setStage("exported")}>Open study plan</button></div>
+              <div className="progress-kpis">
+                <div><span>Completion</span><b>{completionPercent}%</b><small>{completedDays.length} of {studyPlan.length} sessions</small></div>
+                <div><span>Focused time</span><b>{Math.round(completedDays.length * profile.dailyHours * 10) / 10}h</b><small>{feasibility.neededHours}h estimated path</small></div>
+                <div><span>Remaining</span><b>{studyPlan.length - completedDays.length}</b><small>scheduled sessions</small></div>
+              </div>
+              <section className="progress-panel" aria-labelledby="progress-chart-title">
+                <div className="progress-panel-heading">
+                  <div><span className="kicker">COMPLETION STATISTICS</span><h3 id="progress-chart-title">{progressView[0].toUpperCase() + progressView.slice(1)} progress</h3></div>
+                  <div className="progress-switcher" role="group" aria-label="Progress chart period">
+                    {(["daily", "weekly", "monthly"] as const).map((view) => <button className={progressView === view ? "active" : ""} aria-pressed={progressView === view} onClick={() => setProgressView(view)} key={view}>{view}</button>)}
+                  </div>
+                </div>
+                <div className="progress-chart" aria-label={`${progressView} completion chart`}>
+                  {progressSeries.map((point) => (
+                    <div className="chart-column" key={point.key}>
+                      <span className="chart-value">{point.percent}%</span>
+                      <div className="chart-track"><span style={{ height: `${Math.max(3, point.percent)}%` }} /></div>
+                      <small>{point.label}</small>
+                    </div>
+                  ))}
+                </div>
+                <p className="chart-note">Check sessions on the study-plan page, or sync completed checkboxes from the connected Notion subpage.</p>
+              </section>
+              <div className="progress-sync">
+                <div><b>Notion progress sync</b><span>{notionPlanPageId ? "Read completed checkboxes from the generated study-plan subpage." : "Update Notion from the Start studying page to create and connect the subpage."}</span></div>
+                <button className="secondary" disabled={!notionPlanPageId || progressSyncStatus === "syncing"} onClick={syncNotionProgress}>{progressSyncStatus === "syncing" ? "Syncing…" : "Sync Notion progress ↻"}</button>
+              </div>
+              {progressSyncMessage && <div className={progressSyncStatus === "error" ? "integration-error" : "success"} role="status"><span>{progressSyncStatus === "error" ? "!" : "✓"}</span><div><b>{progressSyncStatus === "error" ? "Progress sync needs attention." : "Progress synced."}</b><p>{progressSyncMessage}</p></div></div>}
+              <div className="page-actions"><button className="text-button" onClick={() => setStage("exported")}>← Start studying</button></div>
             </div>
           )}
         </div>

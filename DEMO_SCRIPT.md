@@ -1,4 +1,4 @@
-# Sologurus demo script — 2:50 target
+# Sologurus demo script — 2:55 target
 
 **Live product:** [sologurus-study-agent.lu-liu398220.chatgpt.site](https://sologurus-study-agent.lu-liu398220.chatgpt.site)
 
@@ -16,13 +16,13 @@ Before recording:
 
 ## 0:00–0:18 — The problem
 
-“Self-taught language learners rarely quit because they lack motivation. They quit because research, planning, and daily structure become a second job. Meet Linh: she is in Ho Chi Minh City, needs IELTS 7.0 for Canadian permanent residence, has eight hours a week, and cannot afford a prep school.”
+“Self-taught language learners rarely quit because they lack motivation. They quit because research, planning, and daily structure become a second job. Meet Linh: she is in Ho Chi Minh City, needs IELTS 7.0 for Canadian permanent residence, and cannot afford a prep school.”
 
 ## 0:18–0:37 — One-click onboarding
 
-[Open the target-language menu to show the 16 choices. Show the country-first, dependent city menus. Select English, click **Use demo profile**, and briefly show goal, date, and 8-hour slider.]
+[Open the target-language menu to show the 16 choices. Show the country-first, dependent city menus. Select English, click **Use demo profile**, then show daily hours, study days, consistency, and exam experience.]
 
-“Sologurus supports 16 target languages and starts with the constraints that matter: current level, country and city, test goal, deadline, and real weekly availability. Changing the language reloads the entire evidence set—not just the label—and choosing a country updates the available cities.”
+“Sologurus starts with constraints that matter: current level, location, goal, deadline, daily hours, study days, consistency, and exam experience. It immediately estimates required versus effective hours and says plainly when the deadline is not practical.”
 
 [Click **Build my study system**.]
 
@@ -30,21 +30,21 @@ Before recording:
 
 [Let the tool rows animate. Pause when the dedicated research page appears.]
 
-“This is not a chatbot free-writing a curriculum. GPT-5.6 is a planner over structured tools. It finds relevant tests, ranks current guidance, curates free-first resources, then composes plans from those validated objects. Every step has a predictable schema, and every plan is checked against Linh’s eight-hour limit.”
+“This is not a chatbot free-writing a curriculum. GPT-5.6 is a planner over structured tools. It finds tests, ranks guidance, curates resources, and composes plans from validated objects. Changing the language reloads the whole evidence set—not just the label.”
 
 ## 1:03–1:47 — Evidence and strategic plans
 
-[Point to the IELTS recommendation. Scroll through the four research sections: **Tests & centres**; **YouTube, forums & TV shows**; **Reading, speaking, listening & writing**; and **Mock exams**. Click **Compare strategies**, click each plan card once, settle on **Balanced Four-Skill**, then click **Use Balanced Four-Skill**.]
+[Point to the IELTS recommendation. Scroll through the five separately headed research sections: **Tests & centres**; **YouTube, forums & TV shows**; **Reading, speaking, listening & writing**; **Textbook recommendations**; and **Mock exams**. Select **Balanced Four-Skill**, then continue.]
 
-“For Canadian PR, the agent recommends IELTS and explains the fit. Linh can inspect every result: verified local records plus the official test-centre finder, exactly ten ranked YouTube teachers, three study forums, ten English-language TV shows, three mock-exam platforms, and dedicated listening, speaking, reading, and writing materials. If the target language changes, this entire library changes with it.”
+“Linh can inspect every result: verified centre sources, ten ranked YouTube teachers, three forums, ten TV shows, four-skill materials, three established textbooks, and three mock-exam platforms. Titles sit outside the dark result cards, so the dense evidence stays easy to scan.”
 
 ## 1:47–2:12 — The payoff
 
-[On the dedicated **Start studying** page, show the first-week block and resources. In a credentialed demo, click **Update Notion page** and show that the page contains this language, plan, ten educators, three forums, ten TV shows, three mock exams, and all four skills. Return, open Google Calendar, then download the universal `.ICS`.]
+[On **Start studying**, scroll the dated table and mark two sessions complete. In a credentialed demo, click **Update Notion + subpage**, then show the child plan checkboxes. Return, open **Track progress**, switch daily/weekly/monthly, and sync Notion.]
 
-“The selected plan goes somewhere real. Sologurus replaces the connected Notion page with the current profile, strategy, tasks, educators, forums, TV watchlist, mock-exam links, and skill resources—so stale English results cannot survive a language change. The universal ICS adds 12 study sessions and three recurring reminders to Google, Apple, or Outlook.”
+“The selected plan becomes 14 to 84 dated sessions modeled after a real study tracker: phase, focus, textbook, practice, duration, and done state. Notion receives the research overview plus this plan as a child page. Its checked tasks sync back into daily, weekly, and monthly progress. A universal ICS still works with Google, Apple, or Outlook.”
 
-## 2:12–2:47 — How we built it (graded)
+## 2:12–2:47 — How we built it
 
 [Scroll to ‘Why this is an agent, not a prompt.’ Keep the schema card visible.]
 
@@ -67,7 +67,7 @@ The human decisions were equally important: structured tools over free text, str
 
 **Title:** Sologurus — the self-directed language learning agent
 
-**Description:** Sologurus turns a language-test goal into verified exam options, free-first learning resources, and three strategically distinct study plans that respect a learner’s weekly availability. Learners can choose from 16 target languages, send the result to connected Notion and Google Calendar experiences, or export a universal calendar file. GPT-5.6 orchestrates structured tools and constraint-checks the curriculum.
+**Description:** Sologurus turns a language-test goal into verified resources, an honest deadline-feasibility check, and a dated study plan. Learners can choose from 16 languages, inspect five evidence groups, send a child plan to Notion, and track daily, weekly, or monthly completion. GPT-5.6 orchestrates structured tools and constraint-checks the curriculum.
 
 **Live demo:** [https://sologurus-study-agent.lu-liu398220.chatgpt.site](https://sologurus-study-agent.lu-liu398220.chatgpt.site)
 

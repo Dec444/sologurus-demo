@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import catalog from "../../../data/language-resources.json";
 import communities from "../../../data/language-communities.json";
 import mediaAndExams from "../../../data/language-media-exams.json";
+import textbooks from "../../../data/language-textbooks.json";
 
 type CatalogLanguage = keyof typeof catalog;
 
@@ -39,6 +40,7 @@ export async function GET(request: NextRequest) {
         url: `https://www.themoviedb.org/search?query=${encodeURIComponent(show.name)}`,
       })),
       mockExams: enrichment.mockExams,
+      textbooks: textbooks[language],
       language,
       lastVerified: enrichment.lastVerified,
       requestedLocation: { city, country },
