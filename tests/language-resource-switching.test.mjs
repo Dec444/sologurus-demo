@@ -106,3 +106,16 @@ test("all research is visible in four separate sections without a shared tab pan
   assert.doesNotMatch(page, /resourceTab|setResourceTab/, "research groups should remain visible together");
   assert.equal((page.match(/className="research-section"/g) ?? []).length, 4, "render exactly four top-level research sections");
 });
+
+test("the learner journey uses four page-like views instead of a stretching side panel", async () => {
+  const page = await readFile(pageUrl, "utf8");
+
+  assert.match(page, /<nav className="steps" aria-label="Study-system pages">/, "use a compact page navigator");
+  assert.doesNotMatch(page, /<aside className="steps">/, "the progress control must not be a full-height sidebar");
+  assert.match(page, /stage === "profile"/, "learning goal needs its own view");
+  assert.match(page, /stage === "running" && resourceData/, "agent research needs its own view");
+  assert.match(page, /stage === "plans" && resourceData/, "strategy selection needs its own view");
+  assert.match(page, /stage === "exported" && resourceData/, "start studying needs its own view");
+  assert.equal((page.match(/className="resource-explorer"/g) ?? []).length, 1, "research should live on one page only");
+  assert.equal((page.match(/className="export-row"/g) ?? []).length, 1, "integrations should live on the start-study page only");
+});

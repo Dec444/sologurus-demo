@@ -28,19 +28,19 @@ Before recording:
 
 ## 0:37–1:03 — Agent orchestration
 
-[Let the four tool rows animate. Pause on the final ‘constraint check passed’ result.]
+[Let the tool rows animate. Pause when the dedicated research page appears.]
 
 “This is not a chatbot free-writing a curriculum. GPT-5.6 is a planner over structured tools. It finds relevant tests, ranks current guidance, curates free-first resources, then composes plans from those validated objects. Every step has a predictable schema, and every plan is checked against Linh’s eight-hour limit.”
 
 ## 1:03–1:47 — Evidence and strategic plans
 
-[Point to the IELTS recommendation. Scroll to **See every recommendation**. Move through the four visible sections: **Tests & centres**; **YouTube, forums & TV shows**; **Reading, speaking, listening & writing**; and **Mock exams**. Then click each plan card once; settle on **Balanced Four-Skill**.]
+[Point to the IELTS recommendation. Scroll through the four research sections: **Tests & centres**; **YouTube, forums & TV shows**; **Reading, speaking, listening & writing**; and **Mock exams**. Click **Compare strategies**, click each plan card once, settle on **Balanced Four-Skill**, then click **Use Balanced Four-Skill**.]
 
 “For Canadian PR, the agent recommends IELTS and explains the fit. Linh can inspect every result: verified local records plus the official test-centre finder, exactly ten ranked YouTube teachers, three study forums, ten English-language TV shows, three mock-exam platforms, and dedicated listening, speaking, reading, and writing materials. If the target language changes, this entire library changes with it.”
 
 ## 1:47–2:12 — The payoff
 
-[Scroll to the first-week block and resources. In a credentialed demo, click **Update Notion page** and show that the page contains this language, plan, ten educators, three forums, ten TV shows, three mock exams, and all four skills. Return, open Google Calendar, then download the universal `.ICS`.]
+[On the dedicated **Start studying** page, show the first-week block and resources. In a credentialed demo, click **Update Notion page** and show that the page contains this language, plan, ten educators, three forums, ten TV shows, three mock exams, and all four skills. Return, open Google Calendar, then download the universal `.ICS`.]
 
 “The selected plan goes somewhere real. Sologurus replaces the connected Notion page with the current profile, strategy, tasks, educators, forums, TV watchlist, mock-exam links, and skill resources—so stale English results cannot survive a language change. The universal ICS adds 12 study sessions and three recurring reminders to Google, Apple, or Outlook.”
 

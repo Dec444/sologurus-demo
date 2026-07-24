@@ -33,6 +33,7 @@ type Forum = { name: string; url: string; bestFor: string };
 type Material = { name: string; url: string; cost: string; level: string; use: string };
 type TvShow = { name: string; url: string; origin: string; genre: string; level: string };
 type MockExam = { name: string; url: string; exam: string; access: string };
+type JourneyStage = "profile" | "running" | "plans" | "exported";
 type ResourceData = {
   language: string;
   lastVerified: string;
@@ -47,6 +48,13 @@ type ResourceData = {
   mockExams: MockExam[];
   materials: Record<"listening" | "speaking" | "reading" | "writing", Material[]>;
 };
+
+const journeyStages: { id: JourneyStage; label: string; note: string }[] = [
+  { id: "profile", label: "Learning goal", note: "Context + constraints" },
+  { id: "running", label: "Agent research", note: "Tests + resources" },
+  { id: "plans", label: "Choose a strategy", note: "Three distinct paths" },
+  { id: "exported", label: "Start studying", note: "Schedule + integrations" },
+];
 
 const demoProfile: Profile = {
   language: "English",
@@ -121,7 +129,9 @@ function buildPlans(data: ResourceData | null, language: string): Plan[] {
 
 export default function Home() {
   const [profile, setProfile] = useState<Profile>(demoProfile);
-  const [stage, setStage] = useState<"profile" | "running" | "plans" | "exported">("profile");
+  const [stage, setStage] = useState<JourneyStage>("profile");
+  const [unlockedStage, setUnlockedStage] = useState(0);
+  const [researchRunning, setResearchRunning] = useState(false);
   const [activeTool, setActiveTool] = useState(0);
   const [selected, setSelected] = useState("balanced");
   const [notionStatus, setNotionStatus] = useState<"idle" | "connecting" | "success" | "error">("idle");
@@ -141,6 +151,7 @@ export default function Home() {
   const resourceLoading = loadedResourceKey !== resourceQueryKey;
   const plans = useMemo(() => buildPlans(resourceData, profile.language), [resourceData, profile.language]);
   const selectedPlan = useMemo(() => plans.find((plan) => plan.id === selected) ?? plans[2], [plans, selected]);
+  const currentStageIndex = journeyStages.findIndex((item) => item.id === stage);
   const featuredResources = useMemo(() => {
     if (!resourceData) return [];
     return (["listening", "speaking", "reading", "writing"] as const).map((skill) => {
@@ -208,12 +219,15 @@ export default function Home() {
   const runAgent = async () => {
     if (resourceLoading || !resourceData) return;
     setStage("running");
+    setUnlockedStage((current) => Math.max(current, 1));
+    setResearchRunning(true);
     setActiveTool(0);
     for (let index = 0; index < toolSteps.length; index += 1) {
       setActiveTool(index);
       await new Promise((resolve) => setTimeout(resolve, 520));
     }
-    setStage("plans");
+    setResearchRunning(false);
+    setUnlockedStage((current) => Math.max(current, 2));
   };
 
   const downloadIcs = () => {
@@ -225,7 +239,6 @@ export default function Home() {
     anchor.click();
     URL.revokeObjectURL(href);
     setCalendarReady(true);
-    setStage("exported");
   };
 
   const connectNotion = async () => {
@@ -243,7 +256,6 @@ export default function Home() {
       setNotionUrl(result.url);
       setNotionMessage("The page was written from the current profile, strategy, tests, mock exams, educators, TV shows, forums, and skill resources.");
       setNotionStatus("success");
-      setStage("exported");
     } catch (error) {
       setNotionStatus("error");
       setNotionMessage(error instanceof Error ? error.message : "Notion page creation failed.");
@@ -285,13 +297,20 @@ export default function Home() {
       </section>
 
       <section className="workspace" id="planner" aria-label="Sologurus agent workspace">
-        <aside className="steps">
-          <div className="step done"><span>01</span><div><b>Learning goal</b><small>Your context + constraints</small></div></div>
-          <div className={`step ${stage !== "profile" ? "done" : ""}`}><span>02</span><div><b>Agent research</b><small>Tests, guidance, resources</small></div></div>
-          <div className={`step ${stage === "plans" || stage === "exported" ? "done" : ""}`}><span>03</span><div><b>Choose a strategy</b><small>Three paths, same time budget</small></div></div>
-          <div className={`step ${stage === "exported" ? "done" : ""}`}><span>04</span><div><b>Start studying</b><small>Calendar + live Notion write</small></div></div>
-          <div className="promise"><span>8h</span><p>Your declared weekly limit. Every plan stays inside it.</p></div>
-        </aside>
+        <nav className="steps" aria-label="Study-system pages">
+          {journeyStages.map((item, index) => (
+            <button
+              className={`step ${index < currentStageIndex ? "done" : ""} ${index === currentStageIndex ? "active" : ""}`}
+              disabled={index > unlockedStage}
+              aria-current={index === currentStageIndex ? "step" : undefined}
+              onClick={() => setStage(item.id)}
+              key={item.id}
+            >
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div><b>{item.label}</b><small>{item.note}</small></div>
+            </button>
+          ))}
+        </nav>
 
         <div className="panel">
           {stage === "profile" && (
@@ -311,27 +330,120 @@ export default function Home() {
             </div>
           )}
 
-          {stage === "running" && (
-            <div className="running-view" aria-live="polite">
-              <div className="orb"><span /></div>
-              <span className="kicker">GPT-5.6 ORCHESTRATION</span>
-              <h2>Building evidence before a plan.</h2>
-              <p className="lede">The agent composes validated objects — not a free-text curriculum.</p>
-              <div className="tool-list">
-                {toolSteps.map(([name, result, note], index) => (
-                  <div className={`tool ${index < activeTool ? "complete" : index === activeTool ? "active" : ""}`} key={name}>
-                    <span className="tool-state">{index < activeTool ? "✓" : index === activeTool ? "↻" : "·"}</span>
-                    <code>{name}()</code><b>{index <= activeTool ? result : "Waiting"}</b><small>{index <= activeTool ? note : ""}</small>
+          {stage === "running" && resourceData && (
+            <div className="research-page">
+              {researchRunning ? (
+                <div className="running-view" aria-live="polite">
+                  <div className="orb"><span /></div>
+                  <span className="kicker">STEP 02 · GPT-5.6 ORCHESTRATION</span>
+                  <h2>Building evidence before a plan.</h2>
+                  <p className="lede">The agent composes validated objects — not a free-text curriculum.</p>
+                  <div className="tool-list">
+                    {toolSteps.map(([name, result, note], index) => (
+                      <div className={`tool ${index < activeTool ? "complete" : index === activeTool ? "active" : ""}`} key={name}>
+                        <span className="tool-state">{index < activeTool ? "✓" : index === activeTool ? "↻" : "·"}</span>
+                        <code>{name}()</code><b>{index <= activeTool ? result : "Waiting"}</b><small>{index <= activeTool ? note : ""}</small>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              ) : (
+                <>
+                  <div className="panel-heading"><div><span className="kicker">STEP 02 · RESEARCH COMPLETE</span><h2>Your evidence library.</h2></div><button className="text-button" onClick={() => setStage("profile")}>Edit learning goal</button></div>
+                  <div className="insight-strip"><b>Recommended test: {resourceData.recommendation.name}</b><span>{resourceData.recommendation.reason} Dates, local availability and acceptance should be rechecked before booking.</span><a href={resourceData.recommendation.sourceUrl} target="_blank" rel="noreferrer">Official source ↗</a></div>
+
+                  <section className="resource-explorer" aria-labelledby="all-resources-title">
+                    <div className="resource-heading">
+                      <div><span className="kicker">AGENT RESEARCH · FULL RESULTS</span><h3 id="all-resources-title">See every recommendation.</h3></div>
+                      <p>All {profile.language} research is grouped into four complete sections below. Catalog checked {resourceData.lastVerified}; availability is always rechecked at the source.</p>
+                    </div>
+
+                    <section className="research-section" aria-labelledby="tests-centres-title">
+                      <div className="research-section-heading">
+                        <span className="section-index">01</span>
+                        <div><h3 id="tests-centres-title">Tests &amp; centres</h3><p>Compare recognized exams and open current registration sources for {profile.city}, {profile.country}.</p></div>
+                      </div>
+                      <div className="result-subhead"><b>Test centres near {profile.city}</b><span>{resourceData.centerMode === "official-directory" ? "official finder — no address invented" : `${resourceData.testCenters.length - 1} local record(s) + official finder`}</span></div>
+                      <div className="center-grid">
+                        {resourceData.testCenters.map((center) => (
+                          <a className="center-card" href={center.registrationUrl} target="_blank" rel="noreferrer" key={center.name}>
+                            <span className="pin">⌖</span><div><b>{center.name}</b><small>{center.provider}</small><address>{center.address}</address><p>{center.availability}</p></div><span className="open-link">Official source ↗</span>
+                          </a>
+                        ))}
+                      </div>
+                      <div className="result-subhead secondary-head"><b>Recognized {profile.language} tests</b><span>{resourceData.tests.length} options compared</span></div>
+                      <div className="resource-list tests-list">
+                        {resourceData.tests.map((test) => (
+                          <a href={test.sourceUrl} target="_blank" rel="noreferrer" key={test.name}><span className="rank">TEST</span><div><b>{test.name}</b><p>{test.fit}</p><small>{test.format}</small></div><span className="open-link">Source ↗</span></a>
+                        ))}
+                      </div>
+                    </section>
+
+                    <section className="research-section" aria-labelledby="guidance-immersion-title">
+                      <div className="research-section-heading">
+                        <span className="section-index">02</span>
+                        <div><h3 id="guidance-immersion-title">YouTube, forums &amp; TV shows</h3><p>Learn with 10 ranked educators, 3 learner communities, and 10 target-language shows.</p></div>
+                      </div>
+                      <div className="result-subhead"><b>YouTube educators</b><span>{resourceData.youtube.length} ranked channels</span></div>
+                      <div className="resource-list">
+                        {resourceData.youtube.map((channel, index) => (
+                          <a href={channel.url} target="_blank" rel="noreferrer" key={channel.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{channel.name}</b><p>{channel.bestFor}</p><small>{channel.level} · learner-fit score {channel.score}/100</small></div><span className="open-link">Watch ↗</span></a>
+                        ))}
+                      </div>
+                      <div className="result-subhead secondary-head"><b>Study forums</b><span>{resourceData.forums?.length ?? 0} active communities</span></div>
+                      <div className="resource-list forum-list">
+                        {(resourceData.forums ?? []).map((forum, index) => (
+                          <a href={forum.url} target="_blank" rel="noreferrer" key={forum.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{forum.name}</b><p>{forum.bestFor}</p><small>Active study community · verify community rules before posting</small></div><span className="open-link">Join ↗</span></a>
+                        ))}
+                      </div>
+                      <div className="result-subhead secondary-head"><b>TV immersion watchlist</b><span>{resourceData.tvShows.length} shows in {profile.language}</span></div>
+                      <div className="material-grid media-grid">
+                        {resourceData.tvShows.map((show, index) => (
+                          <a href={show.url} target="_blank" rel="noreferrer" key={show.name}><span className="material-number">{String(index + 1).padStart(2, "0")}</span><div><b>{show.name}</b><p>{show.genre} · {show.origin}</p><small>Suggested learner level {show.level} · check local streaming availability</small></div><span className="open-link">Show guide ↗</span></a>
+                        ))}
+                      </div>
+                    </section>
+
+                    <section className="research-section" aria-labelledby="four-skills-title">
+                      <div className="research-section-heading">
+                        <span className="section-index">03</span>
+                        <div><h3 id="four-skills-title">Reading, speaking, listening &amp; writing</h3><p>Skill-specific materials keep every part of the study plan actionable and balanced.</p></div>
+                      </div>
+                      {(["reading", "speaking", "listening", "writing"] as const).map((skill, skillIndex) => (
+                        <div className={`skill-group ${skillIndex > 0 ? "secondary-head" : ""}`} key={skill}>
+                          <div className="result-subhead"><b>{skill[0].toUpperCase() + skill.slice(1)}</b><span>{resourceData.materials[skill].length} curated materials</span></div>
+                          <div className="material-grid">
+                            {resourceData.materials[skill].map((material, index) => (
+                              <a href={material.url} target="_blank" rel="noreferrer" key={material.name}><span className="material-number">{String(index + 1).padStart(2, "0")}</span><div><b>{material.name}</b><p>{material.use}</p><small>{material.cost} · {material.level}</small></div><span className="open-link">Open ↗</span></a>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </section>
+
+                    <section className="research-section" aria-labelledby="mock-exams-title">
+                      <div className="research-section-heading">
+                        <span className="section-index">04</span>
+                        <div><h3 id="mock-exams-title">Mock exams</h3><p>Practice with 3 exam-specific platforms matched to the recommended certification path.</p></div>
+                      </div>
+                      <div className="result-subhead"><b>Practice platforms</b><span>{resourceData.mockExams.length} current options</span></div>
+                      <div className="resource-list tests-list mock-list">
+                        {resourceData.mockExams.map((mock, index) => (
+                          <a href={mock.url} target="_blank" rel="noreferrer" key={mock.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{mock.name}</b><p>{mock.access}</p><small>{mock.exam} · confirm current access terms at source</small></div><span className="open-link">Practice ↗</span></a>
+                        ))}
+                      </div>
+                    </section>
+                  </section>
+                  <div className="page-actions"><button className="text-button" onClick={() => setStage("profile")}>← Learning goal</button><button className="primary compact" onClick={() => setStage("plans")}>Compare strategies →</button></div>
+                </>
+              )}
             </div>
           )}
 
-          {(stage === "plans" || stage === "exported") && resourceData && (
+          {stage === "plans" && resourceData && (
             <div className="plans-view">
-              <div className="panel-heading"><div><span className="kicker">STEP 03 · CONSTRAINT CHECK PASSED</span><h2>Three strategies. One honest time budget.</h2></div><button className="text-button" onClick={() => setStage("profile")}>Edit profile</button></div>
-              <div className="insight-strip"><b>Recommended test: {resourceData.recommendation.name}</b><span>{resourceData.recommendation.reason} Dates, local availability and acceptance should be rechecked before booking.</span><a href={resourceData.recommendation.sourceUrl} target="_blank" rel="noreferrer">Official source ↗</a></div>
+              <div className="panel-heading"><div><span className="kicker">STEP 03 · CHOOSE A STRATEGY</span><h2>Three strategies. One honest time budget.</h2></div><button className="text-button" onClick={() => setStage("running")}>Review research</button></div>
+              <div className="insight-strip"><b>{resourceData.recommendation.name} · {profile.hours} hours/week</b><span>Every strategy uses the verified {profile.language} research set and stays inside your declared weekly limit.</span></div>
               <div className="plan-grid">
                 {plans.map((plan) => (
                   <button aria-pressed={selected === plan.id} className={`plan-card plan-${plan.id} ${selected === plan.id ? "selected" : ""}`} key={plan.id} onClick={() => setSelected(plan.id)}>
@@ -340,94 +452,18 @@ export default function Home() {
                   </button>
                 ))}
               </div>
+              <div className="page-actions"><button className="text-button" onClick={() => setStage("running")}>← Agent research</button><button className="primary compact" onClick={() => { setUnlockedStage(3); setStage("exported"); }}>Use {selectedPlan.name} →</button></div>
+            </div>
+          )}
+
+          {stage === "exported" && resourceData && (
+            <div className="start-view">
+              <div className="panel-heading"><div><span className="kicker">STEP 04 · START STUDYING</span><h2>Your study system is ready.</h2></div><button className="text-button" onClick={() => setStage("plans")}>Change strategy</button></div>
+              <div className="start-summary"><span>{profile.language}</span><b>{selectedPlan.name}</b><small>{profile.hours} hours/week · target {profile.date}</small></div>
               <div className="schedule">
                 <div><span className="kicker">YOUR FIRST STUDY BLOCK</span><h3>{selectedPlan.name} · Week one</h3>{selectedPlan.sample.map((item) => <p key={item}><span>✓</span>{item}</p>)}</div>
                 <div className="resource-stack"><span className="kicker">RESOURCES IN THIS PLAN</span>{featuredResources.map(([skill, name, meta]) => <div key={skill}><b>{skill}</b><span>{name}</span><small>{meta}</small></div>)}</div>
               </div>
-
-              <section className="resource-explorer" aria-labelledby="all-resources-title">
-                <div className="resource-heading">
-                  <div><span className="kicker">AGENT RESEARCH · FULL RESULTS</span><h3 id="all-resources-title">See every recommendation.</h3></div>
-                  <p>All {profile.language} research is grouped into four complete sections below. Catalog checked {resourceData.lastVerified}; availability is always rechecked at the source.</p>
-                </div>
-
-                <section className="research-section" aria-labelledby="tests-centres-title">
-                  <div className="research-section-heading">
-                    <span className="section-index">01</span>
-                    <div><h3 id="tests-centres-title">Tests &amp; centres</h3><p>Compare recognized exams and open current registration sources for {profile.city}, {profile.country}.</p></div>
-                  </div>
-                  <div className="result-subhead"><b>Test centres near {profile.city}</b><span>{resourceData.centerMode === "official-directory" ? "official finder — no address invented" : `${resourceData.testCenters.length - 1} local record(s) + official finder`}</span></div>
-                  <div className="center-grid">
-                    {resourceData.testCenters.map((center) => (
-                      <a className="center-card" href={center.registrationUrl} target="_blank" rel="noreferrer" key={center.name}>
-                        <span className="pin">⌖</span><div><b>{center.name}</b><small>{center.provider}</small><address>{center.address}</address><p>{center.availability}</p></div><span className="open-link">Official source ↗</span>
-                      </a>
-                    ))}
-                  </div>
-                  <div className="result-subhead secondary-head"><b>Recognized {profile.language} tests</b><span>{resourceData.tests.length} options compared</span></div>
-                  <div className="resource-list tests-list">
-                    {resourceData.tests.map((test) => (
-                      <a href={test.sourceUrl} target="_blank" rel="noreferrer" key={test.name}><span className="rank">TEST</span><div><b>{test.name}</b><p>{test.fit}</p><small>{test.format}</small></div><span className="open-link">Source ↗</span></a>
-                    ))}
-                  </div>
-                </section>
-
-                <section className="research-section" aria-labelledby="guidance-immersion-title">
-                  <div className="research-section-heading">
-                    <span className="section-index">02</span>
-                    <div><h3 id="guidance-immersion-title">YouTube, forums &amp; TV shows</h3><p>Learn with 10 ranked educators, 3 learner communities, and 10 target-language shows.</p></div>
-                  </div>
-                  <div className="result-subhead"><b>YouTube educators</b><span>{resourceData.youtube.length} ranked channels</span></div>
-                  <div className="resource-list">
-                    {resourceData.youtube.map((channel, index) => (
-                      <a href={channel.url} target="_blank" rel="noreferrer" key={channel.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{channel.name}</b><p>{channel.bestFor}</p><small>{channel.level} · learner-fit score {channel.score}/100</small></div><span className="open-link">Watch ↗</span></a>
-                    ))}
-                  </div>
-                  <div className="result-subhead secondary-head"><b>Study forums</b><span>{resourceData.forums?.length ?? 0} active communities</span></div>
-                  <div className="resource-list forum-list">
-                    {(resourceData.forums ?? []).map((forum, index) => (
-                      <a href={forum.url} target="_blank" rel="noreferrer" key={forum.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{forum.name}</b><p>{forum.bestFor}</p><small>Active study community · verify community rules before posting</small></div><span className="open-link">Join ↗</span></a>
-                    ))}
-                  </div>
-                  <div className="result-subhead secondary-head"><b>TV immersion watchlist</b><span>{resourceData.tvShows.length} shows in {profile.language}</span></div>
-                  <div className="material-grid media-grid">
-                    {resourceData.tvShows.map((show, index) => (
-                      <a href={show.url} target="_blank" rel="noreferrer" key={show.name}><span className="material-number">{String(index + 1).padStart(2, "0")}</span><div><b>{show.name}</b><p>{show.genre} · {show.origin}</p><small>Suggested learner level {show.level} · check local streaming availability</small></div><span className="open-link">Show guide ↗</span></a>
-                    ))}
-                  </div>
-                </section>
-
-                <section className="research-section" aria-labelledby="four-skills-title">
-                  <div className="research-section-heading">
-                    <span className="section-index">03</span>
-                    <div><h3 id="four-skills-title">Reading, speaking, listening &amp; writing</h3><p>Skill-specific materials keep every part of the study plan actionable and balanced.</p></div>
-                  </div>
-                  {(["reading", "speaking", "listening", "writing"] as const).map((skill, skillIndex) => (
-                    <div className={`skill-group ${skillIndex > 0 ? "secondary-head" : ""}`} key={skill}>
-                      <div className="result-subhead"><b>{skill[0].toUpperCase() + skill.slice(1)}</b><span>{resourceData.materials[skill].length} curated materials</span></div>
-                      <div className="material-grid">
-                        {resourceData.materials[skill].map((material, index) => (
-                          <a href={material.url} target="_blank" rel="noreferrer" key={material.name}><span className="material-number">{String(index + 1).padStart(2, "0")}</span><div><b>{material.name}</b><p>{material.use}</p><small>{material.cost} · {material.level}</small></div><span className="open-link">Open ↗</span></a>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </section>
-
-                <section className="research-section" aria-labelledby="mock-exams-title">
-                  <div className="research-section-heading">
-                    <span className="section-index">04</span>
-                    <div><h3 id="mock-exams-title">Mock exams</h3><p>Practice with 3 exam-specific platforms matched to the recommended certification path.</p></div>
-                  </div>
-                  <div className="result-subhead"><b>Practice platforms</b><span>{resourceData.mockExams.length} current options</span></div>
-                  <div className="resource-list tests-list mock-list">
-                    {resourceData.mockExams.map((mock, index) => (
-                      <a href={mock.url} target="_blank" rel="noreferrer" key={mock.name}><span className="rank">#{String(index + 1).padStart(2, "0")}</span><div><b>{mock.name}</b><p>{mock.access}</p><small>{mock.exam} · confirm current access terms at source</small></div><span className="open-link">Practice ↗</span></a>
-                    ))}
-                  </div>
-                </section>
-              </section>
-
               <div className="export-row">
                 <div><b>Send the plan somewhere real.</b><span>Live Notion and Google Calendar connections, plus a universal 15-event calendar file.</span></div>
                 <button className="secondary" data-testid="connect-notion" disabled={notionStatus === "connecting"} onClick={connectNotion}>{notionStatus === "connecting" ? "Updating Notion…" : notionApiConfigured ? "Update Notion page ↗" : "Connect Notion to update ↗"}</button>
@@ -437,6 +473,7 @@ export default function Home() {
               {notionStatus === "error" && <div className="integration-error" role="alert"><span>!</span><div><b>Notion needs a write connection.</b><p>{notionMessage}</p></div></div>}
               {notionStatus === "success" && <div className="success" role="status"><span>✓</span><div><b>Notion matches this plan.</b><p>{notionMessage} <a href={notionUrl} target="_blank" rel="noreferrer">Open updated page ↗</a></p></div></div>}
               {calendarReady && <div className="success" role="status"><span>✓</span><div><b>Calendar file generated with 15 events.</b><p>Import it into Google, Apple, or Outlook Calendar. Events use {profile.timezone} and reminders repeat through {profile.date}.</p></div></div>}
+              <div className="page-actions"><button className="text-button" onClick={() => setStage("plans")}>← Choose a strategy</button></div>
             </div>
           )}
         </div>
