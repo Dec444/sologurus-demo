@@ -97,8 +97,6 @@ const countryTimezones: Record<keyof typeof locations, string> = {
   "United Kingdom": "Europe/London", "United States": "America/New_York", Vietnam: "Asia/Ho_Chi_Minh",
 };
 
-const communityLocations = Object.entries(locations).flatMap(([country, cities]) => cities.map((city) => `${city}, ${country}`));
-
 function buildPlans(data: ResourceData | null, language: string): Plan[] {
   const listening = data?.materials.listening[0]?.name ?? `${language} listening practice`;
   const speaking = data?.youtube[0]?.name ?? `${language} speaking lesson`;
@@ -172,7 +170,11 @@ export default function Home() {
   const [loadedResourceKey, setLoadedResourceKey] = useState("");
   const [resourceError, setResourceError] = useState("");
   const [communityOpen, setCommunityOpen] = useState(false);
-  const [communityLocation, setCommunityLocation] = useState(`${demoProfile.city}, ${demoProfile.country}`);
+  const [communityLocation, setCommunityLocation] = useState("");
+  const [communityCoordinates, setCommunityCoordinates] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [communityLocationStatus, setCommunityLocationStatus] = useState<"idle" | "locating" | "ready" | "error">("idle");
+  const [communityLocationMessage, setCommunityLocationMessage] = useState("Location permission has not been requested.");
+  const [communityLocationAttribution, setCommunityLocationAttribution] = useState("");
   const [communityLanguage, setCommunityLanguage] = useState(demoProfile.language);
   const [communityRadius, setCommunityRadius] = useState(10);
   const [communityResults, setCommunityResults] = useState<CommunityLearner[]>([]);
@@ -338,22 +340,59 @@ export default function Home() {
 
   const toggleCommunity = () => {
     setCommunityOpen((current) => {
-      if (!current) {
-        setCommunityLocation(`${profile.city}, ${profile.country}`);
-        setCommunityLanguage(profile.language);
-      }
+      if (!current) setCommunityLanguage(profile.language);
       return !current;
     });
   };
 
+  const locateCommunity = async () => {
+    setCommunityLocationStatus("locating");
+    setCommunityLocationMessage("Waiting for browser location permission…");
+    setCommunityStatus("idle");
+    setCommunityResults([]);
+    if (!navigator.geolocation) {
+      setCommunityLocationStatus("error");
+      setCommunityLocationMessage("This browser does not support location access.");
+      return;
+    }
+    try {
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: false, timeout: 12_000, maximumAge: 300_000 });
+      });
+      const coordinates = { latitude: position.coords.latitude, longitude: position.coords.longitude };
+      const query = new URLSearchParams({ latitude: String(coordinates.latitude), longitude: String(coordinates.longitude) });
+      const response = await fetch(`/api/community/location?${query}`, { cache: "no-store" });
+      const result = await response.json() as { label?: string; attribution?: string; message?: string };
+      if (!response.ok || !result.label) throw new Error(result.message || "Your location could not be resolved.");
+      setCommunityCoordinates(coordinates);
+      setCommunityLocation(result.label);
+      setCommunityLocationAttribution(result.attribution ?? "");
+      setCommunityLocationStatus("ready");
+      setCommunityLocationMessage("Live device location ready. Coordinates are not saved to your profile.");
+    } catch (error) {
+      setCommunityCoordinates(null);
+      setCommunityLocation("");
+      setCommunityLocationStatus("error");
+      const denied = typeof error === "object" && error !== null && "code" in error && error.code === 1;
+      setCommunityLocationMessage(denied ? "Location permission was denied. Allow location access in your browser and try again." : error instanceof Error ? error.message : "Your location could not be resolved.");
+    }
+  };
+
   const searchCommunity = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!communityCoordinates) {
+      setCommunityStatus("error");
+      setCommunityMessage("Use your current location before searching for nearby learners.");
+      return;
+    }
     setCommunityStatus("searching");
     setCommunityMessage("");
     try {
       const query = new URLSearchParams({
         language: communityLanguage,
         location: communityLocation,
+        latitude: String(communityCoordinates.latitude),
+        longitude: String(communityCoordinates.longitude),
         radius: String(communityRadius),
       });
       const response = await fetch(`/api/community?${query}`, { cache: "no-store" });
@@ -392,19 +431,24 @@ export default function Home() {
           <div className="community-intro">
             <span className="kicker">LOCAL LEARNER COMMUNITY</span>
             <h2 id="community-title">Find your language people nearby.</h2>
-            <p>Search the privacy-safe preview directory by target language, approximate location, and travel radius. Exact addresses are never shown.</p>
+            <p>Use your real device location to calculate nearby matches by target language and travel radius. Coordinates are used for this search only and are not saved to your learner profile.</p>
           </div>
           <form className="community-search" onSubmit={searchCommunity}>
             <label>Target language<select value={communityLanguage} onChange={(event) => setCommunityLanguage(event.target.value)}>{languages.map((language) => <option key={language.name} value={language.name}>{language.name}</option>)}</select></label>
-            <label>Location<input list="community-locations" value={communityLocation} onChange={(event) => setCommunityLocation(event.target.value)} placeholder="City, country" required /><datalist id="community-locations">{communityLocations.map((location) => <option value={location} key={location} />)}</datalist></label>
+            <div className={`real-location ${communityLocationStatus}`}>
+              <span>Real location</span>
+              <div><b>{communityLocationStatus === "ready" ? communityLocation : communityLocationMessage}</b>{communityLocationStatus === "ready" && <small>{communityLocationMessage}</small>}</div>
+              <button type="button" onClick={locateCommunity} disabled={communityLocationStatus === "locating"}>{communityLocationStatus === "locating" ? "Locating…" : communityLocationStatus === "ready" ? "Refresh location" : "Use my location"}</button>
+            </div>
             <label>Search radius<select value={communityRadius} onChange={(event) => setCommunityRadius(Number(event.target.value))}><option value={5}>Within 5 miles</option><option value={10}>Within 10 miles</option><option value={25}>Within 25 miles</option><option value={50}>Within 50 miles</option><option value={100}>Within 100 miles</option></select></label>
-            <button className="primary compact" disabled={communityStatus === "searching"}>{communityStatus === "searching" ? "Searching…" : "Find learners →"}</button>
+            <button className="primary compact" disabled={communityStatus === "searching" || !communityCoordinates}>{communityStatus === "searching" ? "Searching…" : "Find learners →"}</button>
           </form>
-          {communityStatus === "idle" && <div className="community-empty"><span>◎</span><p>Choose your language and radius to see opt-in learner profiles near your location.</p></div>}
+          <div className="location-attribution">{communityLocationAttribution && <><span>{communityLocationAttribution}</span><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noreferrer">OpenStreetMap policy ↗</a></>}</div>
+          {communityStatus === "idle" && <div className="community-empty"><span>◎</span><p>Grant location access, choose your language and radius, then search for nearby opt-in learner profiles.</p></div>}
           {communityStatus === "error" && <div className="integration-error" role="alert"><span>!</span><div><b>Community search needs attention.</b><p>{communityMessage}</p></div></div>}
           {communityStatus === "success" && (
             <div className="community-results" aria-live="polite">
-              <div className="community-results-heading"><b>{communityResults.length} learner{communityResults.length === 1 ? "" : "s"} found within {communityRadius} miles</b><span>Preview directory · public groups linked below</span></div>
+              <div className="community-results-heading"><b>{communityResults.length} learner{communityResults.length === 1 ? "" : "s"} found within {communityRadius} miles of {communityLocation}</b><span>Real-distance matches · preview profiles</span></div>
               {communityResults.length > 0 ? (
                 <div className="community-grid">
                   {communityResults.map((learner) => (

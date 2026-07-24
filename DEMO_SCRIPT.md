@@ -20,9 +20,9 @@ Before recording:
 
 ## 0:18–0:37 — Accounts, community, and onboarding
 
-[Point to the top GitHub, Notion, and Google actions. Open **Community**, search for English learners in Ho Chi Minh City within 10 miles, then close it. Show the country-first menus and select **Use demo profile**.]
+[Point to the top GitHub, Notion, and Google actions. Open **Community**, click **Use my location**, allow browser location access, and search for English learners within 10 miles. Then close it, show the country-first menus, and select **Use demo profile**.]
 
-“The project, Notion, and Google accounts are always one click away. The privacy-safe Community finder matches nearby learners by language, city, and travel radius without exposing exact addresses. Then Sologurus checks the learner’s level, goal, deadline, daily hours, consistency, and exam experience—and says plainly when the timeline is not practical.”
+“The project, Notion, and Google accounts are always one click away. Community uses the learner’s real device location and calculates actual distance within the selected radius, without saving coordinates to a learner profile or exposing exact addresses. Then Sologurus checks the learner’s level, goal, deadline, daily hours, consistency, and exam experience—and says plainly when the timeline is not practical.”
 
 [Click **Build my study system**.]
 

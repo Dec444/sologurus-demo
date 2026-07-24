@@ -27,7 +27,7 @@ Sologurus turns a learner's language, level, location, goal, deadline, and reali
 Open the [live Sologurus demo](https://sologurus-study-agent.lu-liu398220.chatgpt.site), then:
 
 1. Use the top navigation to open GitHub, see Notion and Google connection states, or expand **Community**.
-2. In Community, search for English learners in **Ho Chi Minh City, Vietnam** within 5, 10, or 25 miles.
+2. In Community, select **Use my location**, allow browser location access, and search for nearby English learners within 5, 10, or 25 miles.
 3. Open the target-language menu to see all 16 choices.
 4. Select **Use demo profile**.
 5. Run **Build my study system** and watch the dedicated agent-research page populate.
@@ -44,7 +44,7 @@ The seeded learner is an intermediate English speaker in Ho Chi Minh City pursui
 |---|---|
 | Learner profile | 16 target languages, dependent country/city menus, level, goal, deadline, daily hours, study days, consistency, and exam experience |
 | Homepage utility bar | Direct GitHub access plus visible Notion and Google connection states/account shortcuts |
-| Community finder | Language, location, and 5–100 mile search across a privacy-safe opt-in preview directory |
+| Community finder | Real browser location, city/region resolution, and coordinate-based 5–100 mile matching without saving coordinates to a learner profile or showing exact addresses |
 | Feasibility check | Estimates required versus effective hours and clearly flags a tight or impractical deadline |
 | Test explorer | Language-specific recognized tests, an explained recommendation, verified local records where available, and an official center finder everywhere |
 | Guidance | Exactly 10 language-specific YouTube educators and 3 study forums |
@@ -82,6 +82,7 @@ Each stage returns predictable records. The planning layer composes the selected
 ### Demo mode and live integrations
 
 - **Reactive verified research:** `GET /api/resources` returns a dated catalog for the selected language and location. Exact local addresses are shown only when verified; otherwise Sologurus links to the official center directory and clearly says so.
+- **Real community location:** browser permission supplies live coordinates; the server resolves only an approximate city/region and calculates actual great-circle distance for the selected radius. Coordinates are not saved to a learner profile. Place names are resolved through OpenStreetMap Nominatim under its usage policy.
 - **Universal calendar:** the dependency-free iCalendar generator produces timezone-aware events that import into Google, Apple, and Outlook Calendar.
 - **Live Notion write and read:** with `NOTION_TOKEN` plus `NOTION_TARGET_PAGE_ID`, `POST /api/notion` replaces one selected overview and creates a dated study-plan subpage. With `NOTION_PARENT_PAGE_ID` instead, it creates the overview beneath that parent and nests the plan below it. `PUT /api/notion` reads completed Sologurus checkboxes from that subpage for the progress chart.
 - **Honest source model:** exam dates and venue availability can change, so the product never invents a nearby address; it routes learners to the owning exam body's current directory.

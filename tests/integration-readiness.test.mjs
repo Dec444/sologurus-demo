@@ -41,6 +41,8 @@ test("the homepage exposes project, account, and community access at the top", a
   assert.match(page, /https:\/\/www\.notion\.so\//);
   assert.match(page, /https:\/\/calendar\.google\.com\/calendar\/u\/0\/r/);
   assert.match(page, /id="community-finder"/);
+  assert.match(page, /navigator\.geolocation\.getCurrentPosition/);
+  assert.match(page, /\/api\/community\/location/);
   assert.match(page, /Within 5 miles/);
   assert.match(page, /Within 100 miles/);
   assert.match(page, /fetch\(`\/api\/community\?/);

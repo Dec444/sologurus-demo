@@ -17,7 +17,7 @@ Sologurus turns a learner's goal, level, location, deadline, and weekly availabi
 The agent:
 
 - Keeps GitHub plus Notion and Google account/connection actions visible in the homepage utility bar.
-- Matches nearby opt-in learners by target language, approximate location, and a 5–100 mile radius without exposing exact addresses.
+- Uses browser-approved live coordinates to calculate nearby learner matches within a 5–100 mile radius, without saving coordinates to a learner profile or exposing exact addresses.
 - Supports 16 target-language choices.
 - Compares recognized tests for the selected language and recommends the best match for the learner's goal.
 - Shows real test-center locations and official booking links.
