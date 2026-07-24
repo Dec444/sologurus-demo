@@ -18,11 +18,11 @@ Before recording:
 
 “Self-taught language learners rarely quit because they lack motivation. They quit because research, planning, and daily structure become a second job. Meet Linh: she is in Ho Chi Minh City, needs IELTS 7.0 for Canadian permanent residence, and cannot afford a prep school.”
 
-## 0:18–0:37 — One-click onboarding
+## 0:18–0:37 — Accounts, community, and onboarding
 
-[Open the target-language menu to show the 16 choices. Show the country-first, dependent city menus. Select English, click **Use demo profile**, then show daily hours, study days, consistency, and exam experience.]
+[Point to the top GitHub, Notion, and Google actions. Open **Community**, search for English learners in Ho Chi Minh City within 10 miles, then close it. Show the country-first menus and select **Use demo profile**.]
 
-“Sologurus starts with constraints that matter: current level, location, goal, deadline, daily hours, study days, consistency, and exam experience. It immediately estimates required versus effective hours and says plainly when the deadline is not practical.”
+“The project, Notion, and Google accounts are always one click away. The privacy-safe Community finder matches nearby learners by language, city, and travel radius without exposing exact addresses. Then Sologurus checks the learner’s level, goal, deadline, daily hours, consistency, and exam experience—and says plainly when the timeline is not practical.”
 
 [Click **Build my study system**.]
 

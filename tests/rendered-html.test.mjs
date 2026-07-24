@@ -19,7 +19,10 @@ test("server-renders the Sologurus demo shell", async () => {
   assert.match(html, /Better direction\./);
   assert.match(html, /Smarter study\./);
   assert.match(html, /Build my study system/);
-  assert.match(html, /Live research · 16 languages/);
+  assert.match(html, /github\.com\/Dec444\/sologurus-demo/);
+  assert.match(html, /Notion/);
+  assert.match(html, /Google/);
+  assert.match(html, /Community/);
   assert.match(html, /A learning plan designed around/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/);
 });

@@ -26,13 +26,15 @@ Sologurus turns a learner's language, level, location, goal, deadline, and reali
 
 Open the [live Sologurus demo](https://sologurus-study-agent.lu-liu398220.chatgpt.site), then:
 
-1. Open the target-language menu to see all 16 choices.
-2. Select **Use demo profile**.
-3. Run **Build my study system** and watch the dedicated agent-research page populate.
-4. Review its five research sections, including three textbook recommendations, then continue to the separate strategy page.
-5. Compare the three study strategies and continue to the **Start studying** page.
-6. Review the dated study table, mark a few sessions complete, and open **Track progress** to switch among daily, weekly, and monthly statistics.
-7. With Notion write credentials configured, create the plan subpage and sync its completed checkboxes; otherwise use Google Calendar or download the universal `.ics` calendar.
+1. Use the top navigation to open GitHub, see Notion and Google connection states, or expand **Community**.
+2. In Community, search for English learners in **Ho Chi Minh City, Vietnam** within 5, 10, or 25 miles.
+3. Open the target-language menu to see all 16 choices.
+4. Select **Use demo profile**.
+5. Run **Build my study system** and watch the dedicated agent-research page populate.
+6. Review its five research sections, including three textbook recommendations, then continue to the separate strategy page.
+7. Compare the three study strategies and continue to the **Start studying** page.
+8. Review the dated study table, mark a few sessions complete, and open **Track progress** to switch among daily, weekly, and monthly statistics.
+9. With Notion write credentials configured, create the plan subpage and sync its completed checkboxes; otherwise use Google Calendar or download the universal `.ics` calendar.
 
 The seeded learner is an intermediate English speaker in Ho Chi Minh City pursuing IELTS 7.0 for Canadian permanent residence, studying 1.5 hours per day across six days each week.
 
@@ -41,6 +43,8 @@ The seeded learner is an intermediate English speaker in Ho Chi Minh City pursui
 | Capability | Demo result |
 |---|---|
 | Learner profile | 16 target languages, dependent country/city menus, level, goal, deadline, daily hours, study days, consistency, and exam experience |
+| Homepage utility bar | Direct GitHub access plus visible Notion and Google connection states/account shortcuts |
+| Community finder | Language, location, and 5–100 mile search across a privacy-safe opt-in preview directory |
 | Feasibility check | Estimates required versus effective hours and clearly flags a tight or impractical deadline |
 | Test explorer | Language-specific recognized tests, an explained recommendation, verified local records where available, and an official center finder everywhere |
 | Guidance | Exactly 10 language-specific YouTube educators and 3 study forums |
@@ -127,6 +131,7 @@ The tests cover server rendering, language breadth, resource completeness, Notio
 
 ```text
 app/
+  api/community/    Location, radius, and language matching boundary
   api/notion/       Live Notion page-update/create boundary
   api/calendar/     Connected-calendar status boundary
   page.tsx          Interactive learner journey

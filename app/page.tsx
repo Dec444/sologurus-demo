@@ -38,6 +38,17 @@ type Material = { name: string; url: string; cost: string; level: string; use: s
 type TvShow = { name: string; url: string; origin: string; genre: string; level: string };
 type MockExam = { name: string; url: string; exam: string; access: string };
 type Textbook = { name: string; authorPublisher: string; bestFor: string; level: string; url: string };
+type CommunityLearner = {
+  displayName: string;
+  city: string;
+  country: string;
+  language: string;
+  level: string;
+  distanceMiles: number;
+  availability: string;
+  goal: string;
+  interests: string[];
+};
 type JourneyStage = "profile" | "running" | "plans" | "exported" | "progress";
 type ResourceData = {
   language: string;
@@ -85,6 +96,8 @@ const countryTimezones: Record<keyof typeof locations, string> = {
   Sweden: "Europe/Stockholm", Taiwan: "Asia/Taipei", Türkiye: "Europe/Istanbul", "United Arab Emirates": "Asia/Dubai",
   "United Kingdom": "Europe/London", "United States": "America/New_York", Vietnam: "Asia/Ho_Chi_Minh",
 };
+
+const communityLocations = Object.entries(locations).flatMap(([country, cities]) => cities.map((city) => `${city}, ${country}`));
 
 function buildPlans(data: ResourceData | null, language: string): Plan[] {
   const listening = data?.materials.listening[0]?.name ?? `${language} listening practice`;
@@ -158,6 +171,14 @@ export default function Home() {
   const [resourceData, setResourceData] = useState<ResourceData | null>(null);
   const [loadedResourceKey, setLoadedResourceKey] = useState("");
   const [resourceError, setResourceError] = useState("");
+  const [communityOpen, setCommunityOpen] = useState(false);
+  const [communityLocation, setCommunityLocation] = useState(`${demoProfile.city}, ${demoProfile.country}`);
+  const [communityLanguage, setCommunityLanguage] = useState(demoProfile.language);
+  const [communityRadius, setCommunityRadius] = useState(10);
+  const [communityResults, setCommunityResults] = useState<CommunityLearner[]>([]);
+  const [communityStatus, setCommunityStatus] = useState<"idle" | "searching" | "success" | "error">("idle");
+  const [communityMessage, setCommunityMessage] = useState("");
+  const [communityDiscoveryLinks, setCommunityDiscoveryLinks] = useState<Array<{ name: string; url: string }>>([]);
   const resourceQueryKey = useMemo(() => new URLSearchParams({
     language: profile.language,
     city: profile.city,
@@ -315,12 +336,90 @@ export default function Home() {
     }
   };
 
+  const toggleCommunity = () => {
+    setCommunityOpen((current) => {
+      if (!current) {
+        setCommunityLocation(`${profile.city}, ${profile.country}`);
+        setCommunityLanguage(profile.language);
+      }
+      return !current;
+    });
+  };
+
+  const searchCommunity = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setCommunityStatus("searching");
+    setCommunityMessage("");
+    try {
+      const query = new URLSearchParams({
+        language: communityLanguage,
+        location: communityLocation,
+        radius: String(communityRadius),
+      });
+      const response = await fetch(`/api/community?${query}`, { cache: "no-store" });
+      const result = await response.json() as {
+        matches?: CommunityLearner[];
+        discoveryLinks?: Array<{ name: string; url: string }>;
+        privacy?: string;
+        message?: string;
+      };
+      if (!response.ok || !result.matches) throw new Error(result.message || "Community search is temporarily unavailable.");
+      setCommunityResults(result.matches);
+      setCommunityDiscoveryLinks(result.discoveryLinks ?? []);
+      setCommunityMessage(result.privacy ?? "");
+      setCommunityStatus("success");
+    } catch (error) {
+      setCommunityResults([]);
+      setCommunityStatus("error");
+      setCommunityMessage(error instanceof Error ? error.message : "Community search is temporarily unavailable.");
+    }
+  };
+
   return (
     <main>
       <header className="topbar">
         <a className="brand" href="#top" aria-label="Sologurus home"><span className="brand-mark">S</span><span>Sologurus</span></a>
-        <div className="status"><span className="status-dot" /> Live research · 16 languages</div>
+        <nav className="top-actions" aria-label="Account and project links">
+          <a className="top-link github-link" href="https://github.com/Dec444/sologurus-demo" target="_blank" rel="noreferrer"><span aria-hidden="true">⌘</span> GitHub</a>
+          <a className={`account-link ${notionApiConfigured ? "connected" : ""}`} href={notionApiConfigured ? "https://www.notion.so/" : "https://www.notion.so/profile/integrations"} target="_blank" rel="noreferrer"><span className="account-dot" /> <span><b>Notion</b><small>{notionApiConfigured ? "Connected" : "Sign in"}</small></span></a>
+          <a className={`account-link ${googleCalendarUrl ? "connected" : ""}`} href={googleCalendarUrl || "https://calendar.google.com/calendar/u/0/r"} target="_blank" rel="noreferrer"><span className="account-dot" /> <span><b>Google</b><small>{googleCalendarUrl ? "Connected" : "Sign in"}</small></span></a>
+          <button className="community-toggle" aria-expanded={communityOpen} aria-controls="community-finder" onClick={toggleCommunity}>Community <span>{communityOpen ? "×" : "↘"}</span></button>
+        </nav>
       </header>
+
+      {communityOpen && (
+        <section className="community-finder" id="community-finder" aria-labelledby="community-title">
+          <div className="community-intro">
+            <span className="kicker">LOCAL LEARNER COMMUNITY</span>
+            <h2 id="community-title">Find your language people nearby.</h2>
+            <p>Search the privacy-safe preview directory by target language, approximate location, and travel radius. Exact addresses are never shown.</p>
+          </div>
+          <form className="community-search" onSubmit={searchCommunity}>
+            <label>Target language<select value={communityLanguage} onChange={(event) => setCommunityLanguage(event.target.value)}>{languages.map((language) => <option key={language.name} value={language.name}>{language.name}</option>)}</select></label>
+            <label>Location<input list="community-locations" value={communityLocation} onChange={(event) => setCommunityLocation(event.target.value)} placeholder="City, country" required /><datalist id="community-locations">{communityLocations.map((location) => <option value={location} key={location} />)}</datalist></label>
+            <label>Search radius<select value={communityRadius} onChange={(event) => setCommunityRadius(Number(event.target.value))}><option value={5}>Within 5 miles</option><option value={10}>Within 10 miles</option><option value={25}>Within 25 miles</option><option value={50}>Within 50 miles</option><option value={100}>Within 100 miles</option></select></label>
+            <button className="primary compact" disabled={communityStatus === "searching"}>{communityStatus === "searching" ? "Searching…" : "Find learners →"}</button>
+          </form>
+          {communityStatus === "idle" && <div className="community-empty"><span>◎</span><p>Choose your language and radius to see opt-in learner profiles near your location.</p></div>}
+          {communityStatus === "error" && <div className="integration-error" role="alert"><span>!</span><div><b>Community search needs attention.</b><p>{communityMessage}</p></div></div>}
+          {communityStatus === "success" && (
+            <div className="community-results" aria-live="polite">
+              <div className="community-results-heading"><b>{communityResults.length} learner{communityResults.length === 1 ? "" : "s"} found within {communityRadius} miles</b><span>Preview directory · public groups linked below</span></div>
+              {communityResults.length > 0 ? (
+                <div className="community-grid">
+                  {communityResults.map((learner) => (
+                    <article className="learner-card" key={`${learner.displayName}-${learner.city}`}>
+                      <div className="learner-avatar" aria-hidden="true">{learner.displayName.slice(0, 1)}</div>
+                      <div><div className="learner-name"><b>{learner.displayName}</b><span>{learner.distanceMiles} mi</span></div><p>{learner.level} {learner.language} · {learner.goal}</p><small>{learner.city} · {learner.availability}</small><div className="interest-row">{learner.interests.map((interest) => <span key={interest}>{interest}</span>)}</div></div>
+                    </article>
+                  ))}
+                </div>
+              ) : <div className="community-empty compact-empty"><span>○</span><p>No opt-in preview profiles match yet. Try a wider radius or open a public language-exchange directory.</p></div>}
+              <div className="community-discovery"><p>{communityMessage}</p><div>{communityDiscoveryLinks.map((link) => <a href={link.url} target="_blank" rel="noreferrer" key={link.name}>{link.name} ↗</a>)}</div></div>
+            </div>
+          )}
+        </section>
+      )}
 
       <section className="hero" id="top">
         <div className="eyebrow">Independent learning, intelligently designed</div>

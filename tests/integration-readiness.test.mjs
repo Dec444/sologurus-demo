@@ -34,3 +34,14 @@ test("calendar export produces a timezone-aware four-week schedule", async () =>
   const calendarRoute = await readFile(new URL("../app/api/calendar/route.ts", import.meta.url), "utf8");
   assert.match(calendarRoute, /GOOGLE_CALENDAR_EVENT_URL/);
 });
+
+test("the homepage exposes project, account, and community access at the top", async () => {
+  const page = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+  assert.match(page, /https:\/\/github\.com\/Dec444\/sologurus-demo/);
+  assert.match(page, /https:\/\/www\.notion\.so\//);
+  assert.match(page, /https:\/\/calendar\.google\.com\/calendar\/u\/0\/r/);
+  assert.match(page, /id="community-finder"/);
+  assert.match(page, /Within 5 miles/);
+  assert.match(page, /Within 100 miles/);
+  assert.match(page, /fetch\(`\/api\/community\?/);
+});
