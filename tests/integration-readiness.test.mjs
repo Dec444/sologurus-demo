@@ -54,6 +54,22 @@ test("calendar export produces a timezone-aware four-week schedule", async () =>
   assert.match(calendarRoute, /GOOGLE_CALENDAR_EVENT_URL/);
 });
 
+test("Cloudflare Worker deployment does not depend on OpenAI Sites build metadata", async () => {
+  const viteConfig = await readFile(new URL("../vite.config.ts", import.meta.url), "utf8");
+  assert.doesNotMatch(viteConfig, /\.openai\/hosting\.json/, "the build cannot require OpenAI Sites metadata");
+  assert.doesNotMatch(viteConfig, /sites-vite-plugin/, "the build cannot package an OpenAI Sites deployment");
+  assert.doesNotMatch(viteConfig, /sites\(\)/, "the build cannot enable the OpenAI Sites plugin");
+
+  const wranglerConfig = JSON.parse(await readFile(new URL("../wrangler.jsonc", import.meta.url), "utf8"));
+  assert.equal(wranglerConfig.name, "sologurus");
+  assert.equal(wranglerConfig.main, "./worker/index.ts");
+  assert.deepEqual(wranglerConfig.compatibility_flags, ["nodejs_compat"]);
+  assert.equal(wranglerConfig.images?.binding, "IMAGES");
+
+  const pkg = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"));
+  assert.equal(pkg.scripts.deploy, "npm run build && wrangler deploy");
+});
+
 test("the homepage exposes the project, the platform connection, and community at the top", async () => {
   const page = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
   assert.match(page, /https:\/\/github\.com\/Dec444\/sologurus-demo/);
