@@ -20,9 +20,9 @@ test("server-renders the Sologurus demo shell", async () => {
   assert.match(html, /Smarter study\./);
   assert.match(html, /Build my study system/);
   assert.match(html, /github\.com\/Dec444\/sologurus-demo/);
-  assert.match(html, /Notion/);
-  assert.match(html, /Google/);
+  assert.match(html, /TrueFoundry/, "the platform the app connects to is named up front");
   assert.match(html, /Community/);
+  assert.doesNotMatch(html, /notion\.so|calendar\.google\.com/, "no vendor account links in the shell — connections live in the TrueFoundry console");
   assert.match(html, /A learning plan designed around/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/);
 });

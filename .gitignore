@@ -41,3 +41,11 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+
+# Local tooling
+.claude/
+tsconfig.tsbuildinfo
+
+# Wrangler local secrets
+.dev.vars
+.dev.vars.*

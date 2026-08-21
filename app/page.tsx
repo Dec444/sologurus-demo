@@ -66,6 +66,105 @@ type ResourceData = {
   materials: Record<"listening" | "speaking" | "reading" | "writing", Material[]>;
 };
 
+type ConsoleLinks = { root: string; models: string; mcpServers: string };
+type GatewayInfo = {
+  gateway: {
+    configured: boolean;
+    host: string;
+    primaryModel: string;
+    fallbackModels: string[];
+    inputGuardrails: string[];
+    outputGuardrails: string[];
+    tenant: string;
+    costCenter: string;
+    environment: string;
+    console: ConsoleLinks;
+  };
+  models: string[];
+  modelsOk: boolean;
+  modelsError: string;
+  features: Array<{ id: string; label: string; purpose: string; dailyCallCeiling: number }>;
+  privacy: string[];
+  degradedMode: string;
+};
+type Telemetry = {
+  model: string;
+  modelChain: string[];
+  attempts: Array<{ model: string; status: number; latencyMs: number; error: string }>;
+  latencyMs: number;
+  usage: { promptTokens: number; completionTokens: number; totalTokens: number };
+  estimatedCostUsd: number;
+  guardrails: { input: string[]; output: string[] };
+  promptLogging: boolean;
+  degraded: boolean;
+};
+type Budget = { remainingCalls: number; ceilingCalls: number; remainingTokens: number; ceilingTokens: number; used: { calls: number; tokens: number; costUsd: number } };
+type Synthesis = {
+  briefing: string;
+  testRationale: string;
+  riskFlags: Array<{ title: string; detail: string }>;
+  focusByPhase: Array<{ phase: string; emphasis: string; why: string }>;
+  citations: string[];
+};
+type AgentResult = {
+  source: "gateway" | "deterministic";
+  note: string;
+  learnerId: string;
+  synthesis: Synthesis;
+  grounding: { kept: string[]; dropped: string[] };
+  telemetry: Telemetry | null;
+  budget: Budget;
+};
+type McpTool = { name: string; description: string; permitted: boolean; arguments: string[] };
+type McpAction = {
+  id: string;
+  label: string;
+  server: string;
+  tool: string;
+  description: string;
+  available: boolean;
+  reason: string;
+};
+type McpInfo = {
+  console: ConsoleLinks;
+  broker: { configured: boolean; baseUrl: string; servers: Array<{ label: string; integrationId: string }>; skills: string[]; notionParentConfigured: boolean };
+  listings: Array<{ ok: boolean; server: string; tools: McpTool[]; latencyMs: number; error: string }>;
+  actions: McpAction[];
+  permittedCount: number;
+  discoveredCount: number;
+  transport: string;
+  note: string;
+  calendarNote: string;
+};
+type McpDispatch = {
+  ok?: boolean;
+  blocked?: boolean;
+  action?: string;
+  message?: string;
+  output?: string;
+  pageRef?: string;
+  completedDays?: number[] | null;
+  telemetry?: { server: string; tool: string; latencyMs: number; permitted: boolean; transport: string };
+  budget?: Budget | null;
+};
+type WritingFeedback = {
+  source: "gateway" | "offline";
+  note: string;
+  exam: string;
+  wordCount: number;
+  redactions: Array<{ type: string; count: number }>;
+  feedback: {
+    scored: boolean;
+    bandEstimate: string;
+    summary: string;
+    strengths: string[];
+    fixes: Array<{ issue: string; excerpt: string; rewrite: string }>;
+    nextTask: string;
+  };
+  telemetry: Telemetry | null;
+  budget: Budget;
+};
+
 const journeyStages: { id: JourneyStage; label: string; note: string }[] = [
   { id: "profile", label: "Learning goal", note: "Context + constraints" },
   { id: "running", label: "Agent research", note: "Tests + resources" },
@@ -155,17 +254,27 @@ export default function Home() {
   const [researchRunning, setResearchRunning] = useState(false);
   const [activeTool, setActiveTool] = useState(0);
   const [selected, setSelected] = useState("balanced");
-  const [notionStatus, setNotionStatus] = useState<"idle" | "connecting" | "success" | "error">("idle");
-  const [notionMessage, setNotionMessage] = useState("");
-  const [notionUrl, setNotionUrl] = useState("");
-  const [notionApiConfigured, setNotionApiConfigured] = useState(false);
   const [calendarReady, setCalendarReady] = useState(false);
   const [googleCalendarUrl, setGoogleCalendarUrl] = useState("");
-  const [notionPlanPageId, setNotionPlanPageId] = useState("");
+  // The only handle Sologurus keeps on Notion: a page reference returned by the
+  // gateway. There is no token here to keep.
+  const [notionPlanRef, setNotionPlanRef] = useState("");
   const [progressView, setProgressView] = useState<"daily" | "weekly" | "monthly">("weekly");
   const [completedDays, setCompletedDays] = useState<number[]>([]);
   const [progressSyncStatus, setProgressSyncStatus] = useState<"idle" | "syncing" | "success" | "error">("idle");
   const [progressSyncMessage, setProgressSyncMessage] = useState("");
+  const [gatewayInfo, setGatewayInfo] = useState<GatewayInfo | null>(null);
+  const [connectionOpen, setConnectionOpen] = useState(false);
+  const [mcpInfo, setMcpInfo] = useState<McpInfo | null>(null);
+  const [mcpDispatch, setMcpDispatch] = useState<McpDispatch | null>(null);
+  const [mcpStatus, setMcpStatus] = useState<"idle" | "dispatching">("idle");
+  const [agentResult, setAgentResult] = useState<AgentResult | null>(null);
+  const [agentError, setAgentError] = useState("");
+  const [writingPrompt, setWritingPrompt] = useState("");
+  const [writingSample, setWritingSample] = useState("");
+  const [writingResult, setWritingResult] = useState<WritingFeedback | null>(null);
+  const [writingStatus, setWritingStatus] = useState<"idle" | "marking" | "success" | "error">("idle");
+  const [writingMessage, setWritingMessage] = useState("");
   const [resourceData, setResourceData] = useState<ResourceData | null>(null);
   const [loadedResourceKey, setLoadedResourceKey] = useState("");
   const [resourceError, setResourceError] = useState("");
@@ -212,16 +321,20 @@ export default function Home() {
     ["rank_guidance", resourceData ? `${resourceData.youtube.length} educators · ${resourceData.forums?.length ?? 0} forums` : "Loading educators and forums", `Selected for ${profile.language} learner fit`],
     ["curate_resources", resourceData ? `${Object.values(resourceData.materials).flat().length} skill resources · ${resourceData.tvShows.length} TV shows · ${resourceData.textbooks.length} textbooks` : "Loading four-skill materials", "Listening · speaking · reading · writing · immersion"],
     ["match_mock_exams", resourceData ? `${resourceData.mockExams.length} exam simulators` : "Loading mock platforms", `Matched to ${resourceData?.recommendation.name ?? profile.language}`],
-    ["generate_plans", `3 strategies · ${feasibility.weeklyHours} h/week`, feasibility.status === "not-practical" ? "Timeline warning included" : "Constraint check passed"],
-  ], [feasibility.status, feasibility.weeklyHours, profile.city, profile.country, profile.language, resourceData]);
+    ["synthesize_plan", `3 strategies · ${feasibility.weeklyHours} h/week`, gatewayInfo?.gateway.configured
+      ? `TrueFoundry AI Gateway · ${gatewayInfo.gateway.primaryModel}`
+      : "Deterministic planner · gateway not configured"],
+  ], [feasibility.weeklyHours, gatewayInfo, profile.city, profile.country, profile.language, resourceData]);
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/notion").then((response) => response.json()),
       fetch("/api/calendar").then((response) => response.json()),
-    ]).then(([notion, calendar]: [{ configured?: boolean }, { eventUrl?: string | null }]) => {
-      setNotionApiConfigured(Boolean(notion.configured));
+      fetch("/api/gateway").then((response) => response.json()),
+      fetch("/api/mcp").then((response) => response.json()),
+    ]).then(([calendar, gateway, mcp]: [{ eventUrl?: string | null }, GatewayInfo, McpInfo]) => {
       setGoogleCalendarUrl(calendar.eventUrl ?? "");
+      setGatewayInfo(gateway);
+      setMcpInfo(mcp);
     }).catch(() => undefined);
   }, []);
 
@@ -267,17 +380,86 @@ export default function Home() {
   const runAgent = async () => {
     if (resourceLoading || !resourceData) return;
     setCompletedDays([]);
-    setNotionPlanPageId("");
+    setNotionPlanRef("");
+    setMcpDispatch(null);
+    setAgentResult(null);
+    setAgentError("");
+    setWritingResult(null);
+    setWritingStatus("idle");
     setStage("running");
     setUnlockedStage((current) => Math.max(current, 1));
     setResearchRunning(true);
     setActiveTool(0);
-    for (let index = 0; index < toolSteps.length; index += 1) {
+
+    // The retrieval steps read the verified catalog; the final step is a real
+    // gateway call, so the walkthrough runs alongside it rather than after it.
+    const synthesis = fetch("/api/agent", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ profile, feasibility }),
+    })
+      .then(async (response) => {
+        const result = await response.json() as AgentResult & { ok?: boolean; message?: string };
+        if (!response.ok || !result.ok) throw new Error(result.message || "The planning layer did not respond.");
+        return result;
+      })
+      .then((result) => { setAgentResult(result); setAgentError(""); })
+      .catch((error: unknown) => {
+        setAgentResult(null);
+        setAgentError(error instanceof Error ? error.message : "The planning layer did not respond.");
+      });
+
+    for (let index = 0; index < toolSteps.length - 1; index += 1) {
       setActiveTool(index);
       await new Promise((resolve) => setTimeout(resolve, 520));
     }
+    setActiveTool(toolSteps.length - 1);
+    await synthesis;
     setResearchRunning(false);
     setUnlockedStage((current) => Math.max(current, 2));
+  };
+
+  const dispatchMcpAction = async (actionId: string) => {
+    setMcpStatus("dispatching");
+    setMcpDispatch(null);
+    try {
+      // The browser names an intent. The server owns the tool binding and builds
+      // the payload, so no arbitrary tool call can be crafted from here.
+      const response = await fetch("/api/mcp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: actionId, profile, plan: selectedPlan, feasibility, studyPlan, pageRef: notionPlanRef }),
+      });
+      const result = await response.json() as McpDispatch;
+      setMcpDispatch(result);
+      if (result.pageRef) setNotionPlanRef(result.pageRef);
+      if (Array.isArray(result.completedDays)) setCompletedDays(result.completedDays);
+    } catch (error) {
+      setMcpDispatch({ ok: false, message: error instanceof Error ? error.message : "The action could not be dispatched." });
+    } finally {
+      setMcpStatus("idle");
+    }
+  };
+
+  const requestWritingFeedback = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setWritingStatus("marking");
+    setWritingMessage("");
+    try {
+      const response = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profile, sample: writingSample, prompt: writingPrompt }),
+      });
+      const result = await response.json() as WritingFeedback & { ok?: boolean; message?: string };
+      if (!response.ok || !result.ok) throw new Error(result.message || "The writing sample could not be marked.");
+      setWritingResult(result);
+      setWritingStatus("success");
+    } catch (error) {
+      setWritingResult(null);
+      setWritingStatus("error");
+      setWritingMessage(error instanceof Error ? error.message : "The writing sample could not be marked.");
+    }
   };
 
   const downloadIcs = () => {
@@ -291,50 +473,30 @@ export default function Home() {
     setCalendarReady(true);
   };
 
-  const connectNotion = async () => {
-    setNotionStatus("connecting");
-    setNotionMessage("");
-    setNotionUrl("");
-    try {
-      const response = await fetch("/api/notion", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profile: { ...profile, hours: feasibility.weeklyHours }, feasibility, plan: selectedPlan, resources: resourceData, studyPlan }),
-      });
-      const result = await response.json() as { ok?: boolean; url?: string; planPageId?: string; planUrl?: string; message?: string };
-      if (!response.ok || !result.ok || !result.url) throw new Error(result.message || "Notion page creation failed.");
-      setNotionUrl(result.url);
-      setNotionPlanPageId(result.planPageId ?? "");
-      setNotionMessage(`The main page and its ${studyPlan.length}-session study-plan subpage now match this learner.`);
-      setNotionStatus("success");
-    } catch (error) {
-      setNotionStatus("error");
-      setNotionMessage(error instanceof Error ? error.message : "Notion page creation failed.");
-    }
-  };
-
   const toggleStudyDay = (day: number) => {
     setCompletedDays((current) => current.includes(day) ? current.filter((item) => item !== day) : [...current, day].sort((a, b) => a - b));
   };
 
   const syncNotionProgress = async () => {
-    if (!notionPlanPageId) return;
+    if (!notionPlanRef) return;
     setProgressSyncStatus("syncing");
     setProgressSyncMessage("");
     try {
-      const response = await fetch("/api/notion", {
-        method: "PUT",
+      const response = await fetch("/api/mcp", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ planPageId: notionPlanPageId }),
+        body: JSON.stringify({ action: "notion-plan-progress", profile, pageRef: notionPlanRef }),
       });
-      const result = await response.json() as { ok?: boolean; completedDays?: number[]; message?: string };
-      if (!response.ok || !result.ok || !result.completedDays) throw new Error(result.message || "Could not sync Notion progress.");
+      const result = await response.json() as McpDispatch;
+      if (!response.ok || !result.ok || !Array.isArray(result.completedDays)) {
+        throw new Error(result.message || "Could not read progress from the plan page.");
+      }
       setCompletedDays(result.completedDays);
       setProgressSyncStatus("success");
-      setProgressSyncMessage(`Synced ${result.completedDays.length} completed sessions from the Notion study-plan subpage.`);
+      setProgressSyncMessage(`Read ${result.completedDays.length} ticked session(s) back through notion/notion-fetch in ${result.telemetry?.latencyMs ?? 0} ms.`);
     } catch (error) {
       setProgressSyncStatus("error");
-      setProgressSyncMessage(error instanceof Error ? error.message : "Could not sync Notion progress.");
+      setProgressSyncMessage(error instanceof Error ? error.message : "Could not read progress from the plan page.");
     }
   };
 
@@ -420,11 +582,77 @@ export default function Home() {
         <a className="brand" href="#top" aria-label="Sologurus home"><span className="brand-mark">S</span><span>Sologurus</span></a>
         <nav className="top-actions" aria-label="Account and project links">
           <a className="top-link github-link" href="https://github.com/Dec444/sologurus-demo" target="_blank" rel="noreferrer"><span aria-hidden="true">⌘</span> GitHub</a>
-          <a className={`account-link ${notionApiConfigured ? "connected" : ""}`} href={notionApiConfigured ? "https://www.notion.so/" : "https://www.notion.so/profile/integrations"} target="_blank" rel="noreferrer"><span className="account-dot" /> <span><b>Notion</b><small>{notionApiConfigured ? "Connected" : "Sign in"}</small></span></a>
-          <a className={`account-link ${googleCalendarUrl ? "connected" : ""}`} href={googleCalendarUrl || "https://calendar.google.com/calendar/u/0/r"} target="_blank" rel="noreferrer"><span className="account-dot" /> <span><b>Google</b><small>{googleCalendarUrl ? "Connected" : "Sign in"}</small></span></a>
+          <button className={`account-link connection-toggle ${gatewayInfo?.gateway.configured ? "connected" : ""}`} aria-expanded={connectionOpen} aria-controls="connection-panel" onClick={() => setConnectionOpen((current) => !current)}>
+            <span className="account-dot" />
+            <span><b>TrueFoundry</b><small>{gatewayInfo ? (gatewayInfo.gateway.configured ? `${gatewayInfo.models.length || "—"} models · ${mcpInfo?.permittedCount ?? 0} tools` : "Not connected") : "Checking…"}</small></span>
+          </button>
           <button className="community-toggle" aria-expanded={communityOpen} aria-controls="community-finder" onClick={toggleCommunity}>Community <span>{communityOpen ? "×" : "↘"}</span></button>
         </nav>
       </header>
+
+      {connectionOpen && (
+        <section className="connection-panel" id="connection-panel" aria-labelledby="connection-title">
+          <div className="connection-intro">
+            <span className="kicker">YOUR TRUEFOUNDRY ACCOUNT</span>
+            <h2 id="connection-title">Sologurus runs on the platform you control.</h2>
+            <p>
+              This app ships no provider list and no integration secrets. It reflects whatever your own TrueFoundry
+              control plane exposes — connect a model, register an MCP server, and it appears here.
+            </p>
+          </div>
+
+          <div className="connection-grid">
+            <article className={`connection-card ${gatewayInfo?.gateway.configured ? "live" : ""}`}>
+              <div className="connection-card-head">
+                <span className="mcp-chip"><i aria-hidden="true">◆</i>AI Gateway</span>
+                <b>{gatewayInfo?.gateway.configured ? `${gatewayInfo.models.length} model${gatewayInfo.models.length === 1 ? "" : "s"}` : "Not connected"}</b>
+              </div>
+              {gatewayInfo?.gateway.configured ? (
+                <>
+                  <p>Requests route to <code>{gatewayInfo.gateway.primaryModel}</code>{gatewayInfo.gateway.fallbackModels.length > 0 ? `, falling back to ${gatewayInfo.gateway.fallbackModels.join(", ")}` : ", with no fallback configured"}.</p>
+                  {gatewayInfo.models.length > 0 ? (
+                    <div className="connection-tags">{gatewayInfo.models.slice(0, 8).map((model) => <span key={model}>{model}</span>)}</div>
+                  ) : <p className="connection-warn">{gatewayInfo.modelsError ? `Could not list models: ${gatewayInfo.modelsError}` : "No models are connected to this account yet."}</p>}
+                </>
+              ) : <p>Add a TrueFoundry API key to this deployment, then connect any of the 250+ supported models in your console.</p>}
+              {gatewayInfo?.gateway.console.models
+                ? <a className="connection-link" href={gatewayInfo.gateway.console.models} target="_blank" rel="noreferrer">Add or change models ↗</a>
+                : <small className="connection-hint">Set <code>TFY_CONSOLE_URL</code> to link straight to your control plane.</small>}
+            </article>
+
+            <article className={`connection-card ${mcpInfo?.broker.configured ? "live" : ""}`}>
+              <div className="connection-card-head">
+                <span className="mcp-chip"><i aria-hidden="true">◈</i>MCP Gateway</span>
+                <b>{mcpInfo?.broker.configured ? `${mcpInfo.permittedCount}/${mcpInfo.discoveredCount} tools granted` : "No servers"}</b>
+              </div>
+              {mcpInfo?.broker.configured ? (
+                <>
+                  <p>Sologurus can act through {mcpInfo.broker.servers.length} registered server{mcpInfo.broker.servers.length === 1 ? "" : "s"}. It holds no credential of its own for any of them.</p>
+                  <div className="connection-tags">{mcpInfo.broker.servers.map((server) => <span key={server.label}>{server.label}</span>)}</div>
+                </>
+              ) : <p>Register any MCP server — Notion, a ticketing system, your own — and grant Sologurus the tools it may call. Until you do, it can act on nothing.</p>}
+              {(mcpInfo?.console.mcpServers || gatewayInfo?.gateway.console.mcpServers)
+                ? <a className="connection-link" href={mcpInfo?.console.mcpServers || gatewayInfo?.gateway.console.mcpServers} target="_blank" rel="noreferrer">Add MCP servers ↗</a>
+                : <small className="connection-hint">Set <code>TFY_CONSOLE_URL</code> to link straight to your registry.</small>}
+            </article>
+
+            <article className={`connection-card ${gatewayInfo?.gateway.inputGuardrails.length ? "live" : ""}`}>
+              <div className="connection-card-head">
+                <span className="mcp-chip"><i aria-hidden="true">◉</i>Policy</span>
+                <b>{gatewayInfo?.gateway.inputGuardrails.length ? `${gatewayInfo.gateway.inputGuardrails.length + gatewayInfo.gateway.outputGuardrails.length} guardrails` : "No guardrails"}</b>
+              </div>
+              <p>
+                Tagged <code>{gatewayInfo?.gateway.tenant ?? "—"}</code> / <code>{gatewayInfo?.gateway.costCenter ?? "—"}</code> on every request, so your budget and
+                rate-limit rules can match on it. {gatewayInfo?.features.length ?? 0} AI features run under per-learner ceilings.
+              </p>
+              {gatewayInfo?.gateway.console.root
+                ? <a className="connection-link" href={gatewayInfo.gateway.console.root} target="_blank" rel="noreferrer">Open the console ↗</a>
+                : <small className="connection-hint">Point <code>TFY_GATEWAY_BASE_URL</code> at your control plane and the console links appear.</small>}
+            </article>
+          </div>
+          <p className="connection-foot">{gatewayInfo?.degradedMode}</p>
+        </section>
+      )}
 
       {communityOpen && (
         <section className="community-finder" id="community-finder" aria-labelledby="community-title">
@@ -468,7 +696,7 @@ export default function Home() {
       <section className="hero" id="top">
         <div className="eyebrow">Independent learning, intelligently designed</div>
         <h1>Better direction.<br /><em>Smarter study.</em></h1>
-        <p>Sologurus turns a language-test goal into verified options, credible resources, and a calendar-ready study plan — without a tutor or subscription.</p>
+        <p>Sologurus turns a language-test goal into verified options, credible resources, and a calendar-ready study plan — running entirely on the TrueFoundry account you control.</p>
         <a className="hero-cta" href="#planner">Build my study system</a>
         <div className="hero-visual" aria-label="A preview of a personalized Sologurus study plan">
           <div className="visual-orb" />
@@ -479,7 +707,7 @@ export default function Home() {
         <ul className="hero-proof" aria-label="Sologurus benefits">
           <li><span>✓</span>Research matched to your language and location</li>
           <li><span>✓</span>Three strategies tailored to your goal</li>
-          <li><span>✓</span>A study calendar built around your real time</li>
+          <li><span>✓</span>Runs on your own TrueFoundry models and MCP servers</li>
         </ul>
         <div className="hero-metrics" aria-hidden="true">
           <div className="metric-card metric-dark"><span>RESEARCH SET</span><b>10 + 3 + 10</b><small>educators · forums · TV shows</small></div>
@@ -538,9 +766,9 @@ export default function Home() {
               {researchRunning ? (
                 <div className="running-view" aria-live="polite">
                   <div className="orb"><span /></div>
-                  <span className="kicker">STEP 02 · GPT-5.6 ORCHESTRATION</span>
+                  <span className="kicker">STEP 02 · GOVERNED ORCHESTRATION</span>
                   <h2>Building evidence before a plan.</h2>
-                  <p className="lede">The agent composes validated objects — not a free-text curriculum.</p>
+                  <p className="lede">Retrieval runs over the verified catalog; the synthesis call is routed, guardrailed and metered through the TrueFoundry AI Gateway.</p>
                   <div className="tool-list">
                     {toolSteps.map(([name, result, note], index) => (
                       <div className={`tool ${index < activeTool ? "complete" : index === activeTool ? "active" : ""}`} key={name}>
@@ -554,6 +782,61 @@ export default function Home() {
                 <>
                   <div className="panel-heading"><div><span className="kicker">STEP 02 · RESEARCH COMPLETE</span><h2>Your evidence library.</h2></div><button className="text-button" onClick={() => setStage("profile")}>Edit learning goal</button></div>
                   <div className="insight-strip"><b>Recommended test: {resourceData.recommendation.name}</b><span>{resourceData.recommendation.reason} Dates, local availability and acceptance should be rechecked before booking.</span><a href={resourceData.recommendation.sourceUrl} target="_blank" rel="noreferrer">Official source ↗</a></div>
+
+                  {agentError && <div className="integration-error" role="alert"><span>!</span><div><b>The planning layer did not answer.</b><p>{agentError} The verified catalog below is unaffected.</p></div></div>}
+
+                  {agentResult && (
+                    <section className={`agent-brief ${agentResult.source}`} aria-labelledby="agent-brief-title">
+                      <div className="agent-brief-heading">
+                        <div>
+                          <span className="kicker">PLANNING LAYER</span>
+                          <h3 id="agent-brief-title">What the agent concluded.</h3>
+                        </div>
+                        <span className={`source-badge ${agentResult.source}`}>
+                          {agentResult.source === "gateway"
+                            ? `TrueFoundry AI Gateway · ${agentResult.telemetry?.model ?? "model"}`
+                            : "Deterministic planner · no model call"}
+                        </span>
+                      </div>
+                      <p className="agent-briefing">{agentResult.synthesis.briefing}</p>
+                      <p className="agent-rationale">{agentResult.synthesis.testRationale}</p>
+
+                      {agentResult.synthesis.riskFlags.length > 0 && (
+                        <div className="risk-flags">
+                          {agentResult.synthesis.riskFlags.map((flag) => (
+                            <div key={flag.title}><b>{flag.title}</b><p>{flag.detail}</p></div>
+                          ))}
+                        </div>
+                      )}
+
+                      <div className="phase-focus">
+                        {agentResult.synthesis.focusByPhase.map((item) => (
+                          <div key={item.phase}><span>{item.phase}</span><b>{item.emphasis}</b><small>{item.why}</small></div>
+                        ))}
+                      </div>
+
+                      <div className="grounding-row">
+                        <b>Grounded in {agentResult.grounding.kept.length} verified record{agentResult.grounding.kept.length === 1 ? "" : "s"}</b>
+                        <div>{agentResult.grounding.kept.map((name) => <span key={name}>{name}</span>)}</div>
+                        <small>{agentResult.note}</small>
+                      </div>
+
+                      <div className="governance-receipt" aria-label="Gateway governance receipt">
+                        <div className="receipt-heading"><b>Gateway receipt</b><span>Learner {agentResult.learnerId} · pseudonymous</span></div>
+                        <dl>
+                          <div><dt>Model</dt><dd>{agentResult.source === "gateway" ? agentResult.telemetry?.model : "no model called"}</dd></div>
+                          <div><dt>Latency</dt><dd>{agentResult.source === "gateway" ? `${agentResult.telemetry?.latencyMs} ms` : "—"}</dd></div>
+                          <div><dt>Tokens</dt><dd>{agentResult.telemetry?.usage.totalTokens ?? 0}</dd></div>
+                          <div><dt>Est. cost</dt><dd>${(agentResult.telemetry?.estimatedCostUsd ?? 0).toFixed(5)}</dd></div>
+                          <div><dt>Fallbacks used</dt><dd>{Math.max(0, (agentResult.telemetry?.attempts.length ?? 1) - 1)}</dd></div>
+                          <div><dt>Input guardrails</dt><dd>{agentResult.telemetry?.guardrails.input.length ? agentResult.telemetry.guardrails.input.join(", ") : "none configured"}</dd></div>
+                          <div><dt>Daily budget left</dt><dd>{agentResult.budget.remainingCalls}/{agentResult.budget.ceilingCalls} calls</dd></div>
+                          <div><dt>Dropped citations</dt><dd>{agentResult.grounding.dropped.length}</dd></div>
+                        </dl>
+                        {gatewayInfo && <p className="receipt-note">{gatewayInfo.gateway.configured ? `Tenant ${gatewayInfo.gateway.tenant} · cost centre ${gatewayInfo.gateway.costCenter} · ${gatewayInfo.gateway.host}` : gatewayInfo.degradedMode}</p>}
+                      </div>
+                    </section>
+                  )}
 
                   <section className="resource-explorer" aria-labelledby="all-resources-title">
                     <div className="resource-heading">
@@ -706,14 +989,143 @@ export default function Home() {
                   </table>
                 </div>
               </section>
+              <section className="mcp-lab" aria-labelledby="mcp-lab-title">
+                <div className="mcp-heading">
+                  <div><span className="kicker">GOVERNED ACTIONS · MCP GATEWAY</span><h3 id="mcp-lab-title">Write the plan out, without holding a key.</h3></div>
+                  <p>
+                    Writing into Notion is an agent action, so it runs through the TrueFoundry MCP Gateway. The platform
+                    holds the Notion credential, the registry decides which tools exist, and Sologurus may invoke only
+                    the ones its skills allowlist names. Calendar export is not brokered — the <code>.ics</code> file
+                    needs no integration at all.
+                  </p>
+                </div>
+                {mcpInfo?.broker.configured ? (
+                  <>
+                    <div className="mcp-servers">
+                      {mcpInfo.listings.map((listing) => (
+                        <div className="mcp-server" key={listing.server}>
+                          <div className="mcp-server-heading">
+                            <b>{listing.server}</b>
+                            <span className="mcp-chip"><i aria-hidden="true">◆</i>{listing.ok ? `${listing.tools.filter((tool) => tool.permitted).length}/${listing.tools.length} granted` : "unreachable"}</span>
+                          </div>
+                          {listing.ok ? (
+                            <ul className="mcp-tools">
+                              {listing.tools.map((tool) => (
+                                <li className={tool.permitted ? "" : "blocked"} key={tool.name}>
+                                  <span className="mcp-state">{tool.permitted ? "granted" : "blocked"}</span>
+                                  <div><code>{tool.name}</code><p>{tool.description || "No description published by the server."}</p></div>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : <p className="chart-note">{listing.error}</p>}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mcp-actions">
+                      {mcpInfo.actions.map((action) => (
+                        <div className="mcp-action" key={action.id}>
+                          <div>
+                            <b>{action.label}</b>
+                            <small>{action.description}</small>
+                            <code>{action.server}/{action.tool}</code>
+                            {!action.available && <em>{action.reason}</em>}
+                          </div>
+                          <button className="secondary" disabled={!action.available || mcpStatus === "dispatching"} onClick={() => dispatchMcpAction(action.id)}>
+                            {mcpStatus === "dispatching" ? "Dispatching…" : action.available ? "Run action ↗" : "Not granted"}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mcp-dispatch">
+                      <small>
+                        {mcpInfo.permittedCount} of {mcpInfo.discoveredCount} discovered tools are granted to this application · {mcpInfo.transport}
+                        {mcpInfo.broker.notionParentConfigured ? " · parent page configured" : " · no parent page set, pages land at the workspace root"}
+                      </small>
+                    </div>
+                  </>
+                ) : (
+                  <div className="mcp-empty">
+                    <b>No MCP server is registered yet.</b>
+                    {mcpInfo?.note ?? "Checking the registry…"} Register one in your TrueFoundry console and grant Sologurus the tools it may call — until then it can act on nothing, because it holds no credentials of its own.
+                    {mcpInfo?.console.mcpServers && <a className="connection-link" href={mcpInfo.console.mcpServers} target="_blank" rel="noreferrer">Add MCP servers ↗</a>}
+                  </div>
+                )}
+                {mcpDispatch && (
+                  <div className={mcpDispatch.ok ? "success" : "integration-error"} role="status">
+                    <span>{mcpDispatch.ok ? "✓" : mcpDispatch.blocked ? "⊘" : "!"}</span>
+                    <div>
+                      <b>{mcpDispatch.ok ? "Action completed through the gateway." : mcpDispatch.blocked ? "Refused by the skills registry." : "The action did not complete."}</b>
+                      <p>{mcpDispatch.message}{mcpDispatch.output ? ` — ${mcpDispatch.output}` : ""}</p>
+                    </div>
+                  </div>
+                )}
+                {mcpDispatch?.telemetry && (
+                  <div className="mcp-receipt">
+                    <span>{mcpDispatch.telemetry.server}/{mcpDispatch.telemetry.tool}</span>
+                    <span>{mcpDispatch.telemetry.latencyMs} ms · {mcpDispatch.telemetry.transport}</span>
+                    <span>{mcpDispatch.telemetry.permitted ? "allowlist: granted" : "allowlist: refused"}</span>
+                    {mcpDispatch.budget && <span>{mcpDispatch.budget.remainingCalls}/{mcpDispatch.budget.ceilingCalls} daily actions left</span>}
+                    {notionPlanRef && <span>plan page linked for progress sync</span>}
+                  </div>
+                )}
+              </section>
+
+              <section className="writing-lab" aria-labelledby="writing-lab-title">
+                <div className="writing-lab-heading">
+                  <div><span className="kicker">WRITING FEEDBACK LOOP</span><h3 id="writing-lab-title">Get one piece of writing marked.</h3></div>
+                  <p>
+                    Paste a response to any writing task. Direct identifiers are stripped on this server before the request
+                    leaves it, prompt logging stays off for this feature, and the marked reply is metered against a
+                    per-learner budget at the TrueFoundry AI Gateway.
+                  </p>
+                </div>
+                <form className="writing-form" onSubmit={requestWritingFeedback}>
+                  <label className="wide">Task prompt (optional)<input value={writingPrompt} placeholder={`e.g. Some people think exams are the best way to assess learning. Discuss.`} onChange={(event) => setWritingPrompt(event.target.value)} /></label>
+                  <label className="wide">Your writing<textarea rows={7} value={writingSample} placeholder={`Paste at least 40 words of your ${profile.language} writing.`} onChange={(event) => setWritingSample(event.target.value)} /></label>
+                  <div className="writing-actions">
+                    <small>{writingSample.split(/\s+/).filter(Boolean).length} words · {gatewayInfo?.gateway.configured ? "gateway connected" : "gateway offline — structural check only"}</small>
+                    <button className="primary compact" data-testid="request-feedback" disabled={writingStatus === "marking"}>{writingStatus === "marking" ? "Marking…" : "Mark my writing →"}</button>
+                  </div>
+                </form>
+                {writingStatus === "error" && <div className="integration-error" role="alert"><span>!</span><div><b>The sample was not marked.</b><p>{writingMessage}</p></div></div>}
+                {writingResult && (
+                  <div className="writing-result" aria-live="polite">
+                    <div className="writing-result-heading">
+                      <div>
+                        <b>{writingResult.feedback.scored ? `Estimated ${writingResult.exam} level: ${writingResult.feedback.bandEstimate}` : "Structural check"}</b>
+                        <small>{writingResult.wordCount} words · {writingResult.feedback.scored ? "estimate only, not an official result" : "no model was called"}</small>
+                      </div>
+                      <span className={`source-badge ${writingResult.source === "gateway" ? "gateway" : "deterministic"}`}>
+                        {writingResult.source === "gateway" ? `Gateway · ${writingResult.telemetry?.model ?? "model"}` : "Offline heuristics"}
+                      </span>
+                    </div>
+                    <p className="writing-summary">{writingResult.feedback.summary}</p>
+                    {writingResult.feedback.strengths.length > 0 && (
+                      <ul className="writing-strengths">{writingResult.feedback.strengths.map((item) => <li key={item}><span>✓</span>{item}</li>)}</ul>
+                    )}
+                    <div className="writing-fixes">
+                      {writingResult.feedback.fixes.map((fix, index) => (
+                        <div key={fix.issue}>
+                          <span className="fix-index">{String(index + 1).padStart(2, "0")}</span>
+                          <div><b>{fix.issue}</b>{fix.excerpt && <blockquote>{fix.excerpt}</blockquote>}<p>{fix.rewrite}</p></div>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="writing-next"><b>Next task:</b> {writingResult.feedback.nextTask}</p>
+                    <div className="writing-receipt">
+                      <span>{writingResult.note}</span>
+                      <span>{writingResult.redactions.length > 0 ? writingResult.redactions.map((item) => `${item.count} ${item.type}`).join(" · ") : "no identifiers found"}</span>
+                      <span>{writingResult.telemetry ? `${writingResult.telemetry.usage.totalTokens} tokens · ${writingResult.telemetry.latencyMs} ms · $${writingResult.telemetry.estimatedCostUsd.toFixed(5)}` : "no gateway call"}</span>
+                      <span>Prompt logging {writingResult.telemetry?.promptLogging ? "on" : "off"} · {writingResult.budget.remainingCalls}/{writingResult.budget.ceilingCalls} daily calls left</span>
+                    </div>
+                  </div>
+                )}
+              </section>
               <div className="export-row">
-                <div><b>Send the plan somewhere real.</b><span>Notion receives the overview plus this dated plan as a child subpage. Calendar export remains universal.</span></div>
-                <button className="secondary" data-testid="connect-notion" disabled={notionStatus === "connecting"} onClick={connectNotion}>{notionStatus === "connecting" ? "Updating Notion…" : notionApiConfigured ? "Update Notion + subpage ↗" : "Connect Notion to update ↗"}</button>
+                <div><b>Universal calendar</b><span>Not brokered, because it needs nothing to broker: the .ics is built in your browser and imports into Google, Apple, or Outlook with no account and no OAuth.</span></div>
                 {googleCalendarUrl && <a className="secondary action-link" href={googleCalendarUrl} target="_blank" rel="noreferrer">Open Google Calendar ↗</a>}
                 <button className="primary compact" data-testid="download-ics" onClick={downloadIcs}>Download universal .ICS ↓</button>
               </div>
-              {notionStatus === "error" && <div className="integration-error" role="alert"><span>!</span><div><b>Notion needs a write connection.</b><p>{notionMessage}</p></div></div>}
-              {notionStatus === "success" && <div className="success" role="status"><span>✓</span><div><b>Notion matches this plan.</b><p>{notionMessage} <a href={notionUrl} target="_blank" rel="noreferrer">Open updated page ↗</a></p></div></div>}
               {calendarReady && <div className="success" role="status"><span>✓</span><div><b>Calendar file generated with 15 events.</b><p>Import it into Google, Apple, or Outlook Calendar. Events use {profile.timezone} and reminders repeat through {profile.date}.</p></div></div>}
               <div className="page-actions"><button className="text-button" onClick={() => setStage("plans")}>← Choose a strategy</button><button className="primary compact" onClick={() => { setUnlockedStage(4); setStage("progress"); }}>Track progress →</button></div>
             </div>
@@ -743,11 +1155,11 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
-                <p className="chart-note">Check sessions on the study-plan page, or sync completed checkboxes from the connected Notion subpage.</p>
+                <p className="chart-note">Check sessions on the study-plan page, or read the ticked boxes back from the Notion plan page through the MCP Gateway.</p>
               </section>
               <div className="progress-sync">
-                <div><b>Notion progress sync</b><span>{notionPlanPageId ? "Read completed checkboxes from the generated study-plan subpage." : "Update Notion from the Start studying page to create and connect the subpage."}</span></div>
-                <button className="secondary" disabled={!notionPlanPageId || progressSyncStatus === "syncing"} onClick={syncNotionProgress}>{progressSyncStatus === "syncing" ? "Syncing…" : "Sync Notion progress ↻"}</button>
+                <div><b>Notion progress sync</b><span>{notionPlanRef ? "Reads the ticked sessions back through notion/notion-fetch. The same brokered path as the write — still no Notion token here." : "Run the study-plan action on the Start studying page first, so there is a page to read."}</span></div>
+                <button className="secondary" data-testid="sync-progress" disabled={!notionPlanRef || progressSyncStatus === "syncing"} onClick={syncNotionProgress}>{progressSyncStatus === "syncing" ? "Reading…" : "Sync from Notion ↻"}</button>
               </div>
               {progressSyncMessage && <div className={progressSyncStatus === "error" ? "integration-error" : "success"} role="status"><span>{progressSyncStatus === "error" ? "!" : "✓"}</span><div><b>{progressSyncStatus === "error" ? "Progress sync needs attention." : "Progress synced."}</b><p>{progressSyncMessage}</p></div></div>}
               <div className="page-actions"><button className="text-button" onClick={() => setStage("exported")}>← Start studying</button></div>
@@ -758,10 +1170,10 @@ export default function Home() {
 
       <section className="evidence">
         <span className="kicker">WHY THIS IS AN AGENT, NOT A PROMPT</span>
-        <div><h2>Research first.<br />Plan second.<br /><em>Learn for real.</em></h2><p>Sologurus uses GPT-5.6 as a planner over schema-validated tools. That means the schedule can cite a specific resource, obey your hours, and export cleanly — instead of hallucinating a motivational checklist.</p></div>
-        <div className="schema-card"><code>{`plan = {\n  strategy: "balanced",\n  weekly_minutes: 480,\n  resources: Resource[],\n  constraint_check: "passed"\n}`}</code></div>
+        <div><h2>Research first.<br />Plan second.<br /><em>Learn for real.</em></h2><p>Sologurus is a planning agent that brings no models and no integration secrets of its own. It connects to your TrueFoundry account and uses whatever you have put there: your models, your MCP servers, your guardrails, your budgets. Every call carries a pseudonymous learner id and returns a receipt, so the schedule cites a real resource, obeys your hours, and can be audited by the institution running it.</p></div>
+        <div className="schema-card"><code>{`plan = {\n  strategy: "balanced",\n  weekly_minutes: 480,\n  resources: Resource[],\n  constraint_check: "passed",\n  gateway: "truefoundry",\n  citations: "catalog-verified"\n}`}</code></div>
       </section>
-      <footer><span>Sologurus · OpenAI Build Week 2026</span><span>Built for self-directed learners.</span></footer>
+      <footer><span>Sologurus · bring your own TrueFoundry</span><span>Built for self-directed learners.</span></footer>
     </main>
   );
 }

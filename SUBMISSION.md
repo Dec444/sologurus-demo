@@ -45,7 +45,7 @@ We designed Sologurus as a planner over structured tools rather than a chatbot t
 2. `rank_guidance()` scores educators and communities for the learner's level and goal.
 3. `curate_resources()` organizes free-first materials and a ten-show immersion watchlist.
 4. `match_mock_exams()` selects three exam-specific practice environments.
-5. `generate_plans()` checks feasibility, composes three strategies, and schedules dated sessions through the target date.
+5. `synthesize_plan()` checks feasibility, composes three strategies, and schedules dated sessions through the target date.
 
 The interface is built with Next.js-compatible React and TypeScript, with a responsive dark product design inspired by the clarity and information density of modern tools such as Linear. Comic Neue gives the major headings a friendly educational character, while a clean sans-serif keeps the working interface readable.
 
@@ -53,7 +53,50 @@ We implemented the calendar generator directly against the iCalendar format. It 
 
 For integrations, we created a real Notion database with task, date, skill, resource, duration, status, and reflection fields. We also created six real Google Calendar series: three weekly study blocks and three daily behavior reminders. Environment-based server boundaries keep credentials out of the browser.
 
-Codex accelerated the work by translating the project plan and PRD into the interface, orchestration states, data fixtures, calendar emitter, API routes, regression tests, documentation, demo script, and deployment workflow. GPT-5.6 is the intended planner in live mode; the hackathon demo uses the same structured boundaries with deterministic data for speed and reliability.
+We translated the project plan and PRD into the interface, orchestration states, data fixtures, calendar emitter, API routes, regression tests, documentation, demo script, and deployment workflow.
+
+### Bring your own platform
+
+The clearest way to describe Sologurus is that it is a planning agent with no vendor relationships of its own. It has no API keys for model providers, no Notion token, no OAuth client. It has exactly one connection: your TrueFoundry account.
+
+The header carries a single chip. Open it and you see what *your* control plane exposes — every model the account can reach (discovered live from the gateway's `/models` route), every registered MCP server with its tools marked granted or blocked, and the guardrails and cost tags every request carries. Each card links straight into your console. Connect a model, it appears. Register a server, its tools appear.
+
+That is why there is no Notion login and no Google login in the interface. Those relationships belong in the platform an institution already administers, not in an application's environment.
+
+### Governing the AI layer with TrueFoundry
+
+The fifth operation is the one that actually needs a model, and in an education product that is exactly where the hard questions live: whose data is in the prompt, which model answered, what did it cost, and can the institution running it prove any of that afterwards.
+
+So every model call in Sologurus goes through a single client, `lib/truefoundry.mjs`, pointed at the TrueFoundry AI Gateway. Nothing else in the codebase can reach an LLM, and a regression test enforces it.
+
+That one chokepoint buys the whole governance story:
+
+- **Reliability under load.** `TFY_MODEL_CHAIN` is an ordered fallback list. A 429, a 5xx, or a timeout moves to the next model; a 401 stops immediately, because a credential fault is a configuration bug, not something to retry against three providers. Exam-season spikes degrade instead of failing.
+- **Privacy by construction.** Requests carry a pseudonymous learner id derived from study goals — never a name, an email, or coordinates. Learner prose is redacted server-side *before* it reaches the gateway, independently of the gateway's own PII guardrail, so a misconfigured guardrail cannot become a data-exposure bug. `x-tfy-logging-config` turns prompt logging off for any feature carrying learner writing.
+- **Cost attribution.** `x-tfy-metadata` tags every call with tenant, cost centre, environment, feature, and learner id — the same keys a gateway rate-limit or budget rule matches on. The application declares its own per-learner ceilings in `lib/governance.mjs` and mirrors the spend locally so the learner can see it.
+- **Grounding.** The model receives a digest of catalog names, levels, and purposes — never URLs or addresses. Any citation it returns that is not in the verified catalog is dropped rather than displayed, which is what lets Sologurus keep its promise never to invent a test centre.
+- **Observability the learner can read.** The research page shows a gateway receipt: model, latency, tokens, estimated cost, fallbacks used, guardrails applied, and remaining daily budget. The AI is not a black box in the corner of the product.
+
+The gateway also unlocked the feature that had been sitting in our roadmap: a **writing feedback loop** that marks a learner sample against the target exam rubric, quoting the learner's own words. It ships behind the strictest policy in the app — redaction, no prompt logging, a tighter daily ceiling.
+
+### Brokering the writes with the MCP Gateway
+
+The other half of the problem is not inference at all. Sologurus writes a study plan into Notion — and in a school, *that* is the part with real blast radius. Holding a Notion token in the application's environment means a leak of our deployment is a leak of someone's workspace.
+
+So those writes go through the TrueFoundry MCP Gateway instead. `lib/mcp-gateway.mjs` is a dependency-free MCP client over the gateway's streamable-HTTP proxy at `{gateway}/mcp/{integrationId}/server` — initialize, echo the session id, list tools, call tools. Three things fall out of that:
+
+- **We hold no Notion credential — we deleted it.** The direct Notion API route is gone. Both the write and the progress read go through the gateway, and a regression test walks the whole source tree asserting that nothing calls `api.notion.com` and nothing reads a Notion secret. The claim is enforced, not asserted.
+- **The skills allowlist is closed by default.** A tool the registry exposes but this product was never granted is refused before the request is even built, and again in the route. The Governed Actions panel lists all five discovered Notion tools with two marked GRANTED and three BLOCKED, so an administrator reads the app's actual reach off the screen instead of trusting a claim.
+- **The browser names an intent, never a tool.** Declared actions bind one product intent to one tool, and the payload is built server-side. There is no endpoint that will call an arbitrary tool with an arbitrary body.
+- **Actions are metered like inference.** Dispatches count against a per-learner daily ceiling, refused ones included.
+
+One decision we're happy with: we did *not* broker the calendar. TrueFoundry's registry offers Notion, and calendar export never needed an integration anyway — the `.ics` is generated in the browser and imports into Google, Apple, or Outlook with no account. Governing something that has nothing to govern would have been theatre.
+
+The round trip is the part we like most. Each session in the Notion page carries a `[Sologurus day N]` marker, so a learner can tick boxes in Notion, reorder them, or rewrite the text around them, and `notion-fetch` still resolves the right sessions back into the progress chart. Two brokered calls, no token, full loop.
+
+And there is no fallback. With no MCP server registered, Sologurus cannot touch Notion in either direction, because it has nothing to touch it with — the interface says exactly that. We think that is the correct failure mode for a school product: the application's reach is defined by the registry, not by what happens to be in its environment.
+
+With no gateway credentials at all, the app still runs end to end. The deterministic planner answers, every AI panel is labelled offline, and the writing lab reports a structural check that explicitly refuses to invent a band score. Honest degradation was a product requirement, not a fallback we bolted on.
 
 ## Challenges we ran into
 
@@ -93,7 +136,7 @@ Finally, deterministic demos and live systems are not opposites. A strong hackat
 
 ## What's next for Sologurus
 
-The next version will replace the seeded research layer with source-cited live retrieval and freshness checks. GPT-5.6 will orchestrate the structured tools, personalize rankings, and explain why each resource fits the learner.
+The next version will replace the seeded research layer with source-cited live retrieval and freshness checks. The planning model — whichever the operator connects through TrueFoundry — will orchestrate the structured tools, personalize rankings, and explain why each resource fits the learner.
 
 We also plan to add:
 
@@ -102,7 +145,8 @@ We also plan to add:
 - Adaptive weekly replanning based on completed tasks and reflections.
 - Secure account-based persistence and deeper calendar synchronization.
 - Speaking practice with recording, transcription, and feedback.
-- Writing feedback linked to recurring error patterns.
+- Speaking feedback, alongside the writing loop that now ships.
+- Per-institution tenancy on the gateway, so a school sees its own budgets, guardrail policy, skills registry, and usage dashboards.
 - Progress views that track consistency and skill balance without encouraging unhealthy streak behavior.
 - Multi-user accounts, secure OAuth, source monitoring, and integration failure recovery.
 
@@ -110,8 +154,9 @@ Our long-term goal is simple: Sologurus should help any self-directed learner mo
 
 ## build with
 
-`OpenAI Codex`
-`GPT-5.6`
+`TrueFoundry AI Gateway`
+`TrueFoundry MCP Gateway`
+`Model Context Protocol`
 `Next.js`
 `React`
 `TypeScript`
