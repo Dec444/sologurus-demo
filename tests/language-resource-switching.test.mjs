@@ -67,14 +67,14 @@ test("country and city are dependent menus in country-first order", async () => 
 
 test("the plan reaches Notion as a governed action, not a static fallback", async () => {
   const page = await readFile(pageUrl, "utf8");
-  const actions = await readFile(new URL("../lib/mcp-actions.mjs", import.meta.url), "utf8");
+  const actions = await readFile(new URL("../lib/truefoundry/mcp-actions.mjs", import.meta.url), "utf8");
 
   assert.doesNotMatch(page, /window\.open\(notionDatabaseUrl/, "a static Notion link cannot represent the selected plan");
   assert.match(page, /action: actionId, profile, plan: selectedPlan, feasibility, studyPlan/, "the selected research and dated plan reach the action");
   assert.match(page, /action: "notion-plan-progress"/, "progress is read back through the same broker");
 
   // The page body the learner ends up with, built server-side from the catalog.
-  const { studyPlanMarkdown, parseCompletedDays } = await import("../lib/mcp-actions.mjs");
+  const { studyPlanMarkdown, parseCompletedDays } = await import("../lib/truefoundry/mcp-actions.mjs");
   const markdown = studyPlanMarkdown({
     profile: { language: "English", level: "B1", goal: "IELTS 7.0", date: "2026-12-05" },
     plan: { name: "Balanced Four-Skill", tagline: "Progress evenly." },
@@ -113,7 +113,7 @@ test("the client reloads research when language or location changes", async () =
   // The catalog builder is shared with the governed agent route, so the browser
   // and the model always reason over the same records.
   assert.match(resourceRoute, /buildResourceCatalog/, "server must compose the shared language catalog");
-  const catalogModule = await readFile(new URL("../lib/catalog.ts", import.meta.url), "utf8");
+  const catalogModule = await readFile(new URL("../lib/study/catalog.ts", import.meta.url), "utf8");
   assert.match(catalogModule, /language-media-exams\.json/, "server must load language-specific TV and mock-exam data");
   assert.match(catalogModule, /language-textbooks\.json/, "server must load language-specific textbooks");
   const agentRoute = await readFile(new URL("../app/api/agent/route.ts", import.meta.url), "utf8");

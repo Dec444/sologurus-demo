@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { assessFeasibility, buildProgressSeries, buildStudyPlan } from "../lib/learning-plan.mjs";
+import { assessFeasibility, buildProgressSeries, buildStudyPlan } from "../lib/study/learning-plan.mjs";
 
 const baseProfile = {
   language: "French",

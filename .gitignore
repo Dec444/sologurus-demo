@@ -49,3 +49,7 @@ tsconfig.tsbuildinfo
 # Wrangler local secrets
 .dev.vars
 .dev.vars.*
+
+# Local-only working folders (backups, demo production assets)
+/OLD Version/
+/demo-video/

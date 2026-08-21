@@ -6,7 +6,7 @@
 
 **A self-directed language-learning agent that turns a goal into evidence, strategy, and scheduled action — running entirely on the TrueFoundry account you control.**
 
-[Live demo](https://sologurus-study-agent.lu-liu398220.chatgpt.site) · [Demo script](DEMO_SCRIPT.md) · [Submission](SUBMISSION.md)
+[Live demo](https://sologurus-study-agent.lu-liu398220.chatgpt.site) · [Demo script](docs/DEMO_SCRIPT.md) · [Submission](docs/SUBMISSION.md)
 
 [![CI](https://github.com/Dec444/sologurus-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/Dec444/sologurus-demo/actions/workflows/ci.yml)
 [![Node.js 22+](https://img.shields.io/badge/Node.js-22%2B-5FA04E?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
@@ -158,7 +158,7 @@ The console URL is derived from `TFY_GATEWAY_BASE_URL`'s origin — a dedicated 
 
 ### Governed on the TrueFoundry AI Gateway
 
-Sologurus is an education product, so the interesting question is not "does it call a model" but "can an institution run it". Every model call goes through [`lib/truefoundry.mjs`](lib/truefoundry.mjs), which is the only place in the codebase that can reach an LLM. The regression suite asserts that no route bypasses it.
+Sologurus is an education product, so the interesting question is not "does it call a model" but "can an institution run it". Every model call goes through [`lib/truefoundry/gateway.mjs`](lib/truefoundry/gateway.mjs), which is the only place in the codebase that can reach an LLM. The regression suite asserts that no route bypasses it.
 
 | Gateway capability | How Sologurus uses it |
 |---|---|
@@ -170,7 +170,7 @@ Sologurus is an education product, so the interesting question is not "does it c
 | Timeouts | `x-tfy-request-timeout` bounds each call, so an exam-season traffic spike degrades instead of hanging |
 | Cost observability | Token counts, latency, fallback count, and a spend estimate are shown to the learner in a "gateway receipt" on the research page |
 
-Two AI features are declared in [`lib/governance.mjs`](lib/governance.mjs), each with its own daily call and token ceiling:
+Two AI features are declared in [`lib/truefoundry/governance.mjs`](lib/truefoundry/governance.mjs), each with its own daily call and token ceiling:
 
 - **Research synthesis** (`POST /api/agent`) — explains why the curated evidence fits this learner, and what puts the deadline at risk. Grounded: the model receives a digest of names, levels, and purposes, never URLs or addresses, and any citation it returns that is not in the verified catalog is dropped rather than displayed.
 - **Writing feedback** (`POST /api/feedback`) — marks a learner writing sample against the target exam rubric.
@@ -194,13 +194,13 @@ Sologurus  ──POST──▶  {gateway}/mcp/{integrationId}/server   ──▶
 
 Notion is the registered server for this workspace. **Calendar export is deliberately not brokered**, because it needs no integration at all: the `.ics` file is generated in the browser and imports into Google, Apple, or Outlook with no account, no OAuth, and nothing to govern.
 
-[`lib/mcp-gateway.mjs`](lib/mcp-gateway.mjs) is a dependency-free MCP client over the gateway's streamable-HTTP proxy: `initialize` → `notifications/initialized` → `tools/list` / `tools/call`, echoing the `Mcp-Session-Id` the gateway returns and decoding either a JSON or a server-sent-event reply.
+[`lib/truefoundry/mcp-gateway.mjs`](lib/truefoundry/mcp-gateway.mjs) is a dependency-free MCP client over the gateway's streamable-HTTP proxy: `initialize` → `notifications/initialized` → `tools/list` / `tools/call`, echoing the `Mcp-Session-Id` the gateway returns and decoding either a JSON or a server-sent-event reply.
 
 Three properties matter more than the transport:
 
 - **Sologurus holds no Notion credential — at all.** There is no `NOTION_TOKEN`, and a regression test walks `app/`, `lib/`, and `worker/` asserting that nothing calls `api.notion.com` and nothing reads a Notion secret. Both directions go through the gateway: the write *and* the progress read. A leak of this application's environment cannot reach a learner's workspace.
 - **The skills allowlist is closed by default.** `TFY_MCP_ALLOWED_TOOLS` names `server/tool` pairs against the real Notion MCP tool names. A tool the registry exposes but this product was never granted is refused *before the request is built*, and again in the route — the discovery panel shows blocked tools next to granted ones, so an administrator can see exactly what the app can reach.
-- **The browser names an intent, never a tool.** [`lib/mcp-actions.mjs`](lib/mcp-actions.mjs) is a closed list of declared actions, each binding one product intent to one tool with the payload built server-side. A crafted request cannot reach an arbitrary tool with an arbitrary body even before the allowlist is consulted.
+- **The browser names an intent, never a tool.** [`lib/truefoundry/mcp-actions.mjs`](lib/truefoundry/mcp-actions.mjs) is a closed list of declared actions, each binding one product intent to one tool with the payload built server-side. A crafted request cannot reach an arbitrary tool with an arbitrary body even before the allowlist is consulted.
 - **Actions are metered like inference.** `governed-actions` is declared in the same policy as the model features, with its own daily per-learner ceiling. Every dispatch counts, including refused ones.
 
 | Declared action | Notion MCP tool | What it does |
@@ -220,7 +220,7 @@ Each session line carries a `[Sologurus day N]` marker, so a learner can tick bo
 - **Reactive verified research:** `GET /api/resources` returns a dated catalog for the selected language and location. Exact local addresses are shown only when verified; otherwise Sologurus links to the official center directory and clearly says so.
 - **Real community location:** browser permission supplies live coordinates; the server resolves only an approximate city/region and calculates actual great-circle distance for the selected radius. Coordinates are not saved to a learner profile. Place names are resolved through OpenStreetMap Nominatim under its usage policy.
 - **Universal calendar:** the dependency-free iCalendar generator produces timezone-aware events that import into Google, Apple, and Outlook Calendar.
-- **Live Notion write and read:** with `NOTION_TOKEN` plus `NOTION_TARGET_PAGE_ID`, `POST /api/notion` replaces one selected overview and creates a dated study-plan subpage. With `NOTION_PARENT_PAGE_ID` instead, it creates the overview beneath that parent and nests the plan below it. `PUT /api/notion` reads completed Sologurus checkboxes from that subpage for the progress chart.
+- **Brokered Notion write and read:** `POST /api/mcp` runs a declared action through the TrueFoundry MCP Gateway — `notion-create-pages` to write the dated plan as checkbox sessions, `notion-fetch` to read the ticked boxes back into the progress chart. Sologurus holds no Notion credential; the platform does. See [Brokering actions through the MCP Gateway](#brokering-actions-through-the-mcp-gateway).
 - **Honest source model:** exam dates and venue availability can change, so the product never invents a nearby address; it routes learners to the owning exam body's current directory.
 
 ## Run locally
@@ -279,26 +279,36 @@ The tests cover server rendering, language breadth, resource completeness, Notio
 
 ```text
 app/
-  api/agent/        Governed research synthesis, grounded in the verified catalog
-  api/feedback/     Writing feedback against the target exam rubric
-  api/gateway/      Published gateway and AI-policy status
-  api/mcp/          MCP tool discovery and governed action dispatch
-  api/community/    Location, radius, and language matching boundary
-  api/calendar/     Connected-calendar status boundary
-  page.tsx          Interactive learner journey
-data/               Language, community, TV, mock-exam, textbook, forum, and location catalogs
-lib/truefoundry.mjs    TrueFoundry AI Gateway client: headers, fallback, telemetry
-lib/governance.mjs     AI feature policy, budgets, redaction, citation grounding
-lib/mcp-gateway.mjs    MCP Gateway client: handshake, skills allowlist, tool calls
-lib/mcp-actions.mjs    Declared actions binding a product intent to one Notion MCP tool
-lib/catalog.ts         Shared catalog builder and model-facing digest
-lib/calendar.mjs    Timezone-aware iCalendar generator
-lib/learning-plan.mjs  Feasibility, dated-plan, and progress calculations
-tests/              Node regression tests
-public/             Brand and social-preview assets
-DEMO_SCRIPT.md       Under-three-minute recording script
-SUBMISSION.md          Hackathon submission narrative
+  api/agent/          Governed research synthesis, grounded in the verified catalog
+  api/feedback/       Writing feedback against the target exam rubric
+  api/gateway/        Published gateway status + AI policy + discovered models
+  api/mcp/            MCP tool discovery and governed action dispatch
+  api/resources/      Reactive per-language, per-location catalog
+  api/community/      Location, radius, and language matching boundary
+  api/calendar/       Connected-calendar status boundary
+  page.tsx            Interactive learner journey
+  globals.css         The soft-dashboard design system
+
+lib/truefoundry/      Everything that talks to the TrueFoundry platform
+  gateway.mjs         AI Gateway client: headers, model fallback, telemetry
+  governance.mjs      AI feature policy, budgets, redaction, citation grounding
+  mcp-gateway.mjs     MCP Gateway client: handshake, skills allowlist, tool calls
+  mcp-actions.mjs     Declared actions binding a product intent to a Notion MCP tool
+lib/study/            The study domain, independent of any platform
+  catalog.ts          Shared catalog builder and model-facing digest
+  learning-plan.mjs   Feasibility, dated-plan, and progress calculations
+  calendar.mjs        Timezone-aware iCalendar generator
+
+data/                 Language, community, TV, mock-exam, textbook, and location catalogs
+tests/                Node regression tests (run directly against the .mjs sources)
+public/               Brand and social-preview assets
+docs/
+  figures/            Product-tour screenshots
+  DEMO_SCRIPT.md      Under-three-minute recording script
+  SUBMISSION.md       Submission narrative
 ```
+
+Runtime modules are plain `.mjs` with a `.d.ts` type sidecar, so the test suite can run them directly under `node --test` with no build step, while the bundled routes still get full types. Each `lib/` subfolder is one concern: `truefoundry/` is the whole platform integration, `study/` is the domain logic that would survive swapping the platform out.
 
 ## Product decisions
 
@@ -317,7 +327,7 @@ SUBMISSION.md          Hackathon submission narrative
 
 Sologurus targets the **Education** category. The product layer — the responsive interface, orchestration states, calendar emitter, integration routes, fixtures, tests, and deployment workflow — was built for a hackathon. The AI layer runs on [TrueFoundry](https://www.truefoundry.com/solutions/education): the **AI Gateway** governs model access with guardrails, per-learner budgets, and observability, and the **MCP Gateway** brokers the Notion write against a closed-by-default skills registry. That is what makes the same product deployable inside a school or university rather than only on a laptop. Human decisions determined the scope, learning strategies, evidence requirements, and reliability tradeoffs.
 
-For the complete story, see the [submission narrative](SUBMISSION.md). For the intended demonstration sequence, use the [recording script](DEMO_SCRIPT.md).
+For the complete story, see the [submission narrative](docs/SUBMISSION.md). For the intended demonstration sequence, use the [recording script](docs/DEMO_SCRIPT.md).
 
 ## Roadmap
 

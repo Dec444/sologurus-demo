@@ -1,6 +1,6 @@
-import { buildResourceCatalog, catalogDigest, citableSourceNames, type ResourceCatalog } from "../../../lib/catalog";
-import { gatewayChat, parseJsonContent, readGatewayConfig } from "../../../lib/truefoundry.mjs";
-import type { GatewayTelemetry } from "../../../lib/truefoundry";
+import { buildResourceCatalog, catalogDigest, citableSourceNames, type ResourceCatalog } from "../../../lib/study/catalog";
+import { gatewayChat, parseJsonContent, readGatewayConfig } from "../../../lib/truefoundry/gateway.mjs";
+import type { GatewayTelemetry } from "../../../lib/truefoundry/gateway";
 import {
   buildRequestMetadata,
   evaluateBudget,
@@ -8,7 +8,7 @@ import {
   keepGroundedCitations,
   pseudonymousLearnerId,
   recordUsage,
-} from "../../../lib/governance.mjs";
+} from "../../../lib/truefoundry/governance.mjs";
 
 const FEATURE_ID = "research-synthesis";
 const PHASES = ["Foundation", "Skill building", "Exam technique", "Mock & taper"] as const;

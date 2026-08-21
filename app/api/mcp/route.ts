@@ -6,11 +6,11 @@ import {
   isMcpConfigured,
   listServerTools,
   readMcpConfig,
-} from "../../../lib/mcp-gateway.mjs";
-import { consoleLinks, readGatewayConfig } from "../../../lib/truefoundry.mjs";
-import type { McpToolListing } from "../../../lib/mcp-gateway";
-import { describeActions, extractNotionPageRef, findAction, parseCompletedDays } from "../../../lib/mcp-actions.mjs";
-import { evaluateBudget, findFeature, pseudonymousLearnerId, recordUsage } from "../../../lib/governance.mjs";
+} from "../../../lib/truefoundry/mcp-gateway.mjs";
+import { consoleLinks, readGatewayConfig } from "../../../lib/truefoundry/gateway.mjs";
+import type { McpToolListing } from "../../../lib/truefoundry/mcp-gateway";
+import { describeActions, extractNotionPageRef, findAction, parseCompletedDays } from "../../../lib/truefoundry/mcp-actions.mjs";
+import { evaluateBudget, findFeature, pseudonymousLearnerId, recordUsage } from "../../../lib/truefoundry/governance.mjs";
 
 const FEATURE_ID = "governed-actions";
 

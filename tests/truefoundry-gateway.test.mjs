@@ -12,7 +12,7 @@ import {
   listGatewayModels,
   parseJsonContent,
   readGatewayConfig,
-} from "../lib/truefoundry.mjs";
+} from "../lib/truefoundry/gateway.mjs";
 import {
   AI_FEATURES,
   buildRequestMetadata,
@@ -23,7 +23,7 @@ import {
   recordUsage,
   redactPersonalData,
   resetLedger,
-} from "../lib/governance.mjs";
+} from "../lib/truefoundry/governance.mjs";
 
 const liveEnv = {
   TFY_API_KEY: "tfy-test-key",
@@ -244,11 +244,11 @@ test("citations outside the verified catalog are dropped, not displayed", () => 
 test("the gateway is the only place the app calls a model", async () => {
   for (const file of ["app/api/agent/route.ts", "app/api/feedback/route.ts", "app/api/gateway/route.ts"]) {
     const source = await readFile(new URL(`../${file}`, import.meta.url), "utf8");
-    assert.match(source, /lib\/truefoundry\.mjs|\.\.\/\.\.\/\.\.\/lib\/truefoundry\.mjs/, `${file} must route through the gateway client`);
+    assert.match(source, /lib\/truefoundry\/gateway\.mjs/, `${file} must route through the gateway client`);
     assert.doesNotMatch(source, /api\.openai\.com|api\.anthropic\.com|generativelanguage\.googleapis\.com/, `${file} must not bypass the gateway`);
   }
 
-  const client = await readFile(new URL("../lib/truefoundry.mjs", import.meta.url), "utf8");
+  const client = await readFile(new URL("../lib/truefoundry/gateway.mjs", import.meta.url), "utf8");
   assert.match(client, /x-tfy-metadata/);
   assert.match(client, /x-tfy-guardrails/);
   assert.match(client, /x-tfy-logging-config/);

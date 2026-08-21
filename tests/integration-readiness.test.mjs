@@ -36,13 +36,13 @@ test("Notion is reachable only through the MCP Gateway, never with a token of ou
   assert.doesNotMatch(env, /^NOTION_TOKEN=/m, "no Notion token is configurable");
   assert.match(env, /TFY_MCP_ALLOWED_TOOLS/, "the skills allowlist is the way in");
 
-  const actions = await readFile(new URL("../lib/mcp-actions.mjs", import.meta.url), "utf8");
+  const actions = await readFile(new URL("../lib/truefoundry/mcp-actions.mjs", import.meta.url), "utf8");
   assert.match(actions, /notion-create-pages/, "writing the plan is a real Notion MCP tool");
   assert.match(actions, /notion-fetch/, "reading progress back is a real Notion MCP tool");
 });
 
 test("calendar export produces a timezone-aware four-week schedule", async () => {
-  const { makeCalendarIcs } = await import("../lib/calendar.mjs");
+  const { makeCalendarIcs } = await import("../lib/study/calendar.mjs");
   const ics = makeCalendarIcs(
     { goal: "IELTS 7.0", date: "2026-12-05", hours: 8, timezone: "Asia/Ho_Chi_Minh" },
     { id: "balanced", name: "Balanced", sample: ["25 min · Listening", "20 min · Speaking", "15 min · Writing"] },

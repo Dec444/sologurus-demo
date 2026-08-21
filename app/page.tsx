@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import languages from "../data/languages.json";
 import locations from "../data/locations.json";
-import { makeCalendarIcs } from "../lib/calendar.mjs";
-import { assessFeasibility, buildProgressSeries, buildStudyPlan, type StudyPlanRow } from "../lib/learning-plan.mjs";
+import { makeCalendarIcs } from "../lib/study/calendar.mjs";
+import { assessFeasibility, buildProgressSeries, buildStudyPlan, type StudyPlanRow } from "../lib/study/learning-plan.mjs";
 
 type Profile = {
   language: string;

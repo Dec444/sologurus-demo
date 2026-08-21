@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { buildResourceCatalog } from "../../../lib/catalog";
+import { buildResourceCatalog } from "../../../lib/study/catalog";
 
 function clean(value: string | null, fallback: string) {
   return (value ?? fallback).trim().slice(0, 100);

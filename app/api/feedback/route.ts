@@ -1,6 +1,6 @@
-import { buildResourceCatalog } from "../../../lib/catalog";
-import { gatewayChat, parseJsonContent, readGatewayConfig } from "../../../lib/truefoundry.mjs";
-import type { GatewayTelemetry } from "../../../lib/truefoundry";
+import { buildResourceCatalog } from "../../../lib/study/catalog";
+import { gatewayChat, parseJsonContent, readGatewayConfig } from "../../../lib/truefoundry/gateway.mjs";
+import type { GatewayTelemetry } from "../../../lib/truefoundry/gateway";
 import {
   buildRequestMetadata,
   evaluateBudget,
@@ -8,7 +8,7 @@ import {
   pseudonymousLearnerId,
   recordUsage,
   redactPersonalData,
-} from "../../../lib/governance.mjs";
+} from "../../../lib/truefoundry/governance.mjs";
 
 const FEATURE_ID = "writing-feedback";
 const MIN_WORDS = 40;

@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Build output and local-only working folders (backups, demo assets).
+    "dist/**",
+    "OLD Version/**",
+    "demo-video/**",
+    "work/**",
   ]),
 ]);
 

@@ -12,7 +12,7 @@ import {
   listServerTools,
   readMcpConfig,
   serverUrl,
-} from "../lib/mcp-gateway.mjs";
+} from "../lib/truefoundry/mcp-gateway.mjs";
 
 const liveEnv = {
   TFY_API_KEY: "tfy-test-key",
@@ -193,7 +193,7 @@ test("a JSON-RPC error from the gateway becomes a reported failure, not a crash"
 });
 
 test("integration credentials are never held by this application", async () => {
-  const client = await readFile(new URL("../lib/mcp-gateway.mjs", import.meta.url), "utf8");
+  const client = await readFile(new URL("../lib/truefoundry/mcp-gateway.mjs", import.meta.url), "utf8");
   assert.match(client, /\/mcp\/\$\{server\.integrationId\}\/server/, "actions go through the gateway proxy path");
   assert.doesNotMatch(client, /api\.notion\.com/, "the broker must not talk to Notion directly");
 
@@ -210,7 +210,7 @@ test("the MCP proxy can be pointed independently of the inference endpoint", () 
 });
 
 test("declared actions bind a product intent to one real Notion MCP tool", async () => {
-  const { GOVERNED_ACTIONS, describeActions, findAction, studyPlanMarkdown } = await import("../lib/mcp-actions.mjs");
+  const { GOVERNED_ACTIONS, describeActions, findAction, studyPlanMarkdown } = await import("../lib/truefoundry/mcp-actions.mjs");
 
   assert.ok(GOVERNED_ACTIONS.length > 0);
   for (const action of GOVERNED_ACTIONS) {
@@ -242,7 +242,7 @@ test("declared actions bind a product intent to one real Notion MCP tool", async
 });
 
 test("a created page reference is recovered from whatever prose the server returns", async () => {
-  const { extractNotionPageRef } = await import("../lib/mcp-actions.mjs");
+  const { extractNotionPageRef } = await import("../lib/truefoundry/mcp-actions.mjs");
 
   assert.equal(
     extractNotionPageRef('Created "English study plan" at https://www.notion.so/English-plan-24f1a2b3c4d5.'),
@@ -256,7 +256,7 @@ test("a created page reference is recovered from whatever prose the server retur
 });
 
 test("only ticked sessions come back from the plan page", async () => {
-  const { parseCompletedDays } = await import("../lib/mcp-actions.mjs");
+  const { parseCompletedDays } = await import("../lib/truefoundry/mcp-actions.mjs");
 
   const markdown = [
     "- [x] Day 1 · Foundation [Sologurus day 1]",
@@ -272,7 +272,7 @@ test("only ticked sessions come back from the plan page", async () => {
 });
 
 test("reading progress needs a page to read", async () => {
-  const { findAction } = await import("../lib/mcp-actions.mjs");
+  const { findAction } = await import("../lib/truefoundry/mcp-actions.mjs");
   const progress = findAction("notion-plan-progress");
   assert.equal(progress.tool, "notion-fetch");
   assert.equal(progress.needsPageRef, true, "the route must refuse before calling with an empty id");
@@ -280,7 +280,7 @@ test("reading progress needs a page to read", async () => {
 });
 
 test("the created page carries a parent only when one is configured", async () => {
-  const { findAction } = await import("../lib/mcp-actions.mjs");
+  const { findAction } = await import("../lib/truefoundry/mcp-actions.mjs");
   const create = findAction("notion-study-plan");
   const withParent = create.build({ profile: { language: "English" }, plan: { name: "Balanced" }, studyPlan: [] }, { notionParent: "abc123" });
   assert.deepEqual(withParent.parent, { type: "page_id", page_id: "abc123" }, "the parent variant is discriminated");

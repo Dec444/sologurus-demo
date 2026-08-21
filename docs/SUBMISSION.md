@@ -67,13 +67,13 @@ That is why there is no Notion login and no Google login in the interface. Those
 
 The fifth operation is the one that actually needs a model, and in an education product that is exactly where the hard questions live: whose data is in the prompt, which model answered, what did it cost, and can the institution running it prove any of that afterwards.
 
-So every model call in Sologurus goes through a single client, `lib/truefoundry.mjs`, pointed at the TrueFoundry AI Gateway. Nothing else in the codebase can reach an LLM, and a regression test enforces it.
+So every model call in Sologurus goes through a single client, `lib/truefoundry/gateway.mjs`, pointed at the TrueFoundry AI Gateway. Nothing else in the codebase can reach an LLM, and a regression test enforces it.
 
 That one chokepoint buys the whole governance story:
 
 - **Reliability under load.** `TFY_MODEL_CHAIN` is an ordered fallback list. A 429, a 5xx, or a timeout moves to the next model; a 401 stops immediately, because a credential fault is a configuration bug, not something to retry against three providers. Exam-season spikes degrade instead of failing.
 - **Privacy by construction.** Requests carry a pseudonymous learner id derived from study goals — never a name, an email, or coordinates. Learner prose is redacted server-side *before* it reaches the gateway, independently of the gateway's own PII guardrail, so a misconfigured guardrail cannot become a data-exposure bug. `x-tfy-logging-config` turns prompt logging off for any feature carrying learner writing.
-- **Cost attribution.** `x-tfy-metadata` tags every call with tenant, cost centre, environment, feature, and learner id — the same keys a gateway rate-limit or budget rule matches on. The application declares its own per-learner ceilings in `lib/governance.mjs` and mirrors the spend locally so the learner can see it.
+- **Cost attribution.** `x-tfy-metadata` tags every call with tenant, cost centre, environment, feature, and learner id — the same keys a gateway rate-limit or budget rule matches on. The application declares its own per-learner ceilings in `lib/truefoundry/governance.mjs` and mirrors the spend locally so the learner can see it.
 - **Grounding.** The model receives a digest of catalog names, levels, and purposes — never URLs or addresses. Any citation it returns that is not in the verified catalog is dropped rather than displayed, which is what lets Sologurus keep its promise never to invent a test centre.
 - **Observability the learner can read.** The research page shows a gateway receipt: model, latency, tokens, estimated cost, fallbacks used, guardrails applied, and remaining daily budget. The AI is not a black box in the corner of the product.
 
@@ -83,7 +83,7 @@ The gateway also unlocked the feature that had been sitting in our roadmap: a **
 
 The other half of the problem is not inference at all. Sologurus writes a study plan into Notion — and in a school, *that* is the part with real blast radius. Holding a Notion token in the application's environment means a leak of our deployment is a leak of someone's workspace.
 
-So those writes go through the TrueFoundry MCP Gateway instead. `lib/mcp-gateway.mjs` is a dependency-free MCP client over the gateway's streamable-HTTP proxy at `{gateway}/mcp/{integrationId}/server` — initialize, echo the session id, list tools, call tools. Three things fall out of that:
+So those writes go through the TrueFoundry MCP Gateway instead. `lib/truefoundry/mcp-gateway.mjs` is a dependency-free MCP client over the gateway's streamable-HTTP proxy at `{gateway}/mcp/{integrationId}/server` — initialize, echo the session id, list tools, call tools. Three things fall out of that:
 
 - **We hold no Notion credential — we deleted it.** The direct Notion API route is gone. Both the write and the progress read go through the gateway, and a regression test walks the whole source tree asserting that nothing calls `api.notion.com` and nothing reads a Notion secret. The claim is enforced, not asserted.
 - **The skills allowlist is closed by default.** A tool the registry exposes but this product was never granted is refused before the request is even built, and again in the route. The Governed Actions panel lists all five discovered Notion tools with two marked GRANTED and three BLOCKED, so an administrator reads the app's actual reach off the screen instead of trusting a claim.

@@ -1,5 +1,5 @@
-import { describeGateway, listGatewayModels, readGatewayConfig } from "../../../lib/truefoundry.mjs";
-import { AI_FEATURES } from "../../../lib/governance.mjs";
+import { describeGateway, listGatewayModels, readGatewayConfig } from "../../../lib/truefoundry/gateway.mjs";
+import { AI_FEATURES } from "../../../lib/truefoundry/governance.mjs";
 
 /**
  * Secret-free description of the TrueFoundry account this deployment is
