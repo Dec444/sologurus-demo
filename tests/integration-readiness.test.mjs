@@ -79,10 +79,7 @@ test("the homepage exposes the project, the platform connection, and community a
   assert.match(page, /id="connection-panel"/, "the TrueFoundry connection has its own panel");
   assert.match(page, /connection-toggle/, "a single chip opens it");
   assert.match(page, /console\.models/, "the panel links out to add models");
-  assert.match(page, /Personal integrations/, "the public panel labels unavailable personal integrations honestly");
-  assert.match(page, /Coming later/, "the public panel does not imply a visitor can connect Notion today");
-  assert.doesNotMatch(page, /tools granted/, "the public panel does not expose a misleading MCP tool count");
-  assert.doesNotMatch(page, /Add MCP servers ↗/, "the public panel does not direct visitors into an unfinished MCP setup");
+  assert.match(page, /console\.mcpServers/, "the panel links out to add MCP servers");
   assert.doesNotMatch(page, /https:\/\/www\.notion\.so\//, "no Notion sign-in link belongs in the shell");
   assert.doesNotMatch(page, /https:\/\/calendar\.google\.com/, "no Google sign-in link belongs in the shell");
 
