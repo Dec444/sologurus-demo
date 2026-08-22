@@ -44,6 +44,7 @@ next-env.d.ts
 
 # Local tooling
 .claude/
+.worktrees/
 tsconfig.tsbuildinfo
 
 # Wrangler local secrets
