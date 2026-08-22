@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "sologurus",
+  "keep_vars": true,
   "compatibility_date": "2026-08-21",
   "compatibility_flags": [
     "nodejs_compat"

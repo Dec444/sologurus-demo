@@ -63,6 +63,11 @@ test("Cloudflare Worker deployment does not depend on OpenAI Sites build metadat
   const wranglerConfig = JSON.parse(await readFile(new URL("../wrangler.jsonc", import.meta.url), "utf8"));
   assert.equal(wranglerConfig.name, "sologurus");
   assert.equal(wranglerConfig.main, "./worker/index.ts");
+  assert.equal(
+    wranglerConfig.keep_vars,
+    true,
+    "Git deployments must preserve the TrueFoundry and MCP variables managed in Cloudflare",
+  );
   assert.deepEqual(wranglerConfig.compatibility_flags, ["nodejs_compat"]);
   assert.equal(wranglerConfig.images?.binding, "IMAGES");
 
