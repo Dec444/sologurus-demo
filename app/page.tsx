@@ -584,7 +584,7 @@ export default function Home() {
           <a className="top-link github-link" href="https://github.com/Dec444/sologurus-demo" target="_blank" rel="noreferrer"><span aria-hidden="true">⌘</span> GitHub</a>
           <button className={`account-link connection-toggle ${gatewayInfo?.gateway.configured ? "connected" : ""}`} aria-expanded={connectionOpen} aria-controls="connection-panel" onClick={() => setConnectionOpen((current) => !current)}>
             <span className="account-dot" />
-            <span><b>TrueFoundry</b><small>{gatewayInfo ? (gatewayInfo.gateway.configured ? `${gatewayInfo.models.length || "—"} models · ${mcpInfo?.permittedCount ?? 0} tools` : "Not connected") : "Checking…"}</small></span>
+            <span><b>TrueFoundry</b><small>{gatewayInfo ? (gatewayInfo.gateway.configured ? `${gatewayInfo.models.length || "—"} models` : "Not connected") : "Checking…"}</small></span>
           </button>
           <button className="community-toggle" aria-expanded={communityOpen} aria-controls="community-finder" onClick={toggleCommunity}>Community <span>{communityOpen ? "×" : "↘"}</span></button>
         </nav>
@@ -597,7 +597,7 @@ export default function Home() {
             <h2 id="connection-title">Sologurus runs on the platform you control.</h2>
             <p>
               This app ships no provider list and no integration secrets. It reflects whatever your own TrueFoundry
-              control plane exposes — connect a model, register an MCP server, and it appears here.
+              control plane exposes. Personal workspace integrations are planned separately.
             </p>
           </div>
 
@@ -620,20 +620,13 @@ export default function Home() {
                 : <small className="connection-hint">Set <code>TFY_CONSOLE_URL</code> to link straight to your control plane.</small>}
             </article>
 
-            <article className={`connection-card ${mcpInfo?.broker.configured ? "live" : ""}`}>
+            <article className="connection-card">
               <div className="connection-card-head">
-                <span className="mcp-chip"><i aria-hidden="true">◈</i>MCP Gateway</span>
-                <b>{mcpInfo?.broker.configured ? `${mcpInfo.permittedCount}/${mcpInfo.discoveredCount} tools granted` : "No servers"}</b>
+                <span className="mcp-chip"><i aria-hidden="true">◈</i>Personal integrations</span>
+                <b>Coming later</b>
               </div>
-              {mcpInfo?.broker.configured ? (
-                <>
-                  <p>Sologurus can act through {mcpInfo.broker.servers.length} registered server{mcpInfo.broker.servers.length === 1 ? "" : "s"}. It holds no credential of its own for any of them.</p>
-                  <div className="connection-tags">{mcpInfo.broker.servers.map((server) => <span key={server.label}>{server.label}</span>)}</div>
-                </>
-              ) : <p>Register any MCP server — Notion, a ticketing system, your own — and grant Sologurus the tools it may call. Until you do, it can act on nothing.</p>}
-              {(mcpInfo?.console.mcpServers || gatewayInfo?.gateway.console.mcpServers)
-                ? <a className="connection-link" href={mcpInfo?.console.mcpServers || gatewayInfo?.gateway.console.mcpServers} target="_blank" rel="noreferrer">Add MCP servers ↗</a>
-                : <small className="connection-hint">Set <code>TFY_CONSOLE_URL</code> to link straight to your registry.</small>}
+              <p>Notion sync will return when Sologurus supports secure, per-learner account connections.</p>
+              <small className="connection-hint">This public demo does not request or store a personal workspace credential.</small>
             </article>
 
             <article className={`connection-card ${gatewayInfo?.gateway.inputGuardrails.length ? "live" : ""}`}>
@@ -991,83 +984,13 @@ export default function Home() {
               </section>
               <section className="mcp-lab" aria-labelledby="mcp-lab-title">
                 <div className="mcp-heading">
-                  <div><span className="kicker">GOVERNED ACTIONS · MCP GATEWAY</span><h3 id="mcp-lab-title">Write the plan out, without holding a key.</h3></div>
-                  <p>
-                    Writing into Notion is an agent action, so it runs through the TrueFoundry MCP Gateway. The platform
-                    holds the Notion credential, the registry decides which tools exist, and Sologurus may invoke only
-                    the ones its skills allowlist names. Calendar export is not brokered — the <code>.ics</code> file
-                    needs no integration at all.
-                  </p>
+                  <div><span className="kicker">PERSONAL INTEGRATIONS</span><h3 id="mcp-lab-title">Notion sync is coming later.</h3></div>
+                  <p>Personal workspace connections need secure, per-learner authorization. This public demo keeps that future feature out of the learner flow and offers a calendar export that needs no account at all.</p>
                 </div>
-                {mcpInfo?.broker.configured ? (
-                  <>
-                    <div className="mcp-servers">
-                      {mcpInfo.listings.map((listing) => (
-                        <div className="mcp-server" key={listing.server}>
-                          <div className="mcp-server-heading">
-                            <b>{listing.server}</b>
-                            <span className="mcp-chip"><i aria-hidden="true">◆</i>{listing.ok ? `${listing.tools.filter((tool) => tool.permitted).length}/${listing.tools.length} granted` : "unreachable"}</span>
-                          </div>
-                          {listing.ok ? (
-                            <ul className="mcp-tools">
-                              {listing.tools.map((tool) => (
-                                <li className={tool.permitted ? "" : "blocked"} key={tool.name}>
-                                  <span className="mcp-state">{tool.permitted ? "granted" : "blocked"}</span>
-                                  <div><code>{tool.name}</code><p>{tool.description || "No description published by the server."}</p></div>
-                                </li>
-                              ))}
-                            </ul>
-                          ) : <p className="chart-note">{listing.error}</p>}
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mcp-actions">
-                      {mcpInfo.actions.map((action) => (
-                        <div className="mcp-action" key={action.id}>
-                          <div>
-                            <b>{action.label}</b>
-                            <small>{action.description}</small>
-                            <code>{action.server}/{action.tool}</code>
-                            {!action.available && <em>{action.reason}</em>}
-                          </div>
-                          <button className="secondary" disabled={!action.available || mcpStatus === "dispatching"} onClick={() => dispatchMcpAction(action.id)}>
-                            {mcpStatus === "dispatching" ? "Dispatching…" : action.available ? "Run action ↗" : "Not granted"}
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mcp-dispatch">
-                      <small>
-                        {mcpInfo.permittedCount} of {mcpInfo.discoveredCount} discovered tools are granted to this application · {mcpInfo.transport}
-                        {mcpInfo.broker.notionParentConfigured ? " · parent page configured" : " · no parent page set, pages land at the workspace root"}
-                      </small>
-                    </div>
-                  </>
-                ) : (
-                  <div className="mcp-empty">
-                    <b>No MCP server is registered yet.</b>
-                    {mcpInfo?.note ?? "Checking the registry…"} Register one in your TrueFoundry console and grant Sologurus the tools it may call — until then it can act on nothing, because it holds no credentials of its own.
-                    {mcpInfo?.console.mcpServers && <a className="connection-link" href={mcpInfo.console.mcpServers} target="_blank" rel="noreferrer">Add MCP servers ↗</a>}
-                  </div>
-                )}
-                {mcpDispatch && (
-                  <div className={mcpDispatch.ok ? "success" : "integration-error"} role="status">
-                    <span>{mcpDispatch.ok ? "✓" : mcpDispatch.blocked ? "⊘" : "!"}</span>
-                    <div>
-                      <b>{mcpDispatch.ok ? "Action completed through the gateway." : mcpDispatch.blocked ? "Refused by the skills registry." : "The action did not complete."}</b>
-                      <p>{mcpDispatch.message}{mcpDispatch.output ? ` — ${mcpDispatch.output}` : ""}</p>
-                    </div>
-                  </div>
-                )}
-                {mcpDispatch?.telemetry && (
-                  <div className="mcp-receipt">
-                    <span>{mcpDispatch.telemetry.server}/{mcpDispatch.telemetry.tool}</span>
-                    <span>{mcpDispatch.telemetry.latencyMs} ms · {mcpDispatch.telemetry.transport}</span>
-                    <span>{mcpDispatch.telemetry.permitted ? "allowlist: granted" : "allowlist: refused"}</span>
-                    {mcpDispatch.budget && <span>{mcpDispatch.budget.remainingCalls}/{mcpDispatch.budget.ceilingCalls} daily actions left</span>}
-                    {notionPlanRef && <span>plan page linked for progress sync</span>}
-                  </div>
-                )}
+                <div className="mcp-empty">
+                  <b>Bring your own workspace later.</b>
+                  Use the universal <code>.ics</code> download above to add this plan to Google, Apple, or Outlook Calendar without connecting an account.
+                </div>
               </section>
 
               <section className="writing-lab" aria-labelledby="writing-lab-title">
